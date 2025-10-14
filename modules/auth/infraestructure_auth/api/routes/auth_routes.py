@@ -5,6 +5,7 @@ from modules.auth.infraestructure_auth.dtos.input_dto.user_extensionist import U
 from modules.auth.application_auth.dtos.input_dto.register_user_extensionist import RegisterUserExtensionistInputDTO
 from modules.auth.application_auth.dtos.output_dto.register_user_extensionist import RegisterUserExtensionistOutputDTO
 from modules.auth.application_auth.services.auth_service import AuthService
+from modules.auth.application_auth.mappers.auth_mapper import AuthMapper
 from modules.auth.infraestructure_auth.services.auth_service_composer import get_auth_service
 from common.infrastructure.api.dtos.response_dto import ApiResponseDTO
 from common.infrastructure.logging.config import get_logger
@@ -77,4 +78,28 @@ def upload_signing_image(
     return ApiResponseDTO.success_response(
         data=image_path,
         message="Image uploaded successfully"
+    )
+
+@router.put("/extensionist", status_code=response_status.HTTP_200_OK)
+def update_extensionist(
+    input_dto: UpdateUserExtensionistBodyDTO,
+    current_user: UserExtensionist = Depends(get_current_user_from_token),
+    auth_service: AuthService = Depends(get_auth_service),
+) -> ApiResponseDTO[UpdateUserExtensionistOutputDTO]:
+    _LOGGER.info(f"Updating extensionist {current_user.email}")
+    
+    app_input_dto = UpdateUserExtensionistInputDTO(
+        user_id=current_user.id,
+        **input_dto.model_dump(exclude_unset=True)
+    )
+    
+    try:
+        result = auth_service.update_extensionist(app_input_dto)
+        output_dto = AuthMapper.to_update_user_extensionist_dto(result)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    
+    return ApiResponseDTO.success_response(
+        data=output_dto,
+        message="Extensionist updated successfully"
     )

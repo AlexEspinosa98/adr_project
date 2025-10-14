@@ -29,3 +29,11 @@ class AuthService:
         image_path = use_case.execute(user_id, image_data, image_content_type)
         
         return image_path
+
+    def update_extensionist(self, data: UpdateUserExtensionistInputDTO) -> UserExtensionist:
+        self.logger.info("Updating extensionist with data: %s", data)
+        
+        use_case = UpdateUserExtensionistUseCase(self.auth_repository)
+        user_entity = use_case.execute(data)
+        
+        return user_entity

@@ -10,3 +10,14 @@ class AuthMapper:
             email=user.email,
             api_token=user.api_token,
         )
+
+    @staticmethod
+    def to_update_user_extensionist_dto(user: UserExtensionist) -> UpdateUserExtensionistOutputDTO:
+        return UpdateUserExtensionistOutputDTO(
+            id=user.id,
+            name=user.name,
+            email=user.email,
+            phone=user.phone,
+            city=user.city,
+            zone=user.zone,
+        )
