@@ -16,7 +16,6 @@ class UserExtensionist(BaseModel):
     identification: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
     city: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
     zone: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
-    signig: Mapped[Optional[str]] = mapped_column(Text, nullable=True) # firma del extensionista
 
 
 class UserProducter(BaseModel):

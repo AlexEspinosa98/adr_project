@@ -27,7 +27,6 @@ class RegisterUserExtensionistUseCase:
             identification=input_dto.identification,
             city=input_dto.city,
             zone=input_dto.zone,
-            signig=input_dto.signig,
         )
 
         saved_user = self._auth_repository.save(user_entity)

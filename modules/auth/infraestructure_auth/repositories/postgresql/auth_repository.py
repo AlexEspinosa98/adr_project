@@ -21,7 +21,6 @@ class PostgreSQLAuthRepository(BasePostgreSQLRepository[UserExtensionist, UserEx
             identification=model.identification,
             city=model.city,
             zone=model.zone,
-            signig=model.signig,
             created_at=model.created_at,
             updated_at=model.updated_at,
             deleted_at=model.deleted_at,
@@ -38,7 +37,6 @@ class PostgreSQLAuthRepository(BasePostgreSQLRepository[UserExtensionist, UserEx
             identification=entity.identification,
             city=entity.city,
             zone=entity.zone,
-            signig=entity.signig,
         )
 
     def get_user_by_email(self, email: str) -> Optional[UserExtensionist]:

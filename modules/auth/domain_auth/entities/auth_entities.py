@@ -10,4 +10,3 @@ class UserExtensionist(common_entities.BaseEntity):
     identification: Optional[str] = Field(None, description="Extensionist identification")
     city: Optional[str] = Field(None, description="Extensionist city")
     zone: Optional[str] = Field(None, description="Extensionist zone")
-    signig: Optional[str] = Field(None, description="Extensionist signature")

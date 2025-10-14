@@ -20,7 +20,6 @@ class UserExtensionistInputDTO(common_dtos.BaseDTO):
     city: str
     zone: str
     phone: str
-    signig: Optional[str] = None
     
     class Config:
         json_schema_extra: dict[str, dict[str, Any]] = {
@@ -31,7 +30,6 @@ class UserExtensionistInputDTO(common_dtos.BaseDTO):
                 "identification": "123456789",
                 "city": "Sample City",
                 "zone": "Sample Zone",
-                "phone": "123-456-7890",
-                "signig": "base64_encoded_signature_or_url"
+                "phone": "123-456-7890"
             }
         }

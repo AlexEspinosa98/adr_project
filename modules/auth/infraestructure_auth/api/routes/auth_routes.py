@@ -38,8 +38,7 @@ def register_extensionist(
         type_id=type_id_int,
         identification=input_dto.identification,
         city=input_dto.city,
-        zone=input_dto.zone,
-        signig=input_dto.signig
+        zone=input_dto.zone
     )
     
     try:

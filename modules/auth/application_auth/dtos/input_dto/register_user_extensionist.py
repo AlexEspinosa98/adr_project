@@ -8,4 +8,3 @@ class RegisterUserExtensionistInputDTO(BaseDTO):
     identification: str
     city: str
     zone: str
-    signig: str | None = None
