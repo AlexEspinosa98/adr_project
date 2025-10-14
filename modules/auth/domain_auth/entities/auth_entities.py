@@ -10,3 +10,5 @@ class UserExtensionist(common_entities.BaseEntity):
     identification: Optional[str] = Field(None, description="Extensionist identification")
     city: Optional[str] = Field(None, description="Extensionist city")
     zone: Optional[str] = Field(None, description="Extensionist zone")
+    signing_image_path: Optional[str] = Field(None, description="Path to the signing image")
+    api_token: Optional[str] = Field(None, description="API token for the user")

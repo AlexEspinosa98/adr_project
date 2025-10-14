@@ -8,6 +8,8 @@ from modules.auth.application_auth.services.auth_service import AuthService
 from modules.auth.infraestructure_auth.services.auth_service_composer import get_auth_service
 from common.infrastructure.api.dtos.response_dto import ApiResponseDTO
 from common.infrastructure.logging.config import get_logger
+from modules.auth.domain_auth.entities.auth_entities import UserExtensionist
+from modules.auth.infraestructure_auth.api.dependencies.auth import get_current_user_from_token
 
 _LOGGER: Logger = get_logger(__name__)
 
@@ -49,4 +51,30 @@ def register_extensionist(
     return ApiResponseDTO.success_response(
         data=result,
         message="Extensionist registered successfully"
+    )
+
+@router.post("/user/signing-image", status_code=response_status.HTTP_200_OK)
+def upload_signing_image(
+    file: UploadFile = File(...),
+    current_user: UserExtensionist = Depends(get_current_user_from_token),
+    auth_service: AuthService = Depends(get_auth_service),
+) -> ApiResponseDTO[str]:
+    _LOGGER.info(f"Uploading signing image for user {current_user.email}")
+    
+    try:
+        contents = file.file.read()
+        image_path = auth_service.upload_signing_image(
+            user_id=current_user.id,
+            image_data=contents,
+            image_content_type=file.content_type
+        )
+    except Exception as e:
+        _LOGGER.error(f"Error uploading image: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail="Error uploading image.")
+    finally:
+        file.file.close()
+
+    return ApiResponseDTO.success_response(
+        data=image_path,
+        message="Image uploaded successfully"
     )

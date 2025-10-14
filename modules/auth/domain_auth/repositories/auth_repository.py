@@ -18,3 +18,8 @@ class AuthRepository(BaseRepository[UserExtensionist], ABC):
     def get_user_by_identification(self, identification: str) -> Optional[UserExtensionist]:
         """Find a user by identification."""
         pass
+
+    @abstractmethod
+    def get_user_by_token(self, token: str) -> Optional[UserExtensionist]:
+        """Find a user by token."""
+        pass

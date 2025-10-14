@@ -4,3 +4,4 @@ class RegisterUserExtensionistOutputDTO(BaseDTO):
     id: int
     name: str
     email: str
+    api_token: str

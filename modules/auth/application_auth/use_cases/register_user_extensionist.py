@@ -1,3 +1,4 @@
+import secrets
 from logging import Logger
 from modules.auth.domain_auth.entities.auth_entities import UserExtensionist
 from modules.auth.domain_auth.repositories.auth_repository import AuthRepository
@@ -27,6 +28,7 @@ class RegisterUserExtensionistUseCase:
             identification=input_dto.identification,
             city=input_dto.city,
             zone=input_dto.zone,
+            api_token=secrets.token_hex(32)
         )
 
         saved_user = self._auth_repository.save(user_entity)

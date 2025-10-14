@@ -21,6 +21,8 @@ class PostgreSQLAuthRepository(BasePostgreSQLRepository[UserExtensionist, UserEx
             identification=model.identification,
             city=model.city,
             zone=model.zone,
+            signing_image_path=model.signing_image_path,
+            api_token=model.api_token,
             created_at=model.created_at,
             updated_at=model.updated_at,
             deleted_at=model.deleted_at,
@@ -37,6 +39,8 @@ class PostgreSQLAuthRepository(BasePostgreSQLRepository[UserExtensionist, UserEx
             identification=entity.identification,
             city=entity.city,
             zone=entity.zone,
+            signing_image_path=entity.signing_image_path,
+            api_token=entity.api_token,
         )
 
     def get_user_by_email(self, email: str) -> Optional[UserExtensionist]:
@@ -46,5 +50,10 @@ class PostgreSQLAuthRepository(BasePostgreSQLRepository[UserExtensionist, UserEx
 
     def get_user_by_identification(self, identification: str) -> Optional[UserExtensionist]:
         stmt = select(self._model_class).where(self._model_class.identification == identification)
+        model = self._session.execute(stmt).scalar_one_or_none()
+        return self._to_domain_entity(model) if model else None
+
+    def get_user_by_token(self, token: str) -> Optional[UserExtensionist]:
+        stmt = select(self._model_class).where(self._model_class.api_token == token)
         model = self._session.execute(stmt).scalar_one_or_none()
         return self._to_domain_entity(model) if model else None

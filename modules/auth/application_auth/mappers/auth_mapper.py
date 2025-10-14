@@ -8,4 +8,5 @@ class AuthMapper:
             id=user.id,
             name=user.name,
             email=user.email,
+            api_token=user.api_token,
         )
