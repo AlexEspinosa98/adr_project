@@ -13,7 +13,7 @@ from modules.auth.infraestructure_auth.services.auth_service_composer import get
 from common.infrastructure.api.dtos.response_dto import ApiResponseDTO
 from common.infrastructure.logging.config import get_logger
 from modules.auth.domain_auth.entities.auth_entities import UserExtensionist
-from modules.auth.infraestructure_auth.api.dependencies.auth import get_current_user_from_token
+from modules.auth.infraestructure_auth.api.dependencies.auth import get_current_user_from_token, get_current_user_from_query_token
 
 _LOGGER: Logger = get_logger(__name__)
 
@@ -60,7 +60,7 @@ def register_extensionist(
 @router.post("/user/signing-image", status_code=response_status.HTTP_200_OK)
 def upload_signing_image(
     file: UploadFile = File(...),
-    current_user: UserExtensionist = Depends(get_current_user_from_token),
+    current_user: UserExtensionist = Depends(get_current_user_from_query_token),
     auth_service: AuthService = Depends(get_auth_service),
 ) -> ApiResponseDTO[str]:
     _LOGGER.info(f"Uploading signing image for user {current_user.email}")
