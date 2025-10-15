@@ -65,6 +65,37 @@ These instructions will get you a copy of the project up and running on your loc
     The API will be available at `http://localhost:8000`.
     You can access the interactive API documentation (Swagger UI) at `http://localhost:8000/docs`.
 
+## Database Migrations
+
+This project uses Alembic to manage database migrations.
+
+### Generating Migrations
+
+When you make changes to the SQLAlchemy models (e.g., in `common/infrastructure/database/models/`), you need to generate a new migration script.
+
+1.  **Ensure your database container is running:**
+    ```bash
+    docker-compose up -d db
+    ```
+
+2.  **Generate the migration script:**
+    ```bash
+    docker-compose run --rm migration sh -c "alembic revision --autogenerate -m 'Your migration message'"
+    ```
+    Replace `'Your migration message'` with a short, descriptive message about the changes you made. This will create a new file in the `migrations/versions` directory.
+
+### Applying Migrations
+
+To apply pending migrations to the database, run the following command:
+
+```bash
+docker-compose up --build migration
+```
+
+This command will start the `migration` service, which is configured to run `alembic upgrade head`. This will apply all migrations that have not yet been applied to the database. The `--build` flag is recommended to ensure the container has the latest code.
+
+The application is configured to run migrations automatically when you run `docker-compose up --build`. However, you can run the migration service independently if you need to.
+
 ## Deployment
 
 This section provides a step-by-step guide for deploying the application to a production server.
