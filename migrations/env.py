@@ -5,7 +5,7 @@ from sqlalchemy import pool
 
 from alembic import context
 from common.infrastructure.database.models.base import Base
-from common.infrastructure.database.models import auth  # Asegúrate de importar tu Base aquí
+from common.infrastructure.database.models import auth, survey # Asegúrate de importar tu Base aquí
 from common.config.common.settings import Settings
 
 
