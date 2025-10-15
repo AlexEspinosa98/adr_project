@@ -1,10 +1,12 @@
 from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime
+from .survey_user_extensionist import SurveyUserExtensionistInputDTO
+from .survey_user_producter import SurveyUserProducterInputDTO
 
 class CreateSurvey1InputDTO(BaseModel):
-    extensionist_id: int
-    producter_id: int
+    extensionist: SurveyUserExtensionistInputDTO
+    producter: SurveyUserProducterInputDTO
     property_id: int
     visit_date: Optional[datetime] = None
     attended_by: Optional[str] = None
