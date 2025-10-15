@@ -14,7 +14,7 @@ class UserExtensionistInputDTO(common_dtos.BaseDTO):
     Used by API endpoints.
     """
     name: str
-    email: EmailStr
+    email: str
     type_id: str
     identification: str
     city: str

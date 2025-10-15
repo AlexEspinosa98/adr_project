@@ -9,11 +9,11 @@ Usage: from common.infrastructure.repositories import postgresql as common_pg_re
 from .base_repository import BasePostgreSQLRepository
 
 # Then, import the specific repositories
-from .authentication_repository import PostgreSQLAuthenticationRepository
+# from .authentication_repository import PostgreSQLAuthenticationRepository
 
 
 # Re-export for easy access
 __all__: list[str] = [
     "BasePostgreSQLRepository",
-    "PostgreSQLAuthenticationRepository",
+    # "PostgreSQLAuthenticationRepository",
 ]

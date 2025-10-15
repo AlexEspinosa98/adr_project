@@ -1,9 +1,12 @@
 from logging import Logger
 
-from fastapi import APIRouter, Depends, HTTPException, status as response_status
+from fastapi import APIRouter,UploadFile, File, Depends, HTTPException, status as response_status
 from modules.auth.infraestructure_auth.dtos.input_dto.user_extensionist import UserExtensionistInputDTO
+from modules.auth.infraestructure_auth.dtos.input_dto.update_user_extensionist import UpdateUserExtensionistBodyDTO
 from modules.auth.application_auth.dtos.input_dto.register_user_extensionist import RegisterUserExtensionistInputDTO
 from modules.auth.application_auth.dtos.output_dto.register_user_extensionist import RegisterUserExtensionistOutputDTO
+from modules.auth.application_auth.dtos.input_dto.update_user_extensionist import UpdateUserExtensionistInputDTO
+from modules.auth.application_auth.dtos.output_dto.update_user_extensionist import UpdateUserExtensionistOutputDTO
 from modules.auth.application_auth.services.auth_service import AuthService
 from modules.auth.application_auth.mappers.auth_mapper import AuthMapper
 from modules.auth.infraestructure_auth.services.auth_service_composer import get_auth_service

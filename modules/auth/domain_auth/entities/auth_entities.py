@@ -4,7 +4,7 @@ from pydantic import EmailStr, Field
 
 class UserExtensionist(common_entities.BaseEntity):
     name: Optional[str] = Field(None, description="Extensionist name")
-    email: Optional[EmailStr] = Field(None, description="Extensionist email")
+    email: Optional[str] = Field(None, description="Extensionist email")
     phone: Optional[str] = Field(None, description="Extensionist phone")
     type_id: Optional[int] = Field(None, description="Extensionist type id")
     identification: Optional[str] = Field(None, description="Extensionist identification")
