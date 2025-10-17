@@ -1,5 +1,13 @@
 from modules.surveys.domain_surveys.entities.survey1_entity import Survey1 as Survey1Entity
 from common.infrastructure.database.models.survey import Survey1 as Survey1Model
+import json
+from datetime import datetime
+
+class CustomJsonEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, datetime):
+            return obj.isoformat()
+        return json.JSONEncoder.default(self, obj)
 
 class Survey1Mapper:
     @staticmethod
@@ -9,8 +17,8 @@ class Survey1Mapper:
             extensionist_id=survey_entity.extensionist_id,
             user_producter_id=survey_entity.user_producter_id,
             property_id=survey_entity.property_id,
-            classification_user=survey_entity.classification_user,
-            medition_focalization=survey_entity.medition_focalization,
+            classification_user=json.dumps(survey_entity.classification_user, cls=CustomJsonEncoder) if survey_entity.classification_user else None,
+            medition_focalization=json.dumps(survey_entity.medition_focalization, cls=CustomJsonEncoder) if survey_entity.medition_focalization else None,
             objetive_accompaniment=survey_entity.objetive_accompaniment,
             initial_diagnosis=survey_entity.initial_diagnosis,
             recommendations_commitments=survey_entity.recommendations_commitments,
@@ -35,8 +43,8 @@ class Survey1Mapper:
             extensionist_id=survey_model.extensionist_id,
             user_producter_id=survey_model.user_producter_id,
             property_id=survey_model.property_id,
-            classification_user=survey_model.classification_user,
-            medition_focalization=survey_model.medition_focalization,
+            classification_user=json.loads(survey_model.classification_user) if survey_model.classification_user else None,
+            medition_focalization=json.loads(survey_model.medition_focalization) if survey_model.medition_focalization else None,
             objetive_accompaniment=survey_model.objetive_accompaniment,
             initial_diagnosis=survey_model.initial_diagnosis,
             recommendations_commitments=survey_model.recommendations_commitments,
