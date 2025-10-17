@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from typing import Optional, Dict
 from datetime import datetime
+from common.domain.enums.survey_status import SurveyStatus
 
 class Survey1(BaseModel):
     id: int
@@ -23,3 +24,4 @@ class Survey1(BaseModel):
     photo_interaction: Optional[str]
     photo_panorama: Optional[str]
     phono_extra_1: Optional[str]
+    state: SurveyStatus = SurveyStatus.PENDING

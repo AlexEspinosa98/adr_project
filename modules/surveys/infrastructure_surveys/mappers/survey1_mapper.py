@@ -24,7 +24,8 @@ class Survey1Mapper:
             photo_user=survey_entity.photo_user,
             photo_interaction=survey_entity.photo_interaction,
             photo_panorama=survey_entity.photo_panorama,
-            phono_extra_1=survey_entity.phono_extra_1
+            phono_extra_1=survey_entity.phono_extra_1,
+            state=survey_entity.state
         )
 
     @staticmethod
@@ -49,5 +50,6 @@ class Survey1Mapper:
             photo_user=survey_model.photo_user,
             photo_interaction=survey_model.photo_interaction,
             photo_panorama=survey_model.photo_panorama,
-            phono_extra_1=survey_model.phono_extra_1
+            phono_extra_1=survey_model.phono_extra_1,
+            state=survey_model.state
         )

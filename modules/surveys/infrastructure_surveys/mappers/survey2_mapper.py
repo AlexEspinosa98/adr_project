@@ -40,7 +40,8 @@ class Survey2Mapper:
             photo_innovation_1=survey_entity.photo_innovation_1,
             photo_innovation_2=survey_entity.photo_innovation_2,
             photo_innovation_3=survey_entity.photo_innovation_3,
-            photo_innovation_4=survey_entity.photo_innovation_4
+            photo_innovation_4=survey_entity.photo_innovation_4,
+            state=survey_entity.state
         )
 
     @staticmethod
@@ -81,5 +82,6 @@ class Survey2Mapper:
             photo_innovation_1=survey_model.photo_innovation_1,
             photo_innovation_2=survey_model.photo_innovation_2,
             photo_innovation_3=survey_model.photo_innovation_3,
-            photo_innovation_4=survey_model.photo_innovation_4
+            photo_innovation_4=survey_model.photo_innovation_4,
+            state=survey_model.state
         )

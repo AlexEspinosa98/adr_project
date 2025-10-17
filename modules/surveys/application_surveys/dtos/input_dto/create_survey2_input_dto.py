@@ -1,11 +1,10 @@
 from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime
-from .survey_user_extensionist import SurveyUserExtensionistInputDTO
 from .survey_user_producter import SurveyUserProducterInputDTO
+from common.domain.enums.survey_status import SurveyStatus
 
 class CreateSurvey2InputDTO(BaseModel):
-    extensionist: SurveyUserExtensionistInputDTO
     producter: SurveyUserProducterInputDTO
     property_id: int
     objective_accompaniment: Optional[str]
@@ -32,3 +31,4 @@ class CreateSurvey2InputDTO(BaseModel):
     worker_up: Optional[str]
     Household_size: Optional[str]
     other: Optional[str]
+    state: Optional[SurveyStatus] = SurveyStatus.PENDING

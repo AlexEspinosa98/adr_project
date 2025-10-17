@@ -59,6 +59,11 @@ class CreateSurvey2UseCase:
             photo_interaction=image_paths[1] if len(image_paths) > 1 else None,
             photo_panorama=image_paths[2] if len(image_paths) > 2 else None,
             phono_extra_1=image_paths[3] if len(image_paths) > 3 else None,
+            photo_innovation_1=image_paths[4] if len(image_paths) > 4 else None,
+            photo_innovation_2=image_paths[5] if len(image_paths) > 5 else None,
+            photo_innovation_3=image_paths[6] if len(image_paths) > 6 else None,
+            photo_innovation_4=image_paths[7] if len(image_paths) > 7 else None,
+            state=input_dto.state
         )
 
         saved_survey = self._survey_repository.save(survey_entity)

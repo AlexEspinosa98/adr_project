@@ -1,9 +1,10 @@
-from sqlalchemy import String, Text, Integer, Date, Boolean, ForeignKey, JSONB
+from sqlalchemy import String, Text, Integer, Date, Boolean, ForeignKey, Enum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from datetime import datetime
 from typing import Optional
 from common.infrastructure.database.models.base import BaseModel
-
+from common.domain.enums.survey_status import SurveyStatus
+from sqlalchemy.dialects.postgresql import JSONB
 
 
 class UserProducter(BaseModel):
@@ -45,7 +46,6 @@ class ProductProperty(BaseModel):
     area_in_production: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
 
 
-
 # ==============================
 # Survey 1 - Diagnóstico Inicial
 # ==============================
@@ -77,7 +77,7 @@ class Survey1(BaseModel):
     photo_interaction: Mapped[Optional[str]] = mapped_column(String(255))
     photo_panorama: Mapped[Optional[str]] = mapped_column(String(255))
     phono_extra_1: Mapped[Optional[str]] = mapped_column(String(255))
-
+    state: Mapped[SurveyStatus] = mapped_column(Enum(SurveyStatus, name="survey_status"), default=SurveyStatus.PENDING)
 
 # ==============================
 # Survey 2 - Seguimiento y Co-Innovación
@@ -100,7 +100,7 @@ class Survey2(BaseModel):
     visit_followup: Mapped[Optional[str]] = mapped_column(String(500))  # avances, dificultades, pendientes
     fulfilled_previous_recommendations: Mapped[Optional[bool]]
     new_recommendations: Mapped[Optional[str]] = mapped_column(String(500))
-    observations: Mapped[Optional[str]] = mapped_column(String(500))
+    observations_seg: Mapped[Optional[str]] = mapped_column(String(500))
 
     # 4. Co-innovación
     register_coinnovation: Mapped[Optional[str]] = mapped_column(String(500))
@@ -115,7 +115,7 @@ class Survey2(BaseModel):
     materials_and_resources: Mapped[Optional[str]] = mapped_column(String(500))
     process_functioning: Mapped[Optional[str]] = mapped_column(String(500))
     potential_replication: Mapped[Optional[str]] = mapped_column(String(500))
-    observations: Mapped[Optional[str]] = mapped_column(String(500))
+    observations_extensionist: Mapped[Optional[str]] = mapped_column(String(500))
     
     # Fotos
     photo_user: Mapped[Optional[str]] = mapped_column(String(255))
@@ -135,6 +135,7 @@ class Survey2(BaseModel):
     worker_up: Mapped[Optional[str]] = mapped_column(String(50))
     Household_size: Mapped[Optional[str]] = mapped_column(String(10))
     other: Mapped[Optional[str]] = mapped_column(String(150))
+    state: Mapped[SurveyStatus] = mapped_column(Enum(SurveyStatus, name="survey_status"), default=SurveyStatus.PENDING)
 
 
 # ==============================
@@ -168,3 +169,4 @@ class Survey3(BaseModel):
     photo_interaction: Mapped[Optional[str]] = mapped_column(String(255))
     photo_panorama: Mapped[Optional[str]] = mapped_column(String(255))
     phono_extra_1: Mapped[Optional[str]] = mapped_column(String(255))
+    state: Mapped[SurveyStatus] = mapped_column(Enum(SurveyStatus, name="survey_status"), default=SurveyStatus.PENDING)
