@@ -1,10 +1,9 @@
 from logging import Logger
-import secrets
 from modules.surveys.domain_surveys.entities.survey1_entity import Survey1
 from modules.surveys.domain_surveys.repositories.survey1_repository import Survey1Repository
 from modules.auth.domain_auth.repositories.auth_repository import AuthRepository
-from modules.auth.domain_auth.entities.auth_entities import UserExtensionist, UserProducter
-from modules.surveys.application_surveys.dtos.input_dto.create_survey1 import CreateSurvey1InputDTO
+from modules.auth.domain_auth.entities.auth_entities import UserProducter
+from modules.surveys.application_surveys.dtos.input_dto.create_survey1_input_dto import CreateSurvey1InputDTO
 from common.infrastructure.logging.config import get_logger
 
 _LOGGER: Logger = get_logger(__name__)
@@ -14,46 +13,21 @@ class CreateSurvey1UseCase:
         self._survey_repository = survey_repository
         self._auth_repository = auth_repository
 
-    def execute(self, input_dto: CreateSurvey1InputDTO) -> Survey1:
+    def execute(self, input_dto: CreateSurvey1InputDTO, api_key: str, image_paths: list[str]) -> Survey1:
         _LOGGER.info(f"Creating new survey 1")
 
-        # Get or create UserExtensionist
-        extensionist = self._auth_repository.get_user_by_identification(input_dto.extensionist.identification)
+        extensionist = self._auth_repository.get_user_by_api_key(api_key)
         if not extensionist:
-            extensionist_entity = UserExtensionist(
-                id=0,
-                name=input_dto.extensionist.name,
-                email=input_dto.extensionist.email,
-                phone=input_dto.extensionist.phone,
-                type_id=input_dto.extensionist.type_id,
-                identification=input_dto.extensionist.identification,
-                city=input_dto.extensionist.city,
-                zone=input_dto.extensionist.zone,
-                api_token=secrets.token_hex(32)
-            )
-            extensionist = self._auth_repository.save(extensionist_entity)
-            _LOGGER.info(f"Created new UserExtensionist with ID: {extensionist.id}")
+            raise Exception("Extensionist not found")
 
-        # Get or create UserProducter
         producter = self._auth_repository.get_user_by_identification(input_dto.producter.identification)
         if not producter:
-            producter_entity = UserProducter(
-                id=0,
-                name=input_dto.producter.name,
-                type_id=input_dto.producter.type_id,
-                identification=input_dto.producter.identification,
-                is_woman_rural=input_dto.producter.is_woman_rural,
-                is_young_rural=input_dto.producter.is_young_rural,
-                ethnic_belonging=input_dto.producter.ethnic_belonging,
-                is_victim_conflict=input_dto.producter.is_victim_conflict,
-                is_narp=input_dto.producter.is_narp
-            )
-            producter = self._auth_repository.save(producter_entity)
+            producter_entity = UserProducter(**input_dto.producter.dict())
+            producter = self._auth_repository.save_producter(producter_entity)
             _LOGGER.info(f"Created new UserProducter with ID: {producter.id}")
 
-
         survey_entity = Survey1(
-            id=0, # ID will be set by the database
+            id=0,
             extensionist_id=extensionist.id,
             producter_id=producter.id,
             property_id=input_dto.property_id,
@@ -82,9 +56,9 @@ class CreateSurvey1UseCase:
             initial_diagnosis=input_dto.initial_diagnosis,
             recommendations=input_dto.recommendations,
             observations=input_dto.observations,
-            photo_user=input_dto.photo_user,
-            photo_interaction=input_dto.photo_interaction,
-            photo_panorama=input_dto.photo_panorama
+            photo_user=image_paths[0] if len(image_paths) > 0 else None,
+            photo_interaction=image_paths[1] if len(image_paths) > 1 else None,
+            photo_panorama=image_paths[2] if len(image_paths) > 2 else None,
         )
 
         saved_survey = self._survey_repository.save(survey_entity)

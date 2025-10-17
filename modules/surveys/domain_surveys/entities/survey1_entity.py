@@ -1,9 +1,8 @@
-from dataclasses import dataclass
+from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime
 
-@dataclass
-class Survey1:
+class Survey1(BaseModel):
     id: int
     extensionist_id: Optional[int]
     producter_id: Optional[int]

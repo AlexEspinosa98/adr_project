@@ -1,0 +1,16 @@
+from sqlalchemy.orm import Session
+from modules.surveys.domain_surveys.entities.survey3_entity import Survey3
+from modules.surveys.domain_surveys.repositories.survey3_repository import Survey3Repository
+from modules.surveys.infrastructure_surveys.mappers.survey3_mapper import Survey3Mapper
+from common.infrastructure.database.models.survey import Survey3 as Survey3Model
+
+class PostgreSQLSurvey3Repository(Survey3Repository):
+    def __init__(self, session: Session):
+        self.session = session
+
+    def save(self, survey: Survey3) -> Survey3:
+        survey_model = Survey3Mapper.to_db_model(survey)
+        self.session.add(survey_model)
+        self.session.commit()
+        self.session.refresh(survey_model)
+        return Survey3Mapper.to_entity(survey_model)

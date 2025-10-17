@@ -2,14 +2,62 @@ from typing import Optional
 from sqlalchemy.orm import Session
 from sqlalchemy import select
 
-from modules.auth.domain_auth.entities.auth_entities import UserExtensionist
+from modules.auth.domain_auth.entities.auth_entities import UserExtensionist, UserProducter
 from modules.auth.domain_auth.repositories.auth_repository import AuthRepository
-from common.infrastructure.database.models.auth import UserExtensionist as UserExtensionistModel
-from common.infrastructure.repositories.postgresql.base_repository import BasePostgreSQLRepository
+from common.infrastructure.database.models.auth import UserExtensionist as UserExtensionistModel, UserProducter as UserProducterModel, ProductProperty as ProductPropertyModel
+from modules.auth.infraestructure_auth.mappers.user_producter_mapper import UserProducterMapper
+from modules.auth.infraestructure_auth.mappers.product_property_mapper import ProductPropertyMapper
+from common.infrastructure.database.models.auth import ProductProperty
 
-class PostgreSQLAuthRepository(BasePostgreSQLRepository[UserExtensionist, UserExtensionistModel], AuthRepository):
+class PostgreSQLAuthRepository(AuthRepository):
     def __init__(self, session: Session):
-        super().__init__(session, UserExtensionistModel)
+        self.session = session
+
+    def get_user_by_email(self, email: str) -> Optional[UserExtensionist]:
+        stmt = select(UserExtensionistModel).where(UserExtensionistModel.email == email)
+        model = self.session.execute(stmt).scalar_one_or_none()
+        return self._to_domain_entity(model) if model else None
+
+    def get_user_by_identification(self, identification: str) -> Optional[UserExtensionist]:
+        stmt = select(UserExtensionistModel).where(UserExtensionistModel.identification == identification)
+        model = self.session.execute(stmt).scalar_one_or_none()
+        return self._to_domain_entity(model) if model else None
+
+    def get_user_by_token(self, token: str) -> Optional[UserExtensionist]:
+        stmt = select(UserExtensionistModel).where(UserExtensionistModel.api_token == token)
+        model = self.session.execute(stmt).scalar_one_or_none()
+        return self._to_domain_entity(model) if model else None
+
+    def get_user_by_api_key(self, api_key: str) -> Optional[UserExtensionist]:
+        stmt = select(UserExtensionistModel).where(UserExtensionistModel.api_token == api_key)
+        model = self.session.execute(stmt).scalar_one_or_none()
+        return self._to_domain_entity(model) if model else None
+
+    def save_producter(self, producter: UserProducter) -> UserProducter:
+        producter_model = UserProducterMapper.to_db_model(producter)
+        self.session.add(producter_model)
+        self.session.commit()
+        self.session.refresh(producter_model)
+        return UserProducterMapper.to_entity(producter_model)
+
+    def get_property_by_name(self, name: str) -> Optional[ProductProperty]:
+        stmt = select(ProductPropertyModel).where(ProductPropertyModel.name == name)
+        model = self.session.execute(stmt).scalar_one_or_none()
+        return ProductPropertyMapper.to_entity(model) if model else None
+
+    def save_property(self, property: ProductProperty) -> ProductProperty:
+        property_model = ProductPropertyMapper.to_db_model(property)
+        self.session.add(property_model)
+        self.session.commit()
+        self.session.refresh(property_model)
+        return ProductPropertyMapper.to_entity(property_model)
+        
+    def save_extensionist(self, extensionist: UserExtensionist) -> UserExtensionist:
+        extensionist_model = self._to_database_model(extensionist)
+        self.session.add(extensionist_model)
+        self.session.commit()
+        self.session.refresh(extensionist_model)
+        return self._to_domain_entity(extensionist_model)
 
     def _to_domain_entity(self, model: UserExtensionistModel) -> UserExtensionist:
         return UserExtensionist(
@@ -42,18 +90,3 @@ class PostgreSQLAuthRepository(BasePostgreSQLRepository[UserExtensionist, UserEx
             signing_image_path=entity.signing_image_path,
             api_token=entity.api_token,
         )
-
-    def get_user_by_email(self, email: str) -> Optional[UserExtensionist]:
-        stmt = select(self._model_class).where(self._model_class.email == email)
-        model = self._session.execute(stmt).scalar_one_or_none()
-        return self._to_domain_entity(model) if model else None
-
-    def get_user_by_identification(self, identification: str) -> Optional[UserExtensionist]:
-        stmt = select(self._model_class).where(self._model_class.identification == identification)
-        model = self._session.execute(stmt).scalar_one_or_none()
-        return self._to_domain_entity(model) if model else None
-
-    def get_user_by_token(self, token: str) -> Optional[UserExtensionist]:
-        stmt = select(self._model_class).where(self._model_class.api_token == token)
-        model = self._session.execute(stmt).scalar_one_or_none()
-        return self._to_domain_entity(model) if model else None
