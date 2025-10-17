@@ -31,6 +31,6 @@ class RegisterUserExtensionistUseCase:
             api_token=secrets.token_hex(32)
         )
 
-        saved_user = self._auth_repository.save(user_entity)
+        saved_user = self._auth_repository.save_extensionist(user_entity)
         _LOGGER.info(f"User extensionist registered with ID: {saved_user.id}")
         return saved_user

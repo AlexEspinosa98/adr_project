@@ -1,9 +1,10 @@
-from sqlalchemy import String, Text, Integer, Date, Boolean, ForeignKey, Enum
+from sqlalchemy import String, Text, Integer, Date, Boolean, ForeignKey, Enum, DateTime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+
 from datetime import datetime
 from typing import Optional
 from common.infrastructure.database.models.base import BaseModel
-from common.domain.enums.survey_status import SurveyStatus
+
 from sqlalchemy.dialects.postgresql import JSONB
 
 
@@ -66,7 +67,7 @@ class Survey1(BaseModel):
     observations: Mapped[Optional[str]] = mapped_column(String(500))
 
     # 7. data companionship
-    visit_date: Mapped[Optional[datetime]] = mapped_column(Date)
+    visit_date: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
     attended_by: Mapped[Optional[str]] = mapped_column(String(100))
     user: Mapped[Optional[str]] = mapped_column(String(100))
     worker_up: Mapped[Optional[str]] = mapped_column(String(50))
@@ -77,7 +78,7 @@ class Survey1(BaseModel):
     photo_interaction: Mapped[Optional[str]] = mapped_column(String(255))
     photo_panorama: Mapped[Optional[str]] = mapped_column(String(255))
     phono_extra_1: Mapped[Optional[str]] = mapped_column(String(255))
-    state: Mapped[SurveyStatus] = mapped_column(Enum(SurveyStatus, name="survey_status"), default=SurveyStatus.PENDING)
+    state: Mapped[Optional[str]] = mapped_column(String(50), nullable=False, default="PENDING")
 
 # ==============================
 # Survey 2 - Seguimiento y Co-Innovación
@@ -124,18 +125,18 @@ class Survey2(BaseModel):
     phono_extra_1: Mapped[Optional[str]] = mapped_column(String(255))
 
     # cierre
-    date_hour_end: Mapped[Optional[datetime]] = mapped_column(Date)
+    date_hour_end: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
     socilization_next_event: Mapped[Optional[str]] = mapped_column(String(500))
     copy_documentation_delivered: Mapped[Optional[bool]] = mapped_column(Boolean)
 
     # 7. data companionship
-    visit_date: Mapped[Optional[datetime]] = mapped_column(Date)
+    visit_date: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
     attended_by: Mapped[Optional[str]] = mapped_column(String(100))
     user: Mapped[Optional[str]] = mapped_column(String(100))
     worker_up: Mapped[Optional[str]] = mapped_column(String(50))
     Household_size: Mapped[Optional[str]] = mapped_column(String(10))
     other: Mapped[Optional[str]] = mapped_column(String(150))
-    state: Mapped[SurveyStatus] = mapped_column(Enum(SurveyStatus, name="survey_status"), default=SurveyStatus.PENDING)
+    state: Mapped[Optional[str]] = mapped_column(String(50), nullable=False, default="PENDING")
 
 
 # ==============================
@@ -158,7 +159,7 @@ class Survey3(BaseModel):
     observations: Mapped[Optional[str]] = mapped_column(String(500))
 
     # 7. data companionship
-    visit_date: Mapped[Optional[datetime]] = mapped_column(Date)
+    visit_date: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
     attended_by: Mapped[Optional[str]] = mapped_column(String(100))
     user: Mapped[Optional[str]] = mapped_column(String(100))
     worker_up: Mapped[Optional[str]] = mapped_column(String(50))
@@ -169,4 +170,52 @@ class Survey3(BaseModel):
     photo_interaction: Mapped[Optional[str]] = mapped_column(String(255))
     photo_panorama: Mapped[Optional[str]] = mapped_column(String(255))
     phono_extra_1: Mapped[Optional[str]] = mapped_column(String(255))
-    state: Mapped[SurveyStatus] = mapped_column(Enum(SurveyStatus, name="survey_status"), default=SurveyStatus.PENDING)
+    state: Mapped[Optional[str]] = mapped_column(String(50), nullable=False, default="PENDING")
+
+
+class ClassificationUser(BaseModel):
+    __tablename__ = "classification_user"
+
+    survey_idd1: Mapped[Optional[int]] = mapped_column(ForeignKey("survey_1.id"))
+    survey_idd3: Mapped[Optional[int]] = mapped_column(ForeignKey("survey_3.id"))
+    # Aspect 1 - Human and Technical Capacities
+    main_productive_activity: Mapped[Optional[int]] = mapped_column(Integer)  # Q1
+    secondary_productive_activities: Mapped[Optional[int]] = mapped_column(Integer)  # Q2
+    tools_and_equipment: Mapped[Optional[int]] = mapped_column(Integer)  # Q3
+    good_agricultural_practices: Mapped[Optional[int]] = mapped_column(Integer)  # Q4
+    commercialization_structure: Mapped[Optional[int]] = mapped_column(Integer)  # Q5
+    markets: Mapped[Optional[int]] = mapped_column(Integer)  # Q6
+    added_value: Mapped[Optional[int]] = mapped_column(Integer)  # Q7
+    records: Mapped[Optional[int]] = mapped_column(Integer)  # Q8
+    labor_type: Mapped[Optional[int]] = mapped_column(Integer)  # Q9
+    credit_and_banking: Mapped[Optional[int]] = mapped_column(Integer)  # Q10
+
+    # Aspect 2 - Social Capacities & Associativity
+    organization_membership: Mapped[Optional[int]] = mapped_column(Integer)  # Q11
+    collective_activities: Mapped[Optional[int]] = mapped_column(Integer)  # Q12
+    entrepreneurship_associativity: Mapped[Optional[int]] = mapped_column(Integer)  # Q13
+    commercial_alliances: Mapped[Optional[int]] = mapped_column(Integer)  # Q14
+    technical_support: Mapped[Optional[int]] = mapped_column(Integer)  # Q15
+    quality_certifications: Mapped[Optional[int]] = mapped_column(Integer)  # Q16
+    intellectual_property: Mapped[Optional[int]] = mapped_column(Integer)  # Q17
+
+    # Aspect 3 - Information & ICT
+    access_information_sources: Mapped[Optional[int]] = mapped_column(Integer)  # Q18
+    access_to_ict: Mapped[Optional[int]] = mapped_column(Integer)  # Q19
+    use_of_ict_decision: Mapped[Optional[int]] = mapped_column(Integer)  # Q20
+    ict_skills: Mapped[Optional[int]] = mapped_column(Integer)  # Q21
+    knowledge_appropriation: Mapped[Optional[int]] = mapped_column(Integer)  # Q22
+
+    # Aspect 4 - Sustainable Resource Management
+    environmental_practices: Mapped[Optional[int]] = mapped_column(Integer)  # Q23
+    sustainable_practices: Mapped[Optional[int]] = mapped_column(Integer)  # Q24
+    climate_change_adaptation: Mapped[Optional[int]] = mapped_column(Integer)  # Q25
+    environmental_regulations: Mapped[Optional[int]] = mapped_column(Integer)  # Q26
+
+    # Aspect 5 - Participation & Empowerment
+    participation_mechanisms: Mapped[Optional[int]] = mapped_column(Integer)  # Q27
+    participation_tools: Mapped[Optional[int]] = mapped_column(Integer)  # Q28
+    political_social_control: Mapped[Optional[int]] = mapped_column(Integer)  # Q29
+    community_self_management: Mapped[Optional[int]] = mapped_column(Integer)  # Q30
+
+    

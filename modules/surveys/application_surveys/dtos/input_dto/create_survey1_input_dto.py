@@ -5,9 +5,6 @@ from .survey_user_producter import SurveyUserProducterInputDTO
 from common.domain.enums.survey_status import SurveyStatus
 
 class CreateSurvey1InputDTO(BaseModel):
-    producter: SurveyUserProducterInputDTO
-    property_id: int
-    classification_user: Optional[Dict]
     medition_focalization: Optional[Dict]
     objetive_accompaniment: Optional[str]
     initial_diagnosis: Optional[str]

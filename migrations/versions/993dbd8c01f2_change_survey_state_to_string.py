@@ -1,8 +1,8 @@
-"""first migration
+"""change survey state to string
 
-Revision ID: 753f8668be07
-Revises: 
-Create Date: 2025-10-17 13:13:20.695695
+Revision ID: 993dbd8c01f2
+Revises: ceb3bd428007
+Create Date: 2025-10-17 17:11:01.091827
 
 """
 from typing import Sequence, Union
@@ -12,8 +12,8 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision: str = '753f8668be07'
-down_revision: Union[str, Sequence[str], None] = None
+revision: str = '993dbd8c01f2'
+down_revision: Union[str, Sequence[str], None] = 'ceb3bd428007'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
@@ -89,7 +89,7 @@ def upgrade() -> None:
     sa.Column('initial_diagnosis', sa.String(length=500), nullable=True),
     sa.Column('recommendations_commitments', sa.String(length=500), nullable=True),
     sa.Column('observations', sa.String(length=500), nullable=True),
-    sa.Column('visit_date', sa.Date(), nullable=True),
+    sa.Column('visit_date', sa.DateTime(timezone=True), nullable=True),
     sa.Column('attended_by', sa.String(length=100), nullable=True),
     sa.Column('user', sa.String(length=100), nullable=True),
     sa.Column('worker_up', sa.String(length=50), nullable=True),
@@ -99,7 +99,7 @@ def upgrade() -> None:
     sa.Column('photo_interaction', sa.String(length=255), nullable=True),
     sa.Column('photo_panorama', sa.String(length=255), nullable=True),
     sa.Column('phono_extra_1', sa.String(length=255), nullable=True),
-    sa.Column('state', sa.Enum('PENDING', 'REJECTED', 'ACCEPTED', name='survey_status'), nullable=False),
+    sa.Column('state', sa.String(length=50), nullable=False),
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('is_active', sa.Boolean(), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=False),
@@ -139,16 +139,16 @@ def upgrade() -> None:
     sa.Column('photo_interaction', sa.String(length=255), nullable=True),
     sa.Column('photo_panorama', sa.String(length=255), nullable=True),
     sa.Column('phono_extra_1', sa.String(length=255), nullable=True),
-    sa.Column('date_hour_end', sa.Date(), nullable=True),
+    sa.Column('date_hour_end', sa.DateTime(timezone=True), nullable=True),
     sa.Column('socilization_next_event', sa.String(length=500), nullable=True),
     sa.Column('copy_documentation_delivered', sa.Boolean(), nullable=True),
-    sa.Column('visit_date', sa.Date(), nullable=True),
+    sa.Column('visit_date', sa.DateTime(timezone=True), nullable=True),
     sa.Column('attended_by', sa.String(length=100), nullable=True),
     sa.Column('user', sa.String(length=100), nullable=True),
     sa.Column('worker_up', sa.String(length=50), nullable=True),
     sa.Column('Household_size', sa.String(length=10), nullable=True),
     sa.Column('other', sa.String(length=150), nullable=True),
-    sa.Column('state', sa.Enum('PENDING', 'REJECTED', 'ACCEPTED', name='survey_status'), nullable=False),
+    sa.Column('state', sa.String(length=50), nullable=False),
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('is_active', sa.Boolean(), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=False),
@@ -169,7 +169,7 @@ def upgrade() -> None:
     sa.Column('initial_diagnosis', sa.String(length=500), nullable=True),
     sa.Column('recommendations_commitments', sa.String(length=500), nullable=True),
     sa.Column('observations', sa.String(length=500), nullable=True),
-    sa.Column('visit_date', sa.Date(), nullable=True),
+    sa.Column('visit_date', sa.DateTime(timezone=True), nullable=True),
     sa.Column('attended_by', sa.String(length=100), nullable=True),
     sa.Column('user', sa.String(length=100), nullable=True),
     sa.Column('worker_up', sa.String(length=50), nullable=True),
@@ -179,7 +179,7 @@ def upgrade() -> None:
     sa.Column('photo_interaction', sa.String(length=255), nullable=True),
     sa.Column('photo_panorama', sa.String(length=255), nullable=True),
     sa.Column('phono_extra_1', sa.String(length=255), nullable=True),
-    sa.Column('state', sa.Enum('PENDING', 'REJECTED', 'ACCEPTED', name='survey_status'), nullable=False),
+    sa.Column('state', sa.String(length=50), nullable=False),
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('is_active', sa.Boolean(), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=False),
@@ -190,12 +190,55 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['user_producter_id'], ['user_producter.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
+    op.create_table('classification_user',
+    sa.Column('survey_idd1', sa.Integer(), nullable=True),
+    sa.Column('survey_idd3', sa.Integer(), nullable=True),
+    sa.Column('main_productive_activity', sa.Integer(), nullable=True),
+    sa.Column('secondary_productive_activities', sa.Integer(), nullable=True),
+    sa.Column('tools_and_equipment', sa.Integer(), nullable=True),
+    sa.Column('good_agricultural_practices', sa.Integer(), nullable=True),
+    sa.Column('commercialization_structure', sa.Integer(), nullable=True),
+    sa.Column('markets', sa.Integer(), nullable=True),
+    sa.Column('added_value', sa.Integer(), nullable=True),
+    sa.Column('records', sa.Integer(), nullable=True),
+    sa.Column('labor_type', sa.Integer(), nullable=True),
+    sa.Column('credit_and_banking', sa.Integer(), nullable=True),
+    sa.Column('organization_membership', sa.Integer(), nullable=True),
+    sa.Column('collective_activities', sa.Integer(), nullable=True),
+    sa.Column('entrepreneurship_associativity', sa.Integer(), nullable=True),
+    sa.Column('commercial_alliances', sa.Integer(), nullable=True),
+    sa.Column('technical_support', sa.Integer(), nullable=True),
+    sa.Column('quality_certifications', sa.Integer(), nullable=True),
+    sa.Column('intellectual_property', sa.Integer(), nullable=True),
+    sa.Column('access_information_sources', sa.Integer(), nullable=True),
+    sa.Column('access_to_ict', sa.Integer(), nullable=True),
+    sa.Column('use_of_ict_decision', sa.Integer(), nullable=True),
+    sa.Column('ict_skills', sa.Integer(), nullable=True),
+    sa.Column('knowledge_appropriation', sa.Integer(), nullable=True),
+    sa.Column('environmental_practices', sa.Integer(), nullable=True),
+    sa.Column('sustainable_practices', sa.Integer(), nullable=True),
+    sa.Column('climate_change_adaptation', sa.Integer(), nullable=True),
+    sa.Column('environmental_regulations', sa.Integer(), nullable=True),
+    sa.Column('participation_mechanisms', sa.Integer(), nullable=True),
+    sa.Column('participation_tools', sa.Integer(), nullable=True),
+    sa.Column('political_social_control', sa.Integer(), nullable=True),
+    sa.Column('community_self_management', sa.Integer(), nullable=True),
+    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
+    sa.Column('is_active', sa.Boolean(), nullable=False),
+    sa.Column('created_at', sa.DateTime(), nullable=False),
+    sa.Column('updated_at', sa.DateTime(), nullable=False),
+    sa.Column('deleted_at', sa.DateTime(), nullable=True),
+    sa.ForeignKeyConstraint(['survey_idd1'], ['survey_1.id'], ),
+    sa.ForeignKeyConstraint(['survey_idd3'], ['survey_3.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
     # ### end Alembic commands ###
 
 
 def downgrade() -> None:
     """Downgrade schema."""
     # ### commands auto generated by Alembic - please adjust! ###
+    op.drop_table('classification_user')
     op.drop_table('survey_3')
     op.drop_table('survey_2')
     op.drop_table('survey_1')

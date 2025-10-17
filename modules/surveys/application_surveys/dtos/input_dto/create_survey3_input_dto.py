@@ -6,8 +6,6 @@ from .property_info_input_dto import PropertyInfoInputDTO
 from common.domain.enums.survey_status import SurveyStatus
 
 class CreateSurvey3InputDTO(BaseModel):
-    producter: SurveyUserProducterInputDTO
-    property_info: PropertyInfoInputDTO
     classification_user: Optional[Dict]
     medition_focalization: Optional[Dict]
     objetive_accompaniment: Optional[str]

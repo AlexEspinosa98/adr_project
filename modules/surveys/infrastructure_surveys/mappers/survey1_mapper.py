@@ -15,7 +15,7 @@ class Survey1Mapper:
             initial_diagnosis=survey_entity.initial_diagnosis,
             recommendations_commitments=survey_entity.recommendations_commitments,
             observations=survey_entity.observations,
-            visit_date=survey_entity.visit_date,
+            visit_date=str(survey_entity.visit_date),
             attended_by=survey_entity.attended_by,
             user=survey_entity.user,
             worker_up=survey_entity.worker_up,
