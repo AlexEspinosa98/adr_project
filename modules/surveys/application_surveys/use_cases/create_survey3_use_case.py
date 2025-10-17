@@ -3,6 +3,7 @@ from modules.surveys.domain_surveys.entities.survey3_entity import Survey3
 from modules.surveys.domain_surveys.repositories.survey3_repository import Survey3Repository
 from modules.surveys.domain_surveys.repositories.user_producter_repository import UserProducterRepository
 from modules.surveys.domain_surveys.repositories.product_property_repository import ProductPropertyRepository
+from modules.auth.domain_auth.repositories.auth_repository import AuthRepository
 from modules.surveys.domain_surveys.entities.user_producter_entity import UserProducter
 from modules.surveys.domain_surveys.entities.product_property_entity import ProductProperty
 from modules.surveys.application_surveys.dtos.input_dto.create_survey3_input_dto import CreateSurvey3InputDTO

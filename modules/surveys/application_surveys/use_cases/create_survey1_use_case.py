@@ -2,6 +2,7 @@ from logging import Logger
 from modules.surveys.domain_surveys.entities.survey1_entity import Survey1
 from modules.surveys.domain_surveys.repositories.survey1_repository import Survey1Repository
 from modules.surveys.domain_surveys.repositories.user_producter_repository import UserProducterRepository
+from modules.auth.domain_auth.repositories.auth_repository import AuthRepository
 from modules.surveys.domain_surveys.entities.user_producter_entity import UserProducter
 from modules.surveys.application_surveys.dtos.input_dto.create_survey1_input_dto import CreateSurvey1InputDTO
 from common.infrastructure.logging.config import get_logger
