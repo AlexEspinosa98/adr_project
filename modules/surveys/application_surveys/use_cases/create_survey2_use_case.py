@@ -1,17 +1,18 @@
 from logging import Logger
 from modules.surveys.domain_surveys.entities.survey2_entity import Survey2
 from modules.surveys.domain_surveys.repositories.survey2_repository import Survey2Repository
-from modules.auth.domain_auth.repositories.auth_repository import AuthRepository
-from modules.auth.domain_auth.entities.auth_entities import UserProducter
+from modules.surveys.domain_surveys.repositories.user_producter_repository import UserProducterRepository
+from modules.surveys.domain_surveys.entities.user_producter_entity import UserProducter
 from modules.surveys.application_surveys.dtos.input_dto.create_survey2_input_dto import CreateSurvey2InputDTO
 from common.infrastructure.logging.config import get_logger
 
 _LOGGER: Logger = get_logger(__name__)
 
 class CreateSurvey2UseCase:
-    def __init__(self, survey_repository: Survey2Repository, auth_repository: AuthRepository):
+    def __init__(self, survey_repository: Survey2Repository, auth_repository: AuthRepository, user_producter_repository: UserProducterRepository):
         self._survey_repository = survey_repository
         self._auth_repository = auth_repository
+        self._user_producter_repository = user_producter_repository
 
     def execute(self, input_dto: CreateSurvey2InputDTO, api_key: str, image_paths: list[str]) -> Survey2:
         _LOGGER.info(f"Creating new survey 2")
@@ -20,10 +21,10 @@ class CreateSurvey2UseCase:
         if not extensionist:
             raise Exception("Extensionist not found")
 
-        producter = self._auth_repository.get_user_by_identification(input_dto.producter.identification)
+        producter = self._user_producter_repository.get_by_identification(input_dto.producter.identification)
         if not producter:
             producter_entity = UserProducter(**input_dto.producter.dict())
-            producter = self._auth_repository.save_producter(producter_entity)
+            producter = self._user_producter_repository.save(producter_entity)
             _LOGGER.info(f"Created new UserProducter with ID: {producter.id}")
 
         survey_entity = Survey2(

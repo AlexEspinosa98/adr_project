@@ -2,12 +2,9 @@ from typing import Optional
 from sqlalchemy.orm import Session
 from sqlalchemy import select
 
-from modules.auth.domain_auth.entities.auth_entities import UserExtensionist, UserProducter
+from modules.auth.domain_auth.entities.auth_entities import UserExtensionist
 from modules.auth.domain_auth.repositories.auth_repository import AuthRepository
-from common.infrastructure.database.models.auth import UserExtensionist as UserExtensionistModel, UserProducter as UserProducterModel, ProductProperty as ProductPropertyModel
-from modules.auth.infraestructure_auth.mappers.user_producter_mapper import UserProducterMapper
-from modules.auth.infraestructure_auth.mappers.product_property_mapper import ProductPropertyMapper
-from common.infrastructure.database.models.auth import ProductProperty
+from common.infrastructure.database.models.auth import UserExtensionist as UserExtensionistModel
 
 class PostgreSQLAuthRepository(AuthRepository):
     def __init__(self, session: Session):
@@ -33,25 +30,6 @@ class PostgreSQLAuthRepository(AuthRepository):
         model = self.session.execute(stmt).scalar_one_or_none()
         return self._to_domain_entity(model) if model else None
 
-    def save_producter(self, producter: UserProducter) -> UserProducter:
-        producter_model = UserProducterMapper.to_db_model(producter)
-        self.session.add(producter_model)
-        self.session.commit()
-        self.session.refresh(producter_model)
-        return UserProducterMapper.to_entity(producter_model)
-
-    def get_property_by_name(self, name: str) -> Optional[ProductProperty]:
-        stmt = select(ProductPropertyModel).where(ProductPropertyModel.name == name)
-        model = self.session.execute(stmt).scalar_one_or_none()
-        return ProductPropertyMapper.to_entity(model) if model else None
-
-    def save_property(self, property: ProductProperty) -> ProductProperty:
-        property_model = ProductPropertyMapper.to_db_model(property)
-        self.session.add(property_model)
-        self.session.commit()
-        self.session.refresh(property_model)
-        return ProductPropertyMapper.to_entity(property_model)
-        
     def save_extensionist(self, extensionist: UserExtensionist) -> UserExtensionist:
         extensionist_model = self._to_database_model(extensionist)
         self.session.add(extensionist_model)

@@ -83,7 +83,7 @@ def upload_signing_image(
         message="Image uploaded successfully"
     )
 
-@router.put("/egister_extensionist", status_code=response_status.HTTP_200_OK)
+@router.put("/register_extensionist", status_code=response_status.HTTP_200_OK)
 def update_extensionist(
     input_dto: UpdateUserExtensionistBodyDTO,
     current_user: UserExtensionist = Depends(get_current_user_from_token),

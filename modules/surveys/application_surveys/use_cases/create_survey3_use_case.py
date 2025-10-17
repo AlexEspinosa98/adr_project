@@ -1,18 +1,21 @@
 from logging import Logger
 from modules.surveys.domain_surveys.entities.survey3_entity import Survey3
 from modules.surveys.domain_surveys.repositories.survey3_repository import Survey3Repository
-from modules.auth.domain_auth.repositories.auth_repository import AuthRepository
-from modules.auth.domain_auth.entities.auth_entities import UserProducter
-from common.infrastructure.database.models.auth import ProductProperty
+from modules.surveys.domain_surveys.repositories.user_producter_repository import UserProducterRepository
+from modules.surveys.domain_surveys.repositories.product_property_repository import ProductPropertyRepository
+from modules.surveys.domain_surveys.entities.user_producter_entity import UserProducter
+from modules.surveys.domain_surveys.entities.product_property_entity import ProductProperty
 from modules.surveys.application_surveys.dtos.input_dto.create_survey3_input_dto import CreateSurvey3InputDTO
 from common.infrastructure.logging.config import get_logger
 
 _LOGGER: Logger = get_logger(__name__)
 
 class CreateSurvey3UseCase:
-    def __init__(self, survey_repository: Survey3Repository, auth_repository: AuthRepository):
+    def __init__(self, survey_repository: Survey3Repository, auth_repository: AuthRepository, user_producter_repository: UserProducterRepository, product_property_repository: ProductPropertyRepository):
         self._survey_repository = survey_repository
         self._auth_repository = auth_repository
+        self._user_producter_repository = user_producter_repository
+        self._product_property_repository = product_property_repository
 
     def execute(self, input_dto: CreateSurvey3InputDTO, api_key: str, image_paths: list[str]) -> Survey3:
         _LOGGER.info(f"Creating new survey 3")
@@ -21,16 +24,16 @@ class CreateSurvey3UseCase:
         if not extensionist:
             raise Exception("Extensionist not found")
 
-        producter = self._auth_repository.get_user_by_identification(input_dto.producter.identification)
+        producter = self._user_producter_repository.get_by_identification(input_dto.producter.identification)
         if not producter:
             producter_entity = UserProducter(**input_dto.producter.dict())
-            producter = self._auth_repository.save_producter(producter_entity)
+            producter = self._user_producter_repository.save(producter_entity)
             _LOGGER.info(f"Created new UserProducter with ID: {producter.id}")
 
-        property_info = self._auth_repository.get_property_by_name(input_dto.property_info.name)
+        property_info = self._product_property_repository.get_by_name(input_dto.property_info.name)
         if not property_info:
             property_entity = ProductProperty(**input_dto.property_info.dict(), user_producter_id=producter.id)
-            property_info = self._auth_repository.save_property(property_entity)
+            property_info = self._product_property_repository.save(property_entity)
             _LOGGER.info(f"Created new PropertyInfo with ID: {property_info.id}")
 
         survey_entity = Survey3(
