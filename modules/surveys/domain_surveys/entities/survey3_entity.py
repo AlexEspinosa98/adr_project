@@ -3,8 +3,10 @@ from typing import Optional, Dict
 from datetime import datetime
 from common.domain.enums.survey_status import SurveyStatus
 
+from pydantic import Field
+
 class Survey3(BaseModel):
-    id: int
+    id: Optional[int] = Field(None, gt=0, description="Unique identifier for the entity")
     extensionist_id: Optional[int]
     user_producter_id: Optional[int]
     property_id: Optional[int]

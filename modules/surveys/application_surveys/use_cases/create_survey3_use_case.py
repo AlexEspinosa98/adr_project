@@ -44,18 +44,12 @@ class CreateSurvey3UseCase:
             _LOGGER.info(f"Created new PropertyInfo with ID: {property_info.id}")
 
         # Save ClassificationUser
-        classification_user_entity = ClassificationUser(
-            survey_idd3=None, # Will be updated after survey is saved
-            **classification_user_input_dto.dict()
-        )
-        saved_classification_user = self._classification_user_repository.save(classification_user_entity)
-        _LOGGER.info(f"Created new ClassificationUser with ID: {saved_classification_user.id}")
 
         survey_entity = Survey3(
             extensionist_id=extensionist.id,
             user_producter_id=producter.id,
             property_id=property_info.id,
-            classification_user=saved_classification_user.dict(), # Use the saved classification user
+            classification_user=classification_user_input_dto.dict(), # Use the saved classification user
             medition_focalization=input_dto.medition_focalization,
             objetive_accompaniment=input_dto.objetive_accompaniment,
             initial_diagnosis=input_dto.initial_diagnosis,
@@ -75,11 +69,12 @@ class CreateSurvey3UseCase:
         )
 
         saved_survey = self._survey_repository.save(survey_entity)
-        _LOGGER.info(f"Survey 3 created with ID: {saved_survey.id}")
+        _LOGGER.info(f"Survey 1 created with ID: {saved_survey.id}")
 
-        # Update ClassificationUser with survey_idd3
-        saved_classification_user.survey_idd3 = saved_survey.id
-        self._classification_user_repository.save(saved_classification_user) # Save the updated classification user
-        _LOGGER.info(f"Updated ClassificationUser {saved_classification_user.id} with survey_idd3: {saved_survey.id}")
+        # Update ClassificationUser with survey_idd1
+        classification_user = ClassificationUser(**classification_user_input_dto.dict())
+        classification_user.survey_idd3 = saved_survey.id
+        classification_user_saved = self._classification_user_repository.save(classification_user) # Save the updated classification user
+        _LOGGER.info(f"Updated ClassificationUser {classification_user_saved.id} with survey_idd1: {saved_survey.id}")
 
         return saved_survey

@@ -49,7 +49,7 @@ class CreateSurvey1UseCase:
             extensionist_id=extensionist.id,
             user_producter_id=producter.id,
             property_id=property_info.id,
-            classification_user=input_dto.classification_user,
+            classification_user=classification_user_input_dto.dict(),
             medition_focalization=input_dto.medition_focalization,
             objetive_accompaniment=input_dto.objetive_accompaniment,
             initial_diagnosis=input_dto.initial_diagnosis,

@@ -10,7 +10,7 @@ class PostgreSQLClassificationUserRepository(ClassificationUserRepository):
 
     def save(self, classification_user: ClassificationUser) -> ClassificationUser:
         classification_user_data = classification_user.dict()
-        if classification_user_data.get("id") == 0 or classification_user_data.get("id") is None:
+        if classification_user.id is None:
             classification_user_data.pop("id", None)
         classification_user_model = ClassificationUserModel(**classification_user_data)
         self.session.add(classification_user_model)
