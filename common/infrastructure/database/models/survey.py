@@ -56,6 +56,9 @@ class Survey1(BaseModel):
     user_producter_id: Mapped[Optional[int]] = mapped_column(ForeignKey("user_producter.id"))
     property_id: Mapped[Optional[int]] = mapped_column(ForeignKey("product_property.id"))
 
+    user_producter: Mapped["UserProducter"] = relationship(lazy="joined")
+    property: Mapped["ProductProperty"] = relationship(lazy="joined")
+
     classification_user: Mapped[Optional[dict]] = mapped_column(JSONB)
     medition_focalization: Mapped[Optional[dict]] = mapped_column(JSONB)
 
@@ -88,6 +91,13 @@ class Survey2(BaseModel):
     extensionist_id: Mapped[Optional[int]] = mapped_column(ForeignKey("user_extensionist.id"))
     producter_id: Mapped[Optional[int]] = mapped_column(ForeignKey("user_producter.id"))
     property_id: Mapped[Optional[int]] = mapped_column(ForeignKey("product_property.id"))
+
+    producter: Mapped["UserProducter"] = relationship(
+        foreign_keys=[producter_id],
+        primaryjoin="Survey2.producter_id == UserProducter.id",
+        lazy="joined"
+    )
+    property: Mapped["ProductProperty"] = relationship(lazy="joined")
 
     objective_accompaniment: Mapped[Optional[str]] = mapped_column(String(500))
     visit_development_follow_up_activities: Mapped[Optional[str]] = mapped_column(String(500))
@@ -147,6 +157,9 @@ class Survey3(BaseModel):
     extensionist_id: Mapped[Optional[int]] = mapped_column(ForeignKey("user_extensionist.id"))
     user_producter_id: Mapped[Optional[int]] = mapped_column(ForeignKey("user_producter.id"))
     property_id: Mapped[Optional[int]] = mapped_column(ForeignKey("product_property.id"))
+
+    user_producter: Mapped["UserProducter"] = relationship(lazy="joined")
+    property: Mapped["ProductProperty"] = relationship(lazy="joined")
 
     classification_user: Mapped[Optional[dict]] = mapped_column(JSONB)
     medition_focalization: Mapped[Optional[dict]] = mapped_column(JSONB)

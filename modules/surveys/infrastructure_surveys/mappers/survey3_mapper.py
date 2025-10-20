@@ -1,5 +1,7 @@
 from modules.surveys.domain_surveys.entities.survey3_entity import Survey3 as Survey3Entity
 from common.infrastructure.database.models.survey import Survey3 as Survey3Model
+from modules.surveys.infrastructure_surveys.mappers.user_producter_mapper import UserProducterMapper
+from modules.surveys.infrastructure_surveys.mappers.product_property_mapper import ProductPropertyMapper
 import json
 from datetime import datetime
 
@@ -42,7 +44,9 @@ class Survey3Mapper:
             id=survey_model.id,
             extensionist_id=survey_model.extensionist_id,
             user_producter_id=survey_model.user_producter_id,
+            user_producter=UserProducterMapper.to_entity(survey_model.user_producter) if survey_model.user_producter else None,
             property_id=survey_model.property_id,
+            property=ProductPropertyMapper.to_entity(survey_model.property) if survey_model.property else None,
             classification_user=json.loads(survey_model.classification_user) if survey_model.classification_user else None,
             medition_focalization=json.loads(survey_model.medition_focalization) if survey_model.medition_focalization else None,
             objetive_accompaniment=survey_model.objetive_accompaniment,

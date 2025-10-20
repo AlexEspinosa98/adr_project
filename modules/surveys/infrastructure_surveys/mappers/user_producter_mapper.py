@@ -3,9 +3,15 @@ from common.infrastructure.database.models.survey import UserProducter as UserPr
 
 class UserProducterMapper:
     @staticmethod
-    def to_db_model(entity: UserProducterEntity) -> UserProducterModel:
-        return UserProducterModel(**entity.dict())
-
-    @staticmethod
     def to_entity(model: UserProducterModel) -> UserProducterEntity:
-        return UserProducterEntity(**model.__dict__)
+        return UserProducterEntity(
+            id=model.id,
+            name=model.name,
+            type_id=model.type_id,
+            identification=model.identification,
+            is_woman_rural=model.is_woman_rural,
+            is_young_rural=model.is_young_rural,
+            ethnic_belonging=model.ethnic_belonging,
+            is_victim_conflict=model.is_victim_conflict,
+            is_narp=model.is_narp,
+        )

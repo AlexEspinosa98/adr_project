@@ -1,15 +1,17 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional, Dict
 from datetime import datetime
 from common.domain.enums.survey_status import SurveyStatus
-
-from pydantic import Field
+from modules.surveys.domain_surveys.entities.user_producter_entity import UserProducter
+from modules.surveys.domain_surveys.entities.product_property_entity import ProductProperty
 
 class Survey3(BaseModel):
     id: Optional[int] = Field(None, gt=0, description="Unique identifier for the entity")
     extensionist_id: Optional[int]
     user_producter_id: Optional[int]
+    user_producter: Optional[UserProducter]
     property_id: Optional[int]
+    property: Optional[ProductProperty]
     classification_user: Optional[Dict]
     medition_focalization: Optional[Dict]
     objetive_accompaniment: Optional[str]

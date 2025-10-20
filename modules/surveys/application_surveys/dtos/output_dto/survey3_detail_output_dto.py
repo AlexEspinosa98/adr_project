@@ -9,7 +9,7 @@ class Survey3DetailOutputDTO(BaseModel):
     id: int
     user_producter: Optional[UserProducterOutputDTO]
     property: Optional[ProductPropertyOutputDTO]
-    classification_user: Optional[Dict] # This is excluded from the main request, but it's part of Survey3 entity
+    classification_user: Optional[Dict] # This is excluded from the main request, but it\'s part of Survey3 entity
     medition_focalization: Optional[Dict]
     objetive_accompaniment: Optional[str]
     initial_diagnosis: Optional[str]

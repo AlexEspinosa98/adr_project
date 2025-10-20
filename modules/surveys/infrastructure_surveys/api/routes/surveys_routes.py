@@ -1,6 +1,6 @@
 from logging import Logger
 from fastapi import APIRouter, Depends, HTTPException, status as response_status, File, UploadFile, Form, Body, Query
-from typing import List, Optional
+from typing import List, Optional, Union
 from datetime import datetime
 import json
 import shutil
@@ -35,7 +35,9 @@ from common.infrastructure.logging.config import get_logger
 
 from modules.surveys.application_surveys.services.get_survey_detail_service import GetSurveyDetailService
 from modules.surveys.infrastructure_surveys.services.get_survey_detail_service_composer import get_survey_detail_service
-from modules.surveys.application_surveys.dtos.output_dto.survey_detail_output_dto import SurveyDetailOutputDTO
+from modules.surveys.application_surveys.dtos.output_dto.survey1_detail_output_dto import Survey1DetailOutputDTO
+from modules.surveys.application_surveys.dtos.output_dto.survey2_detail_output_dto import Survey2DetailOutputDTO
+from modules.surveys.application_surveys.dtos.output_dto.survey3_detail_output_dto import Survey3DetailOutputDTO
 
 _LOGGER: Logger = get_logger(__name__)
 
@@ -208,12 +210,12 @@ async def list_surveys(
     )
 
 
-@router.get("/{survey_type}/{survey_id}", response_model=ApiResponseDTO[SurveyDetailOutputDTO])
+@router.get("/{survey_type}/{survey_id}", response_model=ApiResponseDTO[Union[Survey1DetailOutputDTO, Survey2DetailOutputDTO, Survey3DetailOutputDTO]])
 async def get_survey_detail(
     survey_type: int,
     survey_id: int,
     survey_detail_service: GetSurveyDetailService = Depends(get_survey_detail_service),
-) -> ApiResponseDTO[SurveyDetailOutputDTO]:
+) -> ApiResponseDTO[Union[Survey1DetailOutputDTO, Survey2DetailOutputDTO, Survey3DetailOutputDTO]]:
     _LOGGER.info(f"Fetching detail for survey type {survey_type} with ID {survey_id}")
     
     survey_detail = survey_detail_service.get_survey_detail(survey_id, survey_type)

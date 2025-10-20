@@ -1,12 +1,16 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional
 from datetime import datetime
+from modules.surveys.domain_surveys.entities.user_producter_entity import UserProducter
+from modules.surveys.domain_surveys.entities.product_property_entity import ProductProperty
 
 class Survey2(BaseModel):
-    id: int
-    extensionist_id: int
-    producter_id: int
-    property_id: int
+    id: Optional[int] = Field(None, gt=0, description="Unique identifier for the entity")
+    extensionist_id: Optional[int]
+    producter_id: Optional[int]
+    producter: Optional[UserProducter]
+    property_id: Optional[int]
+    property: Optional[ProductProperty]
     objective_accompaniment: Optional[str]
     visit_development_follow_up_activities: Optional[str]
     previous_visit_recommendations_fulfilled: Optional[bool]
