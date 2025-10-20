@@ -1,5 +1,13 @@
 from modules.surveys.domain_surveys.entities.survey2_entity import Survey2 as Survey2Entity
 from common.infrastructure.database.models.survey import Survey2 as Survey2Model
+import json
+from datetime import datetime
+
+class CustomJsonEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, datetime):
+            return obj.isoformat()
+        return json.JSONEncoder.default(self, obj)
 
 class Survey2Mapper:
     @staticmethod
@@ -14,6 +22,11 @@ class Survey2Mapper:
             previous_visit_recommendations_fulfilled=survey_entity.previous_visit_recommendations_fulfilled,
             recommendations_commitments=survey_entity.recommendations_commitments,
             observations=survey_entity.observations,
+            objective=survey_entity.objective,
+            visit_followup=survey_entity.visit_followup,
+            fulfilled_previous_recommendations=survey_entity.fulfilled_previous_recommendations,
+            new_recommendations=survey_entity.new_recommendations,
+            observations_seg=survey_entity.observations_seg,
             register_coinnovation=survey_entity.register_coinnovation,
             local_practice_tool_technology_coinnovation_identified=survey_entity.local_practice_tool_technology_coinnovation_identified,
             local_coinovation_or_technology_record=survey_entity.local_coinovation_or_technology_record,
@@ -24,6 +37,11 @@ class Survey2Mapper:
             materials_and_resources=survey_entity.materials_and_resources,
             process_functioning=survey_entity.process_functioning,
             potential_replication=survey_entity.potential_replication,
+            observations_extensionist=survey_entity.observations_extensionist,
+            photo_user=survey_entity.photo_user,
+            photo_interaction=survey_entity.photo_interaction,
+            photo_panorama=survey_entity.photo_panorama,
+            phono_extra_1=survey_entity.phono_extra_1,
             date_hour_end=survey_entity.date_hour_end,
             socilization_next_event=survey_entity.socilization_next_event,
             copy_documentation_delivered=survey_entity.copy_documentation_delivered,
@@ -33,14 +51,6 @@ class Survey2Mapper:
             worker_up=survey_entity.worker_up,
             Household_size=survey_entity.Household_size,
             other=survey_entity.other,
-            photo_user=survey_entity.photo_user,
-            photo_interaction=survey_entity.photo_interaction,
-            photo_panorama=survey_entity.photo_panorama,
-            phono_extra_1=survey_entity.phono_extra_1,
-            photo_innovation_1=survey_entity.photo_innovation_1,
-            photo_innovation_2=survey_entity.photo_innovation_2,
-            photo_innovation_3=survey_entity.photo_innovation_3,
-            photo_innovation_4=survey_entity.photo_innovation_4,
             state=survey_entity.state
         )
 
@@ -56,6 +66,11 @@ class Survey2Mapper:
             previous_visit_recommendations_fulfilled=survey_model.previous_visit_recommendations_fulfilled,
             recommendations_commitments=survey_model.recommendations_commitments,
             observations=survey_model.observations,
+            objective=survey_model.objective,
+            visit_followup=survey_model.visit_followup,
+            fulfilled_previous_recommendations=survey_model.fulfilled_previous_recommendations,
+            new_recommendations=survey_model.new_recommendations,
+            observations_seg=survey_model.observations_seg,
             register_coinnovation=survey_model.register_coinnovation,
             local_practice_tool_technology_coinnovation_identified=survey_model.local_practice_tool_technology_coinnovation_identified,
             local_coinovation_or_technology_record=survey_model.local_coinovation_or_technology_record,
@@ -66,6 +81,11 @@ class Survey2Mapper:
             materials_and_resources=survey_model.materials_and_resources,
             process_functioning=survey_model.process_functioning,
             potential_replication=survey_model.potential_replication,
+            observations_extensionist=survey_model.observations_extensionist,
+            photo_user=survey_model.photo_user,
+            photo_interaction=survey_model.photo_interaction,
+            photo_panorama=survey_model.photo_panorama,
+            phono_extra_1=survey_model.phono_extra_1,
             date_hour_end=survey_model.date_hour_end,
             socilization_next_event=survey_model.socilization_next_event,
             copy_documentation_delivered=survey_model.copy_documentation_delivered,
@@ -75,13 +95,5 @@ class Survey2Mapper:
             worker_up=survey_model.worker_up,
             Household_size=survey_model.Household_size,
             other=survey_model.other,
-            photo_user=survey_model.photo_user,
-            photo_interaction=survey_model.photo_interaction,
-            photo_panorama=survey_model.photo_panorama,
-            phono_extra_1=survey_model.phono_extra_1,
-            photo_innovation_1=survey_model.photo_innovation_1,
-            photo_innovation_2=survey_model.photo_innovation_2,
-            photo_innovation_3=survey_model.photo_innovation_3,
-            photo_innovation_4=survey_model.photo_innovation_4,
             state=survey_model.state
         )
