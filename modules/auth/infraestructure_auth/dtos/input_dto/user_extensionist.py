@@ -2,10 +2,9 @@
 Infrastructure DTOs for user extensionist operations.
 """
 
-from typing import Any, Optional
+from typing import Any
 
 from common.application import dtos as common_dtos
-from pydantic import EmailStr
 
 
 class UserExtensionistInputDTO(common_dtos.BaseDTO):

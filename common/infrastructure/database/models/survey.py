@@ -39,7 +39,6 @@ class ProductProperty(BaseModel):
     state: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
     city: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
     village: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
-    area_total_property: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
     linea_productive_primary: Mapped[Optional[str]] = mapped_column(String(255))
     area_total_linea_productive_primary: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
     linea_productive_secondary: Mapped[Optional[str]] = mapped_column(String(255))

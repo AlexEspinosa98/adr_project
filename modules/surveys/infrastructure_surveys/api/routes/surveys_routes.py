@@ -1,6 +1,7 @@
 from logging import Logger
 from fastapi import APIRouter, Depends, HTTPException, status as response_status, File, UploadFile, Form, Body
-from typing import List
+from typing import List, Optional
+from datetime import datetime
 import json
 import shutil
 import os
@@ -22,6 +23,12 @@ from modules.surveys.application_surveys.dtos.input_dto.create_survey2_input_dto
 from modules.surveys.application_surveys.dtos.output_dto.create_survey2_output_dto import CreateSurvey2OutputDTO
 from modules.surveys.application_surveys.services.survey2_service import Survey2Service
 from modules.surveys.infrastructure_surveys.services.survey2_service_composer import get_survey2_service
+from modules.surveys.application_surveys.services.list_surveys_service import ListSurveysService
+from modules.surveys.infrastructure_surveys.services.list_surveys_service_composer import get_list_surveys_service
+from modules.surveys.application_surveys.dtos.output_dto.survey_list_item_dto import SurveyListItemDTO
+from common.application.dtos.input_dto.pagination_dto import PaginationInputDTO
+from common.infrastructure.api.dependencies.pagination_dependencies import get_pagination_params
+from common.infrastructure.api.dtos.pagination_response_dto import PaginatedApiResponseDTO
 
 from common.infrastructure.api.dtos.response_dto import ApiResponseDTO
 from common.infrastructure.logging.config import get_logger
@@ -164,4 +171,28 @@ async def create_survey3(
     return ApiResponseDTO.success_response(
         data=result,
         message="Survey 3 created successfully"
+    )
+
+
+@router.get("", response_model=PaginatedApiResponseDTO[SurveyListItemDTO])
+async def list_surveys(
+    pagination: PaginationInputDTO = Depends(get_pagination_params),
+    start_date: Optional[datetime] = None,
+    end_date: Optional[datetime] = None,
+    farm_name: Optional[str] = None,
+    survey_type: Optional[int] = None,
+    list_surveys_service: ListSurveysService = Depends(get_list_surveys_service),
+):
+    paginated_result = list_surveys_service.list_surveys(
+        pagination=pagination,
+        start_date=start_date,
+        end_date=end_date,
+        farm_name=farm_name,
+        survey_type=survey_type,
+    )
+    return PaginatedApiResponseDTO.create_paginated_success(
+        items=paginated_result.items,
+        pagination_input=pagination,
+        total_items=paginated_result.pagination.total_items,
+        message="Surveys retrieved successfully",
     )
