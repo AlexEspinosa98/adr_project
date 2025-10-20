@@ -33,6 +33,10 @@ from common.infrastructure.api.dtos.pagination_response_dto import PaginatedApiR
 from common.infrastructure.api.dtos.response_dto import ApiResponseDTO
 from common.infrastructure.logging.config import get_logger
 
+from modules.surveys.application_surveys.services.get_survey_detail_service import GetSurveyDetailService
+from modules.surveys.infrastructure_surveys.services.get_survey_detail_service_composer import get_survey_detail_service
+from modules.surveys.application_surveys.dtos.output_dto.survey_detail_output_dto import SurveyDetailOutputDTO
+
 _LOGGER: Logger = get_logger(__name__)
 
 router = APIRouter(prefix="/surveys", tags=["surveys"])
@@ -201,4 +205,23 @@ async def list_surveys(
         pagination_input=pagination,
         total_items=paginated_result.pagination.total_items,
         message="Surveys retrieved successfully",
+    )
+
+
+@router.get("/{survey_type}/{survey_id}", response_model=ApiResponseDTO[SurveyDetailOutputDTO])
+async def get_survey_detail(
+    survey_type: int,
+    survey_id: int,
+    survey_detail_service: GetSurveyDetailService = Depends(get_survey_detail_service),
+) -> ApiResponseDTO[SurveyDetailOutputDTO]:
+    _LOGGER.info(f"Fetching detail for survey type {survey_type} with ID {survey_id}")
+    
+    survey_detail = survey_detail_service.get_survey_detail(survey_id, survey_type)
+    
+    if not survey_detail:
+        raise HTTPException(status_code=response_status.HTTP_404_NOT_FOUND, detail="Survey not found")
+        
+    return ApiResponseDTO.success_response(
+        data=survey_detail,
+        message=f"Survey type {survey_type} with ID {survey_id} retrieved successfully"
     )
