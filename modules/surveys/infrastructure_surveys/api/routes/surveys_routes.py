@@ -1,5 +1,5 @@
 from logging import Logger
-from fastapi import APIRouter, Depends, HTTPException, status as response_status, File, UploadFile, Form, Body
+from fastapi import APIRouter, Depends, HTTPException, status as response_status, File, UploadFile, Form, Body, Query
 from typing import List, Optional
 from datetime import datetime
 import json
@@ -66,6 +66,8 @@ async def create_survey1(
         producter_data_dict = json.loads(producter_data)
         property_data_dict = json.loads(property_data)
         classification_user_data_dict = json.loads(classification_user_data)
+
+        survey_data_dict['classification_user'] = classification_user_data_dict
 
         producter_input_dto = SurveyUserProducterInputDTO(**producter_data_dict)
         property_info_input_dto = PropertyInfoInputDTO(**property_data_dict)
@@ -156,6 +158,8 @@ async def create_survey3(
         property_data_dict = json.loads(property_data)
         classification_user_data_dict = json.loads(classification_user_data)
 
+        survey_data_dict['classification_user'] = classification_user_data_dict
+
         producter_input_dto = SurveyUserProducterInputDTO(**producter_data_dict)
         property_info_input_dto = PropertyInfoInputDTO(**property_data_dict)
         classification_user_input_dto = ClassificationUserInputDTO(**classification_user_data_dict)
@@ -177,6 +181,7 @@ async def create_survey3(
 @router.get("", response_model=PaginatedApiResponseDTO[SurveyListItemDTO])
 async def list_surveys(
     pagination: PaginationInputDTO = Depends(get_pagination_params),
+    api_key: str = Query(...),
     start_date: Optional[datetime] = None,
     end_date: Optional[datetime] = None,
     farm_name: Optional[str] = None,
@@ -185,6 +190,7 @@ async def list_surveys(
 ):
     paginated_result = list_surveys_service.list_surveys(
         pagination=pagination,
+        api_key=api_key,
         start_date=start_date,
         end_date=end_date,
         farm_name=farm_name,

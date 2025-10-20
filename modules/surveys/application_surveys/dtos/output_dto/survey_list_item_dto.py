@@ -10,3 +10,4 @@ class SurveyListItemDTO(BaseModel):
     state: Optional[str]
     producter_name: Optional[str]
     extensionist_name: Optional[str]
+    created_at: Optional[datetime]

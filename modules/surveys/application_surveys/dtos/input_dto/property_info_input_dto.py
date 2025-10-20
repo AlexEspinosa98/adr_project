@@ -10,7 +10,6 @@ class PropertyInfoInputDTO(BaseModel):
     state: Optional[str] = None
     city: Optional[str] = None
     village: Optional[str] = None
-    area_total_property: Optional[str] = None
     linea_productive_primary: Optional[str] = None
     area_total_linea_productive_primary: Optional[str] = None
     linea_productive_secondary: Optional[str] = None

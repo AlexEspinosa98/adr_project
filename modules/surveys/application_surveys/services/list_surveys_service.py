@@ -12,6 +12,7 @@ class ListSurveysService:
     def list_surveys(
         self,
         pagination: PaginationInputDTO,
+        api_key: str,
         start_date: Optional[datetime] = None,
         end_date: Optional[datetime] = None,
         farm_name: Optional[str] = None,
@@ -20,6 +21,7 @@ class ListSurveysService:
         
         return self._list_surveys_use_case.execute(
             pagination=pagination,
+            api_key=api_key,
             start_date=start_date,
             end_date=end_date,
             farm_name=farm_name,

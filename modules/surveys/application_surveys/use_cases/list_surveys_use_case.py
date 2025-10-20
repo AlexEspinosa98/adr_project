@@ -12,6 +12,7 @@ class ListSurveysUseCase:
     def execute(
         self,
         pagination: PaginationInputDTO,
+        api_key: str,
         start_date: Optional[datetime] = None,
         end_date: Optional[datetime] = None,
         farm_name: Optional[str] = None,
@@ -20,6 +21,7 @@ class ListSurveysUseCase:
         
         surveys, total_items = self._list_surveys_repository.list_surveys(
             pagination=pagination,
+            api_key=api_key,
             start_date=start_date,
             end_date=end_date,
             farm_name=farm_name,

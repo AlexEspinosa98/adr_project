@@ -13,6 +13,7 @@ class PostgreSQLListSurveysRepository(ListSurveysRepository):
     def list_surveys(
         self,
         pagination: PaginationInputDTO,
+        api_key: str,
         start_date: Optional[datetime] = None,
         end_date: Optional[datetime] = None,
         farm_name: Optional[str] = None,
@@ -20,27 +21,27 @@ class PostgreSQLListSurveysRepository(ListSurveysRepository):
     ) -> Tuple[list[SurveyListItemDTO], int]:
         
         base_query = """
-        (SELECT s.id, 'Survey 1' as survey_type, pp.name as farm_name, s.visit_date, s.state, up.name as producter_name, ue.name as extensionist_name
+        (SELECT s.id, 'Survey 1' as survey_type, pp.name as farm_name, s.visit_date, s.state, up.name as producter_name, ue.name as extensionist_name, ue.api_token, s.created_at
         FROM survey_1 s
         LEFT JOIN product_property pp ON s.property_id = pp.id
         LEFT JOIN user_producter up ON s.user_producter_id = up.id
         LEFT JOIN user_extensionist ue ON s.extensionist_id = ue.id)
         UNION ALL
-        (SELECT s.id, 'Survey 2' as survey_type, pp.name as farm_name, s.visit_date, s.state, up.name as producter_name, ue.name as extensionist_name
+        (SELECT s.id, 'Survey 2' as survey_type, pp.name as farm_name, s.visit_date, s.state, up.name as producter_name, ue.name as extensionist_name, ue.api_token, s.created_at
         FROM survey_2 s
         LEFT JOIN product_property pp ON s.property_id = pp.id
         LEFT JOIN user_producter up ON s.producter_id = up.id
         LEFT JOIN user_extensionist ue ON s.extensionist_id = ue.id)
         UNION ALL
-        (SELECT s.id, 'Survey 3' as survey_type, pp.name as farm_name, s.visit_date, s.state, up.name as producter_name, ue.name as extensionist_name
+        (SELECT s.id, 'Survey 3' as survey_type, pp.name as farm_name, s.visit_date, s.state, up.name as producter_name, ue.name as extensionist_name, ue.api_token, s.created_at
         FROM survey_3 s
         LEFT JOIN product_property pp ON s.property_id = pp.id
         LEFT JOIN user_producter up ON s.user_producter_id = up.id
         LEFT JOIN user_extensionist ue ON s.extensionist_id = ue.id)
         """
 
-        filters = []
-        params = {}
+        filters = ["api_token = :api_key"]
+        params = {"api_key": api_key}
 
         if start_date:
             filters.append("visit_date >= :start_date")
