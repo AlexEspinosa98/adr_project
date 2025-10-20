@@ -16,4 +16,5 @@ class CreateSurvey1InputDTO(BaseModel):
     worker_up: Optional[str]
     Household_size: Optional[str]
     other: Optional[str]
+    classification_user: Optional[Dict]
     state: Optional[SurveyStatus] = SurveyStatus.PENDING

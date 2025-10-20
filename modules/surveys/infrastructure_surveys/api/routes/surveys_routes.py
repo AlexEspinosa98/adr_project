@@ -72,3 +72,49 @@ async def create_survey1(
         data=result,
         message="Survey 1 created successfully"
     )
+
+
+@router.post("/3", status_code=response_status.HTTP_201_CREATED)
+async def create_survey3(
+    api_key: str = Form(...),
+    survey_data: str = Form(...),
+    producter_data: str = Form(...),
+    property_data: str = Form(...),
+    classification_user_data: str = Form(...),
+    files: List[UploadFile] = File(...),
+    survey_service: Survey3Service = Depends(get_survey3_service),
+) -> ApiResponseDTO[CreateSurvey3OutputDTO]:
+    _LOGGER.info(f"Creating new survey 3")
+    
+    if not os.path.exists(UPLOAD_DIRECTORY):
+        os.makedirs(UPLOAD_DIRECTORY)
+
+    image_paths = []
+    for file in files:
+        file_path = os.path.join(UPLOAD_DIRECTORY, file.filename)
+        with open(file_path, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+        image_paths.append(file_path)
+
+    try:
+        survey_data_dict = json.loads(survey_data)
+        producter_data_dict = json.loads(producter_data)
+        property_data_dict = json.loads(property_data)
+        classification_user_data_dict = json.loads(classification_user_data)
+
+        producter_input_dto = SurveyUserProducterInputDTO(**producter_data_dict)
+        property_info_input_dto = PropertyInfoInputDTO(**property_data_dict)
+        classification_user_input_dto = ClassificationUserInputDTO(**classification_user_data_dict)
+
+        input_dto = CreateSurvey3InputDTO(
+            **survey_data_dict
+        )
+        result = survey_service.create_survey3(input_dto, producter_input_dto, property_info_input_dto, classification_user_input_dto, api_key, image_paths)
+    except Exception as e:
+        _LOGGER.error(f"Error creating survey 3: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail="Error creating survey 3.")
+    
+    return ApiResponseDTO.success_response(
+        data=result,
+        message="Survey 3 created successfully"
+    )

@@ -1,8 +1,8 @@
-"""change survey state to string
+"""update first models
 
-Revision ID: 993dbd8c01f2
-Revises: ceb3bd428007
-Create Date: 2025-10-17 17:11:01.091827
+Revision ID: cef400685c0a
+Revises: 
+Create Date: 2025-10-19 20:10:48.937071
 
 """
 from typing import Sequence, Union
@@ -12,8 +12,8 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision: str = '993dbd8c01f2'
-down_revision: Union[str, Sequence[str], None] = 'ceb3bd428007'
+revision: str = 'cef400685c0a'
+down_revision: Union[str, Sequence[str], None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
