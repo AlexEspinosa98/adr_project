@@ -52,7 +52,6 @@ class CreateSurvey3UseCase:
         _LOGGER.info(f"Created new ClassificationUser with ID: {saved_classification_user.id}")
 
         survey_entity = Survey3(
-            id=0,
             extensionist_id=extensionist.id,
             user_producter_id=producter.id,
             property_id=property_info.id,
