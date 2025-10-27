@@ -1,4 +1,4 @@
-from typing import List # New import
+from typing import List, Optional # New import
 
 from fastapi import APIRouter, Depends, status
 from fastapi.responses import JSONResponse
@@ -106,24 +106,26 @@ async def admin_register(
     description="Retrieves a list of surveys for admin with optional filters.",
     tags=["Admin Surveys"],
 )
-@common_decorators.handle_exceptions
-@common_decorators.handle_authentication_exceptions
+# @common_decorators.handle_exceptions
+# @common_decorators.handle_authentication_exceptions
 async def get_admin_survey_list(
-    filters: AdminSurveyFilterInputDTO = Depends(),
+    city: Optional[str] = None,
+    extensionist: Optional[str] = None,
     get_admin_survey_list_use_case: GetAdminSurveyListUseCase = Depends(get_admin_survey_list_use_case),
 ) -> ApiResponseDTO[List[AdminSurveyOutputDTO]]:
     """
     Handles fetching a list of surveys for admin with optional filters.
 
     Args:
-        filters (AdminSurveyFilterInputDTO): Optional filters for city and extensionist.
+        city (Optional[str]): Optional filter for city.
+        extensionist (Optional[str]): Optional filter for extensionist.
         get_admin_survey_list_use_case (GetAdminSurveyListUseCase): The use case for getting admin survey list.
 
     Returns:
         ApiResponseDTO[List[AdminSurveyOutputDTO]]: The API response containing the list of surveys.
     """
     surveys = get_admin_survey_list_use_case.execute(
-        city=filters.city, extensionist=filters.extensionist
+        city=city, extensionist=extensionist
     )
     return ApiResponseDTO.success_response(
         data=surveys,

@@ -8,6 +8,8 @@ from common.application import dtos as common_dtos
 
 class AdminSurveyOutputDTO(common_dtos.BaseDTO):
     id: int = Field(..., description="Unique identifier for the survey")
+    survey_type: Optional[str] = Field(None, description="Type of the survey (e.g., 'Survey 1', 'Survey 2')") # New field
+    farm_name: Optional[str] = Field(None, description="Name of the farm/property") # New field
     extensionist_id: Optional[int] = Field(None, description="ID of the extensionist")
     name_extensionist: Optional[str] = Field(None, description="Name of the extensionist")
     user_producter_id: Optional[int] = Field(None, description="ID of the user producer")

@@ -187,7 +187,7 @@ async def create_survey3(
 @router.get("", response_model=PaginatedApiResponseDTO[SurveyListItemDTO])
 async def list_surveys(
     pagination: PaginationInputDTO = Depends(get_pagination_params),
-    api_key: str = Query(...),
+    api_key: Optional[str] = Query(None),
     start_date: Optional[datetime] = None,
     end_date: Optional[datetime] = None,
     farm_name: Optional[str] = None,

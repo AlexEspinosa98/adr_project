@@ -5,6 +5,7 @@ Authentication exception handler decorator for FastAPI endpoints.
 import functools
 import logging
 from typing import Any, Callable, TypeVar
+import inspect # New import
 
 from fastapi import HTTPException, status
 from sqlalchemy import exc
@@ -46,7 +47,10 @@ def handle_authentication_exceptions(func: Callable[..., T]) -> Callable[..., T]
     @functools.wraps(func)
     async def wrapper(*args: Any, **kwargs: Any) -> T:
         try:
-            return await func(*args, **kwargs)
+            if inspect.iscoroutinefunction(func):
+                return await func(*args, **kwargs)
+            else:
+                return func(*args, **kwargs)
 
         # Token Expired (401 Unauthorized)
         except common_exceptions.TokenExpiredException:

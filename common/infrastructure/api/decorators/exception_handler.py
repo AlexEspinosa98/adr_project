@@ -5,6 +5,7 @@ General error handler decorator for FastAPI endpoints.
 import functools
 import logging
 from typing import Any, Callable, TypeVar
+import inspect # New import
 
 from fastapi import HTTPException, status
 from pydantic import ValidationError
@@ -35,7 +36,10 @@ def handle_exceptions(func: Callable[..., T]) -> Callable[..., T]:
     @functools.wraps(func)
     async def wrapper(*args: Any, **kwargs: Any) -> T:
         try:
-            return await func(*args, **kwargs)
+            if inspect.iscoroutinefunction(func):
+                return await func(*args, **kwargs)
+            else:
+                return func(*args, **kwargs)
 
         except ValidationError as e:
             _LOGGER.error(f"Pydantic validation error: [{e}]")

@@ -44,8 +44,12 @@ class PostgreSQLListSurveysRepository(ListSurveysRepository):
         LEFT JOIN user_extensionist ue ON s.extensionist_id = ue.id)
         """
 
-        filters = ["api_token = :api_key"]
-        params = {"api_key": api_key}
+        filters = []
+        params = {}
+
+        if api_key: # Changed
+            filters.append("api_token = :api_key")
+            params["api_key"] = api_key
 
         if start_date:
             filters.append("visit_date >= :start_date")

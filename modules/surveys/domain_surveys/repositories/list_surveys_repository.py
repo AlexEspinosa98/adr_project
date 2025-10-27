@@ -11,7 +11,7 @@ class ListSurveysRepository(ABC):
     def list_surveys(
         self,
         pagination: PaginationInputDTO,
-        api_key: str,
+        api_key: Optional[str],
         start_date: Optional[datetime] = None,
         end_date: Optional[datetime] = None,
         farm_name: Optional[str] = None,
