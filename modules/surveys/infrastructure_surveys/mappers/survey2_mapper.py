@@ -95,5 +95,7 @@ class Survey2Mapper:
             worker_up=survey_model.worker_up,
             Household_size=survey_model.Household_size,
             other=survey_model.other,
-            state=survey_model.state
+            state=survey_model.state,
+            producter=survey_model.producter,
+            property=survey_model.property
         )

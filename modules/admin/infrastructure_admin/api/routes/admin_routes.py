@@ -1,6 +1,6 @@
-from typing import List, Optional # New import
+from typing import List, Optional, Union # Modified import
 
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, status, HTTPException # Added HTTPException
 from fastapi.responses import JSONResponse
 
 from common.infrastructure.api import decorators as common_decorators
@@ -8,20 +8,26 @@ from common.infrastructure.api.dtos.response_dto import ApiResponseDTO
 
 from modules.admin.application_admin.dtos.input_dto.admin_login_dto import AdminLoginInputDTO
 from modules.admin.application_admin.dtos.input_dto.admin_register_dto import AdminRegisterInputDTO
-from modules.admin.application_admin.dtos.input_dto.admin_survey_filter_input_dto import AdminSurveyFilterInputDTO # New import
+from modules.admin.application_admin.dtos.input_dto.admin_survey_filter_input_dto import AdminSurveyFilterInputDTO
 from modules.admin.application_admin.dtos.output_dto.admin_login_output_dto import AdminLoginOutputDTO
 from modules.admin.application_admin.dtos.output_dto.admin_user_dto import AdminUserDTO
-from modules.admin.application_admin.dtos.output_dto.admin_survey_output_dto import AdminSurveyOutputDTO # New import
+from modules.admin.application_admin.dtos.output_dto.admin_survey_output_dto import AdminSurveyOutputDTO
+from modules.admin.application_admin.dtos.output_dto.admin_survey1_detail_output_dto import AdminSurvey1DetailOutputDTO # New import
+from modules.admin.application_admin.dtos.output_dto.admin_survey2_detail_output_dto import AdminSurvey2DetailOutputDTO # New import
+from modules.admin.application_admin.dtos.output_dto.admin_survey3_detail_output_dto import AdminSurvey3DetailOutputDTO # New import
 from modules.admin.application_admin.services.admin_authentication_service import AdminAuthenticationService
 from modules.admin.application_admin.use_cases.login_admin_use_case import LoginAdminUseCase
 from modules.admin.application_admin.use_cases.register_admin_use_case import RegisterAdminUseCase
-from modules.admin.application_admin.use_cases.get_admin_survey_list_use_case import GetAdminSurveyListUseCase # New import
+from modules.admin.application_admin.use_cases.get_admin_survey_list_use_case import GetAdminSurveyListUseCase
+from modules.admin.application_admin.use_cases.get_admin_survey_detail_use_case import GetAdminSurveyDetailUseCase # New import
 from modules.admin.infrastructure_admin.services.admin_authentication_service_composer import (
     get_admin_authentication_service,
     get_login_admin_use_case,
     get_register_admin_use_case,
-    get_admin_survey_list_use_case, # New import
+    get_admin_survey_list_use_case,
+    get_admin_survey_detail_use_case, # New import
 )
+# Removed old imports for Survey1DetailOutputDTO, Survey2DetailOutputDTO, Survey3DetailOutputDTO
 
 
 router = APIRouter()
@@ -77,7 +83,7 @@ async def admin_register(
 
     Args:
         register_data (AdminRegisterInputDTO): The registration data.
-        register_admin_use_case (RegisterAdminUseCase): The use case for admin registration.
+        register_admin_use_case (RegisterAdminUseCase): The use case for admin registration.)
 
     Returns:
         ApiResponseDTO[AdminUserDTO]: The API response containing the created admin user.
@@ -106,8 +112,8 @@ async def admin_register(
     description="Retrieves a list of surveys for admin with optional filters.",
     tags=["Admin Surveys"],
 )
-# @common_decorators.handle_exceptions
-# @common_decorators.handle_authentication_exceptions
+@common_decorators.handle_exceptions
+@common_decorators.handle_authentication_exceptions
 async def get_admin_survey_list(
     city: Optional[str] = None,
     extensionist: Optional[str] = None,
@@ -131,3 +137,41 @@ async def get_admin_survey_list(
         data=surveys,
         message="Admin survey list fetched successfully",
     )
+
+
+@router.get(
+    "/surveys/{survey_type}/{survey_id}",
+    response_model=ApiResponseDTO[Union[AdminSurvey1DetailOutputDTO, AdminSurvey2DetailOutputDTO, AdminSurvey3DetailOutputDTO]], # Changed response_model
+    status_code=status.HTTP_200_OK,
+    summary="Get Admin Survey Detail",
+    description="Retrieves full details of a single survey for admin.",
+    tags=["Admin Surveys"],
+)
+@common_decorators.handle_exceptions
+@common_decorators.handle_authentication_exceptions
+async def get_admin_survey_detail(
+    survey_type: int,
+    survey_id: int,
+    get_admin_survey_detail_use_case: GetAdminSurveyDetailUseCase = Depends(get_admin_survey_detail_use_case),
+) -> ApiResponseDTO[Union[AdminSurvey1DetailOutputDTO, AdminSurvey2DetailOutputDTO, AdminSurvey3DetailOutputDTO]]: # Changed return type
+    """
+    Handles fetching full details of a single survey for admin.
+
+    Args:
+        survey_type (int): The type of the survey (1, 2, or 3).
+        survey_id (int): The ID of the survey.
+        get_admin_survey_detail_use_case (GetAdminSurveyDetailUseCase): The use case for getting admin survey detail.
+
+    Returns:
+        ApiResponseDTO[Union[AdminSurvey1DetailOutputDTO, AdminSurvey2DetailOutputDTO, AdminSurvey3DetailOutputDTO]]: The API response containing the survey details.
+    """
+    survey_detail = get_admin_survey_detail_use_case.execute(survey_id, survey_type)
+
+    if not survey_detail:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Survey not found")
+
+    return ApiResponseDTO.success_response(
+        data=survey_detail,
+        message=f"Survey type {survey_type} with ID {survey_id} retrieved successfully",
+    )
+

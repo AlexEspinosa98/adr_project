@@ -47,8 +47,10 @@ class GetSurveyDetailUseCase:
         elif isinstance(survey_entity, Survey2):
             return Survey2DetailOutputDTO(
                 id=survey_entity.id,
-                producter=UserProducterOutputDTO.model_validate(survey_entity.producter) if survey_entity.producter else None,
-                property=ProductPropertyOutputDTO.model_validate(survey_entity.property) if survey_entity.property else None,
+                producter=(UserProducterOutputDTO.model_validate(survey_entity.producter)
+                           if survey_entity.producter else None),
+                property=(ProductPropertyOutputDTO.model_validate(survey_entity.property)
+                          if survey_entity.property else None),
                 objective_accompaniment=survey_entity.objective_accompaniment,
                 visit_development_follow_up_activities=survey_entity.visit_development_follow_up_activities,
                 previous_visit_recommendations_fulfilled=survey_entity.previous_visit_recommendations_fulfilled,

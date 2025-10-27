@@ -8,10 +8,13 @@ from modules.admin.application_admin.services.admin_authentication_service impor
 from modules.admin.application_admin.use_cases.authenticate_admin_user import AuthenticateAdminUserUseCase
 from modules.admin.application_admin.use_cases.login_admin_use_case import LoginAdminUseCase
 from modules.admin.application_admin.use_cases.register_admin_use_case import RegisterAdminUseCase
-from modules.admin.application_admin.use_cases.get_admin_survey_list_use_case import GetAdminSurveyListUseCase # New import
+from modules.admin.application_admin.use_cases.get_admin_survey_list_use_case import GetAdminSurveyListUseCase
+from modules.admin.application_admin.use_cases.get_admin_survey_detail_use_case import GetAdminSurveyDetailUseCase # New import
 from modules.admin.infrastructure_admin.repositories.admin_authentication_repository import AdminAuthenticationRepository
-from modules.surveys.domain_surveys.repositories.list_surveys_repository import ListSurveysRepository # New import
-from modules.surveys.infrastructure_surveys.repositories.postgresql.list_surveys_repository import PostgreSQLListSurveysRepository # New import
+from modules.surveys.domain_surveys.repositories.list_surveys_repository import ListSurveysRepository
+from modules.surveys.infrastructure_surveys.repositories.postgresql.list_surveys_repository import PostgreSQLListSurveysRepository
+from modules.surveys.application_surveys.services.get_survey_detail_service import GetSurveyDetailService # New import
+from modules.surveys.infrastructure_surveys.services.get_survey_detail_service_composer import get_survey_detail_service # New import
 
 
 def get_admin_authentication_service(
@@ -76,4 +79,14 @@ def get_admin_survey_list_use_case(
 
     return GetAdminSurveyListUseCase(
         survey_repository=list_surveys_repository,
+    )
+
+def get_admin_survey_detail_use_case(
+    get_survey_detail_service: GetSurveyDetailService = Depends(get_survey_detail_service),
+) -> GetAdminSurveyDetailUseCase:
+    """
+    Compose and return a configured GetAdminSurveyDetailUseCase.
+    """
+    return GetAdminSurveyDetailUseCase(
+        get_survey_detail_service=get_survey_detail_service,
     )
