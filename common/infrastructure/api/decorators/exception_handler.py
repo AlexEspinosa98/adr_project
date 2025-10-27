@@ -33,9 +33,9 @@ def handle_exceptions(func: Callable[..., T]) -> Callable[..., T]:
     """
 
     @functools.wraps(func)
-    def wrapper(*args: Any, **kwargs: Any) -> T:
+    async def wrapper(*args: Any, **kwargs: Any) -> T:
         try:
-            return func(*args, **kwargs)
+            return await func(*args, **kwargs)
 
         except ValidationError as e:
             _LOGGER.error(f"Pydantic validation error: [{e}]")

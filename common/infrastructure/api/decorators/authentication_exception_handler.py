@@ -44,9 +44,9 @@ def handle_authentication_exceptions(func: Callable[..., T]) -> Callable[..., T]
     """
 
     @functools.wraps(func)
-    def wrapper(*args: Any, **kwargs: Any) -> T:
+    async def wrapper(*args: Any, **kwargs: Any) -> T:
         try:
-            return func(*args, **kwargs)
+            return await func(*args, **kwargs)
 
         # Token Expired (401 Unauthorized)
         except common_exceptions.TokenExpiredException:
