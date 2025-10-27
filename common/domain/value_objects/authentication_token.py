@@ -1,4 +1,5 @@
 from typing import Any
+from datetime import datetime, timedelta
 
 import jwt
 from pydantic import Field, ValidationError, field_validator
@@ -30,6 +31,25 @@ class AuthenticationToken(common_value_objects.BaseValueObject):
         if token.startswith("Bearer "):
             return token[7:].strip()
         return token
+
+    @staticmethod
+    def create_token(payload: dict[str, Any], secret_key: str, expires_delta: timedelta = timedelta(hours=1)) -> "AuthenticationToken":
+        """
+        Create a JWT token from a payload and secret key.
+
+        Args:
+            payload (dict[str, Any]): The data to encode into the token.
+            secret_key (str): The secret key to sign the token.
+            expires_delta (timedelta): The expiration time for the token.
+
+        Returns:
+            AuthenticationToken: A new AuthenticationToken instance.
+        """
+        to_encode = payload.copy()
+        expire = datetime.utcnow() + expires_delta
+        to_encode.update({"exp": expire})
+        encoded_jwt = jwt.encode(to_encode, secret_key, algorithm="HS256")
+        return AuthenticationToken(raw_token=encoded_jwt)
 
     def extract_user_id(self, secret_key: str) -> int:
         """

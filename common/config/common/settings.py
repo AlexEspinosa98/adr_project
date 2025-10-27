@@ -79,6 +79,16 @@ class Settings(BaseSettings):
         description="Database name",
     )
 
+    # Security configuration
+    secret_api_key: str = Field(
+        default="super-secret-key",
+        description="Secret key for API authentication",
+    )
+    admin_register_token: str = Field(
+        default="admin-register-token",
+        description="Token for admin user registration",
+    )
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",
