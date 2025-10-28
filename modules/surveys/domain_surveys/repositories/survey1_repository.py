@@ -5,3 +5,7 @@ class Survey1Repository(ABC):
     @abstractmethod
     def save(self, survey: Survey1) -> Survey1:
         pass
+
+    @abstractmethod
+    def get_by_id(self, survey_id: int) -> Survey1 | None:
+        pass

@@ -27,10 +27,21 @@ from modules.admin.infrastructure_admin.services.admin_authentication_service_co
     get_admin_survey_list_use_case,
     get_admin_survey_detail_use_case, # New import
 )
+
+from fastapi import Depends, status, HTTPException
+from common.infrastructure.api.dtos.response_dto import ApiResponseDTO
+from common.infrastructure.authentication.user_authorizer import get_current_user
+from common.application.dtos.output_dto.authentication_dto import AuthenticatedUserDTO
+from common.infrastructure.database.session import session_manager
+from sqlalchemy.orm import Session
+from modules.surveys.application_surveys.use_cases.update_survey_state import UpdateSurveyState
+from modules.surveys.application_surveys.dtos.input_dto.update_survey_state_input_dto import UpdateSurveyStateInputDTO
 # Removed old imports for Survey1DetailOutputDTO, Survey2DetailOutputDTO, Survey3DetailOutputDTO
+#logger setup
+from common.infrastructure.logging.config import get_logger
+_LOGGER = get_logger(__name__)
 
-
-router = APIRouter()
+router = APIRouter(prefix="/admin", tags=["Admin"])
 
 
 @router.post(
@@ -112,8 +123,8 @@ async def admin_register(
     description="Retrieves a list of surveys for admin with optional filters.",
     tags=["Admin Surveys"],
 )
-@common_decorators.handle_exceptions
-@common_decorators.handle_authentication_exceptions
+# @common_decorators.handle_exceptions
+# @common_decorators.handle_authentication_exceptions
 async def get_admin_survey_list(
     city: Optional[str] = None,
     extensionist: Optional[str] = None,
@@ -174,4 +185,43 @@ async def get_admin_survey_detail(
         data=survey_detail,
         message=f"Survey type {survey_type} with ID {survey_id} retrieved successfully",
     )
+
+
+@router.put(
+    "/surveys/{survey_type}/{survey_id}/state",
+    response_model=ApiResponseDTO[str],
+    status_code=status.HTTP_200_OK,
+    summary="Update Survey State",
+    description="Updates the state of a specific survey (1, 2, or 3) to ACCEPTED or REJECTED.",
+    tags=["Admin Surveys"],
+)
+# @common_decorators.handle_exceptions
+# @common_decorators.handle_authentication_exceptions
+async def update_survey_state(
+    survey_type: int,
+    survey_id: int,
+    state_update: UpdateSurveyStateInputDTO,
+    current_user: AuthenticatedUserDTO = Depends(get_current_user),
+    db_session: Session = Depends(session_manager.get_session),
+) -> ApiResponseDTO[str]:
+    _LOGGER.info(f"Admin user {current_user.user_id} updating state for survey type {survey_type} with ID {survey_id} to {state_update.new_state}")
+
+    try:
+        update_survey_state_use_case = UpdateSurveyState(db_session)
+        updated_survey = update_survey_state_use_case.execute(
+            survey_type=survey_type,
+            survey_id=survey_id,
+            new_state=state_update.new_state,
+            admin_user_id=current_user.user_id,
+        )
+        return ApiResponseDTO.success_response(
+            data=f"Survey {survey_type} with ID {survey_id} state updated to {updated_survey.state}",
+            message="Survey state updated successfully",
+        )
+    except ValueError as e:
+        _LOGGER.error(f"Error updating survey state: {e}")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+    except Exception as e:
+        _LOGGER.error(f"Unexpected error updating survey state: {e}", exc_info=True)
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="An unexpected error occurred.")
 

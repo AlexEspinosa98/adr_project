@@ -10,6 +10,7 @@ from common.domain import (
     repositories as common_repositories,
 )
 from common.infrastructure.database import models as common_database_models
+from common.infrastructure.database.models.auth import UserExtensionist
 from common.infrastructure.logging.config import get_logger
 from common.infrastructure.repositories import (
     postgresql as common_postgresql_repositories,
@@ -21,7 +22,7 @@ _LOGGER: Logger = get_logger(__name__)
 
 class PostgreSQLAuthenticationRepository(
     common_postgresql_repositories.BasePostgreSQLRepository[
-        common_entities.AuthenticatedUser, common_database_models.UserModel
+        common_entities.AuthenticatedUser, UserExtensionist
     ],
     common_repositories.AuthenticationRepository,
 ):
@@ -32,7 +33,7 @@ class PostgreSQLAuthenticationRepository(
     """
 
     def __init__(self, session: Session) -> None:
-        super().__init__(session, common_database_models.UserModel)
+        super().__init__(session, UserExtensionist)
 
     def find_active_user_by_id(
         self, user_id: int
@@ -40,18 +41,18 @@ class PostgreSQLAuthenticationRepository(
         """Find active user for authentication using select()."""
         _LOGGER.info(f"Finding active user for authentication: [{user_id}]")
 
-        stmt: Select[Tuple[common_database_models.UserModel]] = select(
-            common_database_models.UserModel
+        stmt: Select[Tuple[UserExtensionist]] = select(
+            UserExtensionist
         ).where(
-            common_database_models.UserModel.id == user_id,
-            common_database_models.UserModel.user_status
+            UserExtensionist.id == user_id,
+            UserExtensionist.user_status
             == common_enums.UserStatus.ACTIVE,
         )
 
-        result: Result[Tuple[common_database_models.UserModel]] = self._session.execute(
+        result: Result[Tuple[UserExtensionist]] = self._session.execute(
             stmt
         )
-        user_model: common_database_models.UserModel | None = (
+        user_model: UserExtensionist | None = (
             result.scalar_one_or_none()
         )
 
@@ -62,7 +63,7 @@ class PostgreSQLAuthenticationRepository(
         return self._to_domain_entity(model=user_model)
 
     def _to_domain_entity(
-        self, model: common_database_models.UserModel
+        self, model: UserExtensionist
     ) -> common_entities.AuthenticatedUser:
         _LOGGER.info(f"Converting UserModel to AuthenticatedUser: [{model.id}]")
         return common_entities.AuthenticatedUser(
@@ -77,7 +78,7 @@ class PostgreSQLAuthenticationRepository(
 
     def _to_database_model(
         self, entity: common_entities.AuthenticatedUser
-    ) -> common_database_models.UserModel:
+    ) -> UserExtensionist:
         """
         Convert authentication entity to database model.
         """

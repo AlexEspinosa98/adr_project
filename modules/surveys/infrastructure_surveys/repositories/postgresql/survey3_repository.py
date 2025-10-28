@@ -14,3 +14,9 @@ class PostgreSQLSurvey3Repository(Survey3Repository):
         self.session.commit()
         self.session.refresh(survey_model)
         return Survey3Mapper.to_entity(survey_model)
+
+    def get_by_id(self, survey_id: int) -> Survey3 | None:
+        survey_model = self.session.query(Survey3Model).filter_by(id=survey_id).first()
+        if survey_model:
+            return Survey3Mapper.to_entity(survey_model)
+        return None

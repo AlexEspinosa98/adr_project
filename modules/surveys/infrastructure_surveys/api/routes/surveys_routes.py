@@ -33,6 +33,15 @@ from common.infrastructure.api.dtos.pagination_response_dto import PaginatedApiR
 from common.infrastructure.api.dtos.response_dto import ApiResponseDTO
 from common.infrastructure.logging.config import get_logger
 
+from fastapi import Depends, status, HTTPException
+from common.infrastructure.api.dtos.response_dto import ApiResponseDTO
+from common.infrastructure.authentication.user_authorizer import get_current_user
+from common.application.dtos.output_dto.authentication_dto import AuthenticatedUserDTO
+from common.infrastructure.database.session import session_manager
+from sqlalchemy.orm import Session
+from modules.surveys.application_surveys.use_cases.update_survey_state import UpdateSurveyState
+from modules.surveys.application_surveys.dtos.input_dto.update_survey_state_input_dto import UpdateSurveyStateInputDTO
+
 from modules.surveys.application_surveys.services.get_survey_detail_service import GetSurveyDetailService
 from modules.surveys.infrastructure_surveys.services.get_survey_detail_service_composer import get_survey_detail_service
 from modules.surveys.application_surveys.dtos.output_dto.survey1_detail_output_dto import Survey1DetailOutputDTO
@@ -227,3 +236,6 @@ async def get_survey_detail(
         data=survey_detail,
         message=f"Survey type {survey_type} with ID {survey_id} retrieved successfully"
     )
+
+
+

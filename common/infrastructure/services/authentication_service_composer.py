@@ -11,7 +11,7 @@ from sqlalchemy.orm import Session
 from common.application import services as common_services
 from common.config.common.settings import settings
 from common.infrastructure.database.session import session_manager
-from common.infrastructure.repositories import postgresql as common_pg_repos
+from common.infrastructure.repositories.postgresql.authentication_repository import PostgreSQLAuthenticationRepository
 
 
 def get_authentication_service(
@@ -29,7 +29,7 @@ def get_authentication_service(
     Returns:
         AuthenticationService: Fully configured authentication service
     """
-    auth_repository = common_pg_repos.PostgreSQLAuthenticationRepository(
+    auth_repository = PostgreSQLAuthenticationRepository(
         session=session
     )
 
