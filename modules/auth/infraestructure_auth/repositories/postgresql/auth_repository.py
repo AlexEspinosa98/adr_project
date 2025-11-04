@@ -36,6 +36,23 @@ class PostgreSQLAuthRepository(AuthRepository):
         self.session.commit()
         self.session.refresh(extensionist_model)
         return self._to_domain_entity(extensionist_model)
+    
+    def update_extensionist(self, extensionist: UserExtensionist) -> UserExtensionist:
+        existing_model = self.session.get(UserExtensionistModel, extensionist.id)
+        if not existing_model:
+            raise ValueError(f"Extensionist with ID {extensionist.id} does not exist.")
+        
+        for field, value in vars(extensionist).items():
+            setattr(existing_model, field, value)
+        
+        self.session.commit()
+        self.session.refresh(existing_model)
+        return self._to_domain_entity(existing_model)
+    
+    def get_by_id(self, user_id: int) -> Optional[UserExtensionist]:
+        stmt = select(UserExtensionistModel).where(UserExtensionistModel.id == user_id)
+        model = self.session.execute(stmt).scalar_one_or_none()
+        return self._to_domain_entity(model) if model else None
 
     def _to_domain_entity(self, model: UserExtensionistModel) -> UserExtensionist:
         return UserExtensionist(

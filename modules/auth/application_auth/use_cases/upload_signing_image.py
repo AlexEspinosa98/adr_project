@@ -5,7 +5,7 @@ from modules.auth.domain_auth.repositories.auth_repository import AuthRepository
 from common.infrastructure.logging.config import get_logger
 
 _LOGGER: Logger = get_logger(__name__)
-IMAGE_DIR = "image/signing"
+IMAGE_DIR = "images/signing"
 
 class UploadSigningImageUseCase:
     def __init__(self, auth_repository: AuthRepository):
@@ -32,7 +32,7 @@ class UploadSigningImageUseCase:
             f.write(image_data)
 
         user.signing_image_path = image_path
-        self._auth_repository.save(user)
+        self._auth_repository.update_extensionist(user)
 
         _LOGGER.info(f"Signing image uploaded for user {user_id} to {image_path}")
         return image_path
