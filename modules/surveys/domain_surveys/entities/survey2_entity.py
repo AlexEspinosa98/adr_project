@@ -15,7 +15,7 @@ class Survey2(BaseModel):
     visit_development_follow_up_activities: Optional[str]
     previous_visit_recommendations_fulfilled: Optional[bool]
     recommendations_commitments: Optional[str]
-    observations: Optional[str]
+    observations_visited: Optional[str]
     objective: Optional[str]
     visit_followup: Optional[str]
     fulfilled_previous_recommendations: Optional[bool]

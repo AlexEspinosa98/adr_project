@@ -40,7 +40,7 @@ class CreateSurvey2UseCase:
             _LOGGER.info(f"Created new PropertyInfo with ID: {property_info.id}")
 
         survey_entity = Survey2(
-            id=0,
+            id=None,
             extensionist_id=extensionist.id,
             producter_id=producter.id,
             property_id=property_info.id,
@@ -48,7 +48,7 @@ class CreateSurvey2UseCase:
             visit_development_follow_up_activities=input_dto.visit_development_follow_up_activities,
             previous_visit_recommendations_fulfilled=input_dto.previous_visit_recommendations_fulfilled,
             recommendations_commitments=input_dto.recommendations_commitments,
-            observations=input_dto.observations,
+            observations_visited=input_dto.observations,
             objective=input_dto.objective,
             visit_followup=input_dto.visit_followup,
             fulfilled_previous_recommendations=input_dto.fulfilled_previous_recommendations,
@@ -78,7 +78,9 @@ class CreateSurvey2UseCase:
             worker_up=input_dto.worker_up,
             Household_size=input_dto.Household_size,
             other=input_dto.other,
-            state="PENDING"
+            state="PENDING",
+            producter=None,
+            property=None
         )
 
         saved_survey = self._survey_repository.save(survey_entity)

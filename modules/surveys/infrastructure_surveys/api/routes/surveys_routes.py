@@ -82,7 +82,7 @@ async def create_survey1(
         property_data_dict = json.loads(property_data)
         classification_user_data_dict = json.loads(classification_user_data)
 
-        survey_data_dict['classification_user'] = classification_user_data_dict
+        
 
         producter_input_dto = SurveyUserProducterInputDTO(**producter_data_dict)
         property_info_input_dto = PropertyInfoInputDTO(**property_data_dict)
@@ -173,7 +173,7 @@ async def create_survey3(
         property_data_dict = json.loads(property_data)
         classification_user_data_dict = json.loads(classification_user_data)
 
-        survey_data_dict['classification_user'] = classification_user_data_dict
+        
 
         producter_input_dto = SurveyUserProducterInputDTO(**producter_data_dict)
         property_info_input_dto = PropertyInfoInputDTO(**property_data_dict)
