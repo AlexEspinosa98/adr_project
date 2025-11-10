@@ -10,9 +10,7 @@ class ProductProperty(common_entities.BaseEntity):
     state: Optional[str] = Field(None, description="State of property")
     city: Optional[str] = Field(None, description="city of property")
     village: Optional[str] = Field(None, description="village of property")
-    total_area: Optional[str] = Field(None, description="area total property")
     linea_productive_primary: Optional[str] = Field(None, description="linea productive primary")
-    area_total_linea_productive_primary: Optional[str] = Field(None, description="area total linea primary")
     linea_productive_secondary: Optional[str] = Field(None, description="linea productive secondary")
-    area_total_linea_productive_secondary: Optional[str] = Field(None, description="area total in secondary linea")
     area_in_production: Optional[str] = Field(None, description="area in production")
+

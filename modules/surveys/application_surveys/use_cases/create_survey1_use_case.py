@@ -45,24 +45,48 @@ class CreateSurvey1UseCase:
             _LOGGER.info(f"Created new PropertyInfo with ID: {property_info.id}")
 
         survey_entity = Survey1(
-            id=None,
-            extensionist_id=extensionist.id,
-            user_producter_id=producter.id,
-            property_id=property_info.id,
-            medition_focalization=input_dto.medition_focalization,
-            objetive_accompaniment=input_dto.objetive_accompaniment,
-            initial_diagnosis=input_dto.initial_diagnosis,
-            recommendations_commitments=input_dto.recommendations_commitments,
-            observations_visited=input_dto.observations,
-            date_acompanamiento=str(input_dto.visit_date),
-            photo_user=image_paths[0] if len(image_paths) > 0 else None,
-            photo_interaction=image_paths[1] if len(image_paths) > 1 else None,
-            photo_panorama=image_paths[2] if len(image_paths) > 2 else None,
-            phono_extra_1=image_paths[3] if len(image_paths) > 3 else None,
-            state=input_dto.state,
-            user_producter=None,
-            property=None
-        )
+                        id=None,
+                        extensionist_id=extensionist.id,
+                        user_producter_id=producter.id,
+                        property_id=property_info.id,
+
+                        # Campos tipo JSON
+                        medition_focalization=input_dto.medition_focalization,
+                        classification_user=input_dto.classification_user,
+
+                        # Información del acompañamiento
+                        objetive_accompaniment=input_dto.objetive_accompaniment,
+                        initial_diagnosis=input_dto.initial_diagnosis,
+                        recommendations_commitments=input_dto.recommendations_commitments,
+                        observations_visited=input_dto.observations_visited,
+
+                        # Fechas (visit_date → date_acompanamiento)
+                        date_acompanamiento=str(input_dto.date_acompanamiento or input_dto.visit_date)
+                        if getattr(input_dto, "visit_date", None) or getattr(input_dto, "date_acompanamiento", None)
+                        else None,
+                        hour_acompanamiento=input_dto.hour_acompanamiento,
+                        origen_register=input_dto.origen_register,
+                        name_acompanamiento=input_dto.name_acompanamiento,
+                        type_acompanamiento=input_dto.type_acompanamiento,
+                        other_acompanamiento=input_dto.other_acompanamiento,
+
+                        # Fotografías (manejo seguro de índice)
+                        photo_user=image_paths[0] if len(image_paths) > 0 else None,
+                        photo_interaction=image_paths[1] if len(image_paths) > 1 else None,
+                        photo_panorama=image_paths[2] if len(image_paths) > 2 else None,
+                        phono_extra_1=image_paths[3] if len(image_paths) > 3 else None,
+
+                        # Estado
+                        state=input_dto.state,
+
+                        # Relaciones (no cargadas en este punto)
+                        user_producter=None,
+                        property=None,
+
+                        # Cierre/documentación (si aplica)
+                        date_hour_end=getattr(input_dto, "date_hour_end", None),
+                        copy_documentation_delivered=getattr(input_dto, "copy_documentation_delivered", None),
+                    )
 
         saved_survey = self._survey_repository.save(survey_entity)
         _LOGGER.info(f"Survey 1 created with ID: {saved_survey.id}")

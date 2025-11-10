@@ -5,16 +5,42 @@ from .survey_user_producter import SurveyUserProducterInputDTO
 from common.domain.enums.survey_status import SurveyStatus
 
 class CreateSurvey1InputDTO(BaseModel):
-    medition_focalization: Optional[Dict]
-    objetive_accompaniment: Optional[str]
-    initial_diagnosis: Optional[str]
-    recommendations_commitments: Optional[str]
-    observations: Optional[str]
-    visit_date: Optional[datetime]
-    attended_by: Optional[str]
-    user: Optional[str]
-    worker_up: Optional[str]
-    Household_size: Optional[str]
-    other: Optional[str]
-    classification_user: Optional[Dict]
+    # Campos JSON
+    classification_user: Optional[Dict] = None
+    medition_focalization: Optional[Dict] = None
+
+    # Información de acompañamiento
+    objetive_accompaniment: Optional[str] = None
+    initial_diagnosis: Optional[str] = None
+    recommendations_commitments: Optional[str] = None
+    observations_visited: Optional[str] = None
+
+    # Fotografías
+    photo_user: Optional[str] = None
+    photo_interaction: Optional[str] = None
+    photo_panorama: Optional[str] = None
+    phono_extra_1: Optional[str] = None
+
+    # Estado
     state: Optional[SurveyStatus] = SurveyStatus.PENDING
+
+    # Cierre y documentación
+    date_hour_end: Optional[datetime] = None
+    copy_documentation_delivered: Optional[str] = None
+
+    # Datos de acompañamiento
+    date_acompanamiento: Optional[str] = None
+    hour_acompanamiento: Optional[str] = None
+    origen_register: Optional[str] = None
+    name_acompanamiento: Optional[str] = None
+    type_acompanamiento: Optional[str] = None
+    other_acompanamiento: Optional[str] = None
+
+    # Información complementaria (si aplica)
+    visit_date: Optional[datetime] = None
+    attended_by: Optional[str] = None
+    user: Optional[str] = None
+    worker_up: Optional[str] = None
+    household_size: Optional[str] = None
+    other: Optional[str] = None
+

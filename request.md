@@ -57,7 +57,12 @@ This document provides detailed information about the API endpoints available in
     "score": 3},
     "participation_public_political": {"observation": "Notes on political capacity",
     "score": 2}
-  }
+  },
+  "date_acompanamiento": "2025-11-07T10:00:00",
+  "origen_register": "MOBILE",
+  "name_acompanamiento": "pepito",
+  "type_acompanamiento": "INITIAL",
+  "other_acompanamiento": "nose"
 }
 ```
 
@@ -66,12 +71,16 @@ This document provides detailed information about the API endpoints available in
 {
   "identification": "123456789",
   "name": "John Doe",
-  "type_id": 1,
+  "type_id": "CC",
+  "number_phone": "3001234567",
   "is_woman_rural": false,
   "is_young_rural": true,
   "ethnic_belonging": "None",
   "is_victim_conflict": false,
-  "is_narp": false
+  "is_narp": false,
+  "is_producer_organization_member": true,
+  "organization_name": "ASOPROCAFE",
+  "representantive1_name": "Jane Doe"
 }
 ```
 
@@ -82,14 +91,11 @@ This document provides detailed information about the API endpoints available in
   "latitude": "11.23",
   "longitude": "-74.20",
   "asnm": "100",
-  "total_area": "50",
   "state": "Magdalena",
   "city": "Santa Marta",
   "village": "Minca",
   "linea_productive_primary": "Coffee",
-  "area_total_linea_productive_primary": "30",
   "linea_productive_secondary": "Avocado",
-  "area_total_linea_productive_secondary": "10",
   "area_in_production": "40"
 }
 ```
@@ -325,13 +331,17 @@ This document provides detailed information about the API endpoints available in
     "user_producter": {
         "id": 1,
         "name": "John Doe",
-        "type_id": 1,
+        "type_id": "CC",
         "identification": "123456789",
         "is_woman_rural": false,
         "is_young_rural": true,
         "ethnic_belonging": "None",
         "is_victim_conflict": false,
-        "is_narp": false
+        "is_narp": false,
+        "number_phone": "3001234567",
+        "is_producer_organization_member": true,
+        "organization_name": "ASOPROCAFE",
+        "representantive1_name": "Jane Doe"
     },
     "property": {
         "id": 1,
@@ -342,11 +352,8 @@ This document provides detailed information about the API endpoints available in
         "state": "Magdalena",
         "city": "Santa Marta",
         "village": "Minca",
-        "total_area": "50",
         "linea_productive_primary": "Coffee",
-        "area_total_linea_productive_primary": "30",
         "linea_productive_secondary": "Avocado",
-        "area_total_linea_productive_secondary": "10",
         "area_in_production": "40"
     },
     "medition_focalization": {},

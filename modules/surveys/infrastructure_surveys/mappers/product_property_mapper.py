@@ -13,10 +13,23 @@ class ProductPropertyMapper:
             state=model.state,
             city=model.city,
             village=model.village,
-            total_area=model.total_area,
             linea_productive_primary=model.linea_productive_primary,
-            area_total_linea_productive_primary=model.area_total_linea_productive_primary,
             linea_productive_secondary=model.linea_productive_secondary,
-            area_total_linea_productive_secondary=model.area_total_linea_productive_secondary,
             area_in_production=model.area_in_production,
+        )
+
+    @staticmethod
+    def to_db_model(entity: ProductPropertyEntity) -> ProductPropertyModel:
+        return ProductPropertyModel(
+            id=entity.id if entity.id != 0 else None,
+            name=entity.name,
+            latitude=entity.latitude,
+            longitude=entity.longitude,
+            asnm=entity.asnm,
+            state=entity.state,
+            city=entity.city,
+            village=entity.village,
+            linea_productive_primary=entity.linea_productive_primary,
+            linea_productive_secondary=entity.linea_productive_secondary,
+            area_in_production=entity.area_in_production,
         )
