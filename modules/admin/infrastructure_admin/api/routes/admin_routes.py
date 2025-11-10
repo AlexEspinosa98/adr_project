@@ -12,16 +12,19 @@ from modules.admin.application_admin.dtos.input_dto.admin_survey_filter_input_dt
 from modules.admin.application_admin.dtos.output_dto.admin_login_output_dto import AdminLoginOutputDTO
 from modules.admin.application_admin.dtos.output_dto.admin_user_dto import AdminUserDTO
 from modules.admin.application_admin.dtos.output_dto.admin_survey_output_dto import AdminSurveyOutputDTO
+from modules.admin.application_admin.dtos.output_dto.admin_survey_list_output_dto import AdminSurveyListOutputDTO
 from modules.admin.application_admin.dtos.output_dto.admin_survey1_detail_output_dto import AdminSurvey1DetailOutputDTO # New import
 from modules.admin.application_admin.dtos.output_dto.admin_survey2_detail_output_dto import AdminSurvey2DetailOutputDTO # New import
 from modules.admin.application_admin.dtos.output_dto.admin_survey3_detail_output_dto import AdminSurvey3DetailOutputDTO
 from modules.admin.application_admin.dtos.output_dto.extensionist_output_dto import ExtensionistOutputDTO
+from modules.admin.application_admin.dtos.output_dto.extensionist_name_id_phone_output_dto import ExtensionistNameIdPhoneOutputDTO
 from modules.admin.application_admin.services.admin_authentication_service import AdminAuthenticationService
 from modules.admin.application_admin.use_cases.login_admin_use_case import LoginAdminUseCase
 from modules.admin.application_admin.use_cases.register_admin_use_case import RegisterAdminUseCase
 from modules.admin.application_admin.use_cases.get_admin_survey_list_use_case import GetAdminSurveyListUseCase
 from modules.admin.application_admin.use_cases.get_admin_survey_detail_use_case import GetAdminSurveyDetailUseCase
 from modules.admin.application_admin.use_cases.get_extensionist_list_use_case import GetExtensionistListUseCase
+from modules.admin.application_admin.use_cases.get_extensionist_name_id_phone_list_use_case import GetExtensionistNameIdPhoneListUseCase
 from modules.admin.infrastructure_admin.services.admin_authentication_service_composer import (
     get_admin_authentication_service,
     get_login_admin_use_case,
@@ -29,6 +32,7 @@ from modules.admin.infrastructure_admin.services.admin_authentication_service_co
     get_admin_survey_list_use_case,
     get_admin_survey_detail_use_case,
     get_get_extensionist_list_use_case,
+    get_get_extensionist_name_id_phone_list_use_case,
 )
 
 from fastapi import Depends, status, HTTPException
@@ -154,8 +158,41 @@ async def get_extensionist_list(
 
 
 @router.get(
+    "/extensionists/names-ids-phones",
+    response_model=ApiResponseDTO[List[ExtensionistNameIdPhoneOutputDTO]],
+    status_code=status.HTTP_200_OK,
+    summary="Get Extensionist Names, IDs, and Phones List",
+    description="Retrieves a list of extensionist names, identification numbers, and phone numbers, with optional filters.",
+    tags=["Admin Users"],
+    # dependencies=[Depends(get_current_user)],
+)
+@common_decorators.handle_exceptions
+@common_decorators.handle_authentication_exceptions
+async def get_extensionist_name_id_phone_list(
+    name: Optional[str] = None,
+    identification: Optional[str] = None,
+    phone: Optional[str] = None,
+    get_extensionist_name_id_phone_list_use_case: GetExtensionistNameIdPhoneListUseCase = Depends(
+        get_get_extensionist_name_id_phone_list_use_case
+    ),
+) -> ApiResponseDTO[List[ExtensionistNameIdPhoneOutputDTO]]:
+    """
+    Handles fetching a list of extensionist names, identification numbers, and phone numbers with optional filters.
+    """
+    extensionists = get_extensionist_name_id_phone_list_use_case.execute(
+        name=name,
+        identification=identification,
+        phone=phone,
+    )
+    return ApiResponseDTO.success_response(
+        data=extensionists,
+        message="Extensionist names, identification, and phones list fetched successfully",
+    )
+
+
+@router.get(
     "/surveys",
-    response_model=ApiResponseDTO[List[AdminSurveyOutputDTO]],
+    response_model=ApiResponseDTO[List[AdminSurveyListOutputDTO]],
     status_code=status.HTTP_200_OK,
     summary="Get Admin Survey List",
     description="Retrieves a list of surveys for admin with optional filters.",
@@ -165,22 +202,26 @@ async def get_extensionist_list(
 # @common_decorators.handle_authentication_exceptions
 async def get_admin_survey_list(
     city: Optional[str] = None,
-    extensionist: Optional[str] = None,
+    extensionist_identification: Optional[str] = None,
+    extensionist_name: Optional[str] = None,
     get_admin_survey_list_use_case: GetAdminSurveyListUseCase = Depends(get_admin_survey_list_use_case),
-) -> ApiResponseDTO[List[AdminSurveyOutputDTO]]:
+) -> ApiResponseDTO[List[AdminSurveyListOutputDTO]]:
     """
     Handles fetching a list of surveys for admin with optional filters.
 
     Args:
         city (Optional[str]): Optional filter for city.
-        extensionist (Optional[str]): Optional filter for extensionist.
+        extensionist_identification (Optional[str]): Optional filter for extensionist identification.
+        extensionist_name (Optional[str]): Optional filter for extensionist name.
         get_admin_survey_list_use_case (GetAdminSurveyListUseCase): The use case for getting admin survey list.
 
     Returns:
-        ApiResponseDTO[List[AdminSurveyOutputDTO]]: The API response containing the list of surveys.
+        ApiResponseDTO[List[AdminSurveyListOutputDTO]]: The API response containing the list of surveys.
     """
     surveys = get_admin_survey_list_use_case.execute(
-        city=city, extensionist=extensionist
+        city=city,
+        extensionist_identification=extensionist_identification,
+        extensionist_name=extensionist_name,
     )
     return ApiResponseDTO.success_response(
         data=surveys,

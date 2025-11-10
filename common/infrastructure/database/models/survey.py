@@ -218,7 +218,7 @@ class Survey2(BaseModel):
     attended_by: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     user: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     worker_up: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
-    Household_size: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
+    household_size: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
     other: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)
 
 

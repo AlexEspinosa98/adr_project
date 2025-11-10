@@ -11,16 +11,15 @@ from modules.admin.application_admin.use_cases.register_admin_use_case import Re
 from modules.admin.application_admin.use_cases.get_admin_survey_list_use_case import GetAdminSurveyListUseCase
 from modules.admin.application_admin.use_cases.get_admin_survey_detail_use_case import GetAdminSurveyDetailUseCase # New import
 from modules.admin.application_admin.use_cases.get_extensionist_list_use_case import GetExtensionistListUseCase
+from modules.admin.application_admin.use_cases.get_extensionist_name_id_phone_list_use_case import GetExtensionistNameIdPhoneListUseCase
 from modules.admin.infrastructure_admin.repositories.admin_authentication_repository import (
     AdminAuthenticationRepository,
 )
 from modules.admin.infrastructure_admin.repositories.extensionist_user_repository import (
     ExtensionistUserRepository,
 )
-from modules.surveys.domain_surveys.repositories.list_surveys_repository import (
-    ListSurveysRepository,
-)
-from modules.surveys.infrastructure_surveys.repositories.postgresql.list_surveys_repository import PostgreSQLListSurveysRepository
+from modules.admin.domain_admin.repositories.admin_survey_repository import AdminSurveyRepository
+from modules.admin.infrastructure_admin.repositories.admin_survey_repository import PostgreSQLAdminSurveyRepository
 from modules.surveys.application_surveys.services.get_survey_detail_service import GetSurveyDetailService # New import
 from modules.surveys.infrastructure_surveys.services.get_survey_detail_service_composer import get_survey_detail_service # New import
 
@@ -83,10 +82,10 @@ def get_admin_survey_list_use_case(
     """
     Compose and return a configured GetAdminSurveyListUseCase.
     """
-    list_surveys_repository: ListSurveysRepository = PostgreSQLListSurveysRepository(session=session)
+    admin_survey_repository: AdminSurveyRepository = PostgreSQLAdminSurveyRepository(session=session)
 
     return GetAdminSurveyListUseCase(
-        survey_repository=list_surveys_repository,
+        admin_survey_repository=admin_survey_repository,
     )
 
 def get_admin_survey_detail_use_case(
@@ -109,5 +108,18 @@ def get_get_extensionist_list_use_case(
     extensionist_user_repository = ExtensionistUserRepository(session=session)
 
     return GetExtensionistListUseCase(
+        extensionist_user_repository=extensionist_user_repository,
+    )
+
+
+def get_get_extensionist_name_id_phone_list_use_case(
+    session: Session = Depends(session_manager.get_session),
+) -> GetExtensionistNameIdPhoneListUseCase:
+    """
+    Compose and return a configured GetExtensionistNameIdPhoneListUseCase.
+    """
+    extensionist_user_repository = ExtensionistUserRepository(session=session)
+
+    return GetExtensionistNameIdPhoneListUseCase(
         extensionist_user_repository=extensionist_user_repository,
     )
