@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import List
 
 from modules.admin.domain_admin.entities.admin_user_entity import AdminUser as AdminUserEntity
 from common.domain import repositories as common_repositories

@@ -14,18 +14,21 @@ from modules.admin.application_admin.dtos.output_dto.admin_user_dto import Admin
 from modules.admin.application_admin.dtos.output_dto.admin_survey_output_dto import AdminSurveyOutputDTO
 from modules.admin.application_admin.dtos.output_dto.admin_survey1_detail_output_dto import AdminSurvey1DetailOutputDTO # New import
 from modules.admin.application_admin.dtos.output_dto.admin_survey2_detail_output_dto import AdminSurvey2DetailOutputDTO # New import
-from modules.admin.application_admin.dtos.output_dto.admin_survey3_detail_output_dto import AdminSurvey3DetailOutputDTO # New import
+from modules.admin.application_admin.dtos.output_dto.admin_survey3_detail_output_dto import AdminSurvey3DetailOutputDTO
+from modules.admin.application_admin.dtos.output_dto.extensionist_output_dto import ExtensionistOutputDTO
 from modules.admin.application_admin.services.admin_authentication_service import AdminAuthenticationService
 from modules.admin.application_admin.use_cases.login_admin_use_case import LoginAdminUseCase
 from modules.admin.application_admin.use_cases.register_admin_use_case import RegisterAdminUseCase
 from modules.admin.application_admin.use_cases.get_admin_survey_list_use_case import GetAdminSurveyListUseCase
-from modules.admin.application_admin.use_cases.get_admin_survey_detail_use_case import GetAdminSurveyDetailUseCase # New import
+from modules.admin.application_admin.use_cases.get_admin_survey_detail_use_case import GetAdminSurveyDetailUseCase
+from modules.admin.application_admin.use_cases.get_extensionist_list_use_case import GetExtensionistListUseCase
 from modules.admin.infrastructure_admin.services.admin_authentication_service_composer import (
     get_admin_authentication_service,
     get_login_admin_use_case,
     get_register_admin_use_case,
     get_admin_survey_list_use_case,
-    get_admin_survey_detail_use_case, # New import
+    get_admin_survey_detail_use_case,
+    get_get_extensionist_list_use_case,
 )
 
 from fastapi import Depends, status, HTTPException
@@ -112,6 +115,41 @@ async def admin_register(
     return ApiResponseDTO.success_response(
         data=admin_user,
         message="Admin registered successfully",
+    )
+
+
+@router.get(
+    "/extensionists",
+    response_model=ApiResponseDTO[List[ExtensionistOutputDTO]],
+    status_code=status.HTTP_200_OK,
+    summary="Get Extensionist List",
+    description="Retrieves a list of extensionist users with optional filters.",
+    tags=["Admin Users"],
+    # dependencies=[Depends(get_current_user)],
+)
+# @common_decorators.handle_exceptions
+# @common_decorators.handle_authentication_exceptions
+async def get_extensionist_list(
+    name: Optional[str] = None,
+    identification: Optional[str] = None,
+    email: Optional[str] = None,
+    phone: Optional[str] = None,
+    get_extensionist_list_use_case: GetExtensionistListUseCase = Depends(
+        get_get_extensionist_list_use_case
+    ),
+) -> ApiResponseDTO[List[ExtensionistOutputDTO]]:
+    """
+    Handles fetching a list of extensionist users with optional filters.
+    """
+    extensionists = get_extensionist_list_use_case.execute(
+        name=name,
+        identification=identification,
+        email=email,
+        phone=phone,
+    )
+    return ApiResponseDTO.success_response(
+        data=extensionists,
+        message="Extensionist list fetched successfully",
     )
 
 

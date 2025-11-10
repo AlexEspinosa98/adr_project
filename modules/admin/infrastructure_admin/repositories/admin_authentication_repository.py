@@ -1,5 +1,5 @@
 from logging import Logger
-from typing import Optional, Tuple
+from typing import List, Optional, Tuple
 
 from sqlalchemy import Result, Select, select
 from sqlalchemy.orm import Session

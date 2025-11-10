@@ -45,7 +45,7 @@ class PostgreSQLAuthenticationRepository(
             UserExtensionist
         ).where(
             UserExtensionist.id == user_id,
-            UserExtensionist.user_status
+            UserExtensionist.is_active
             == common_enums.UserStatus.ACTIVE,
         )
 
@@ -66,14 +66,19 @@ class PostgreSQLAuthenticationRepository(
         self, model: UserExtensionist
     ) -> common_entities.AuthenticatedUser:
         _LOGGER.info(f"Converting UserModel to AuthenticatedUser: [{model.id}]")
+        user_status = (
+            common_enums.UserStatus.ACTIVE
+            if model.is_active
+            else common_enums.UserStatus.INACTIVE
+        )
         return common_entities.AuthenticatedUser(
             email=model.email,
-            user_status=model.user_status,
+            user_status=user_status,
             created_at=model.created_at,
             updated_at=model.updated_at,
-            last_login=model.last_login,
+            last_login=model.updated_at,  # Assuming last login is the last update
             id=model.id,
-            is_premium=model.is_user_premium,
+            is_premium=False,  # Assuming not premium
         )
 
     def _to_database_model(

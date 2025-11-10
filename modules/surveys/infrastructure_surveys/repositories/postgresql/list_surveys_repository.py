@@ -108,7 +108,8 @@ class PostgreSQLListSurveysRepository(ListSurveysRepository):
             pp.city as property_city,
             pp.name as property_name,
             up.name as user_producter_name,
-            ue.name as extensionist_name
+            ue.name as extensionist_name,
+            ue.identification as extensionist_identification
         FROM survey_1 s
         LEFT JOIN product_property pp ON s.property_id = pp.id
         LEFT JOIN user_producter up ON s.user_producter_id = up.id
@@ -139,7 +140,8 @@ class PostgreSQLListSurveysRepository(ListSurveysRepository):
             pp.city as property_city,
             pp.name as property_name,
             up.name as user_producter_name,
-            ue.name as extensionist_name
+            ue.name as extensionist_name,
+            ue.identification as extensionist_identification
         FROM survey_2 s
         LEFT JOIN product_property pp ON s.property_id = pp.id
         LEFT JOIN user_producter up ON s.producter_id = up.id
@@ -170,7 +172,8 @@ class PostgreSQLListSurveysRepository(ListSurveysRepository):
             pp.city as property_city,
             pp.name as property_name,
             up.name as user_producter_name,
-            ue.name as extensionist_name
+            ue.name as extensionist_name,
+            ue.identification as extensionist_identification
         FROM survey_3 s
         LEFT JOIN product_property pp ON s.property_id = pp.id
         LEFT JOIN user_producter up ON s.user_producter_id = up.id
@@ -184,7 +187,7 @@ class PostgreSQLListSurveysRepository(ListSurveysRepository):
             filters.append("property_city ILIKE :city")
             params["city"] = f"%{city}%"
         if extensionist:
-            filters.append("extensionist_name ILIKE :extensionist")
+            filters.append("extensionist_identification ILIKE :extensionist")
             params["extensionist"] = f"%{extensionist}%"
 
         if filters:
