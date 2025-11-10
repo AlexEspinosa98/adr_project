@@ -47,5 +47,13 @@ class Survey2(BaseModel):
     other: Optional[str]
     state: str
 
+    # Data companionship
+    date_acompanamiento: Optional[str] = None
+    hour_acompanamiento: Optional[str] = None
+    origen_register: Optional[str] = None
+    name_acompanamiento: Optional[str] = None
+    type_acompanamiento: Optional[str] = None
+    other_acompanamiento: Optional[str] = None
+
     class Config:
         from_attributes = True

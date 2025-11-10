@@ -47,6 +47,14 @@ class Survey1(BaseModel):
     type_acompanamiento: Optional[str] = Field(None, description="Type of accompaniment")
     other_acompanamiento: Optional[str] = Field(None, description="Additional accompaniment type")
 
+    # Información complementaria
+    visit_date: Optional[datetime] = None
+    attended_by: Optional[str] = None
+    user: Optional[str] = None
+    worker_up: Optional[str] = None
+    household_size: Optional[str] = None
+    other: Optional[str] = None
+
     class Config:
         orm_mode = True
 

@@ -44,6 +44,14 @@ class Survey2DetailOutputDTO(BaseModel):
     other: Optional[str] = Field(None, alias="other")
     state: Optional[str]
 
+    # Data companionship
+    date_acompanamiento: Optional[str] = None
+    hour_acompanamiento: Optional[str] = None
+    origen_register: Optional[str] = None
+    name_acompanamiento: Optional[str] = None
+    type_acompanamiento: Optional[str] = None
+    other_acompanamiento: Optional[str] = None
+
     class Config:
         from_attributes = True
         populate_by_name = True

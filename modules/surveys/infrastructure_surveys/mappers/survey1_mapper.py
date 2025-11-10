@@ -38,7 +38,13 @@ class Survey1Mapper:
             origen_register=survey_entity.origen_register,
             name_acompanamiento=survey_entity.name_acompanamiento,
             type_acompanamiento=survey_entity.type_acompanamiento,
-            other_acompanamiento=survey_entity.other_acompanamiento
+            other_acompanamiento=survey_entity.other_acompanamiento,
+            visit_date=survey_entity.visit_date,
+            attended_by=survey_entity.attended_by,
+            user=survey_entity.user,
+            worker_up=survey_entity.worker_up,
+            household_size=survey_entity.household_size,
+            other=survey_entity.other
         )
 
     @staticmethod
@@ -67,6 +73,12 @@ class Survey1Mapper:
             origen_register=survey_model.origen_register,
             name_acompanamiento=survey_model.name_acompanamiento,
             type_acompanamiento=survey_model.type_acompanamiento,
-            other_acompanamiento=survey_model.other_acompanamiento
+            other_acompanamiento=survey_model.other_acompanamiento,
+            visit_date=survey_model.visit_date,
+            attended_by=survey_model.attended_by,
+            user=survey_model.user,
+            worker_up=survey_model.worker_up,
+            household_size=survey_model.household_size,
+            other=survey_model.other
         )
 

@@ -43,34 +43,50 @@ class CreateSurvey3UseCase:
             property_info = self._product_property_repository.save(property_entity)
             _LOGGER.info(f"Created new PropertyInfo with ID: {property_info.id}")
 
-        # Save ClassificationUser
-
         survey_entity = Survey3(
             id=None,
             extensionist_id=extensionist.id,
             user_producter_id=producter.id,
             property_id=property_info.id,
+            classification_user=input_dto.classification_user,
             medition_focalization=input_dto.medition_focalization,
             objetive_accompaniment=input_dto.objetive_accompaniment,
-            final_diagnosis=input_dto.initial_diagnosis,
+            development_accompaniment=input_dto.development_accompaniment,
+            final_diagnosis=input_dto.final_diagnosis,
             recommendations_commitments=input_dto.recommendations_commitments,
-            observations_visited=input_dto.observations,
+            observations_visited=input_dto.observations_visited,
             photo_user=image_paths[0] if len(image_paths) > 0 else None,
             photo_interaction=image_paths[1] if len(image_paths) > 1 else None,
             photo_panorama=image_paths[2] if len(image_paths) > 2 else None,
             phono_extra_1=image_paths[3] if len(image_paths) > 3 else None,
             state=input_dto.state,
+            date_hour_end=input_dto.date_hour_end,
+            copy_documentation_delivered=input_dto.copy_documentation_delivered,
+            socialization_events_group=input_dto.socialization_events_group,
+            not_agend_new_visit=input_dto.not_agend_new_visit,
+            date_acompanamiento=input_dto.date_acompanamiento,
+            hour_acompanamiento=input_dto.hour_acompanamiento,
+            origen_register=input_dto.origen_register,
+            name_acompanamiento=input_dto.name_acompanamiento,
+            type_acompanamiento=input_dto.type_acompanamiento,
+            other_acompanamiento=input_dto.other_acompanamiento,
+            visit_date=input_dto.visit_date,
+            attended_by=input_dto.attended_by,
+            user=input_dto.user,
+            worker_up=input_dto.worker_up,
+            household_size=input_dto.household_size,
+            other=input_dto.other,
             user_producter=None,
             property=None
         )
 
         saved_survey = self._survey_repository.save(survey_entity)
-        _LOGGER.info(f"Survey 1 created with ID: {saved_survey.id}")
+        _LOGGER.info(f"Survey 3 created with ID: {saved_survey.id}")
 
-        # Update ClassificationUser with survey_idd1
+        # Update ClassificationUser with survey_idd3
         classification_user = ClassificationUser(**classification_user_input_dto.dict())
         classification_user.survey_idd3 = saved_survey.id
-        classification_user_saved = self._classification_user_repository.save(classification_user) # Save the updated classification user
-        _LOGGER.info(f"Updated ClassificationUser {classification_user_saved.id} with survey_idd1: {saved_survey.id}")
+        classification_user_saved = self._classification_user_repository.save(classification_user)
+        _LOGGER.info(f"Updated ClassificationUser {classification_user_saved.id} with survey_idd3: {saved_survey.id}")
 
         return saved_survey

@@ -84,7 +84,13 @@ class GetSurveyDetailUseCase:
                 worker_up=survey_entity.worker_up,
                 Household_size=survey_entity.Household_size,
                 other=survey_entity.other,
-                state=survey_entity.state
+                state=survey_entity.state,
+                date_acompanamiento=survey_entity.date_acompanamiento,
+                hour_acompanamiento=survey_entity.hour_acompanamiento,
+                origen_register=survey_entity.origen_register,
+                name_acompanamiento=survey_entity.name_acompanamiento,
+                type_acompanamiento=survey_entity.type_acompanamiento,
+                other_acompanamiento=survey_entity.other_acompanamiento
             )
         elif isinstance(survey_entity, Survey3):
             return Survey3DetailOutputDTO(

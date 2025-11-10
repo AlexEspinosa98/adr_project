@@ -7,7 +7,7 @@ class CreateSurvey2InputDTO(BaseModel):
     visit_development_follow_up_activities: Optional[str] = Field(None, alias="visit_development_follow_up_activities")
     previous_visit_recommendations_fulfilled: Optional[bool] = Field(None, alias="previous_visit_recommendations_fulfilled")
     recommendations_commitments: Optional[str] = Field(None, alias="recommendations_commitments")
-    observations: Optional[str] = Field(None, alias="observations")
+    observations_visited: Optional[str] = Field(None, alias="observations_visited")
     objective: Optional[str] = Field(None, alias="objective")
     visit_followup: Optional[str] = Field(None, alias="visit_followup")
     fulfilled_previous_recommendations: Optional[bool] = Field(None, alias="fulfilled_previous_recommendations")
@@ -27,6 +27,16 @@ class CreateSurvey2InputDTO(BaseModel):
     date_hour_end: Optional[datetime] = Field(None, alias="date_hour_end")
     socilization_next_event: Optional[str] = Field(None, alias="socilization_next_event")
     copy_documentation_delivered: Optional[bool] = Field(None, alias="copy_documentation_delivered")
+    
+    # Datos de acompañamiento
+    date_acompanamiento: Optional[str] = None
+    hour_acompanamiento: Optional[str] = None
+    origen_register: Optional[str] = None
+    name_acompanamiento: Optional[str] = None
+    type_acompanamiento: Optional[str] = None
+    other_acompanamiento: Optional[str] = None
+
+    # Información complementaria
     visit_date: Optional[datetime] = Field(None, alias="visit_date")
     attended_by: Optional[str] = Field(None, alias="attended_by")
     user: Optional[str] = Field(None, alias="user")

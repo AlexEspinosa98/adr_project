@@ -89,10 +89,9 @@ class Survey1(BaseModel):
     __tablename__ = "survey_1"
 
     extensionist_id: Mapped[Optional[int]] = mapped_column(ForeignKey("user_extensionist.id"))
-    user_producter_id: Mapped[Optional[int]] = mapped_column(ForeignKey("user_producter.id")) # esta relacion esta de mas porque con la propiedad sabemos cual es
-    property_id: Mapped[Optional[int]] = mapped_column(ForeignKey("product_property.id")) # elimino propiedad porque ya esta en user_producter
+    user_producter_id: Mapped[Optional[int]] = mapped_column(ForeignKey("user_producter.id"))
+    property_id: Mapped[Optional[int]] = mapped_column(ForeignKey("product_property.id"))
 
-    # user_producter: Mapped["UserProducter"] = relationship(lazy="joined")
     property: Mapped["ProductProperty"] = relationship(lazy="joined")
 
     classification_user: Mapped[Optional[dict]] = mapped_column(JSONB)
@@ -122,6 +121,14 @@ class Survey1(BaseModel):
     name_acompanamiento: Mapped[Optional[str]] = mapped_column(String(100))
     type_acompanamiento: Mapped[Optional[str]] = mapped_column(String(100))
     other_acompanamiento: Mapped[Optional[str]] = mapped_column(String(100))
+
+    # Otros campos
+    visit_date: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
+    attended_by: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    user: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    worker_up: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    household_size: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
+    other: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)
 
     def set_classification_user(self, data: dict):
         validated = ClassificationUser(**data)
@@ -158,9 +165,6 @@ class Survey2(BaseModel):
     )
     property: Mapped["ProductProperty"] = relationship(lazy="joined")
 
-
-
-
     objective_accompaniment: Mapped[Optional[str]] = mapped_column(String(500))
     visit_development_follow_up_activities: Mapped[Optional[str]] = mapped_column(String(500))
     previous_visit_recommendations_fulfilled: Mapped[Optional[bool]] = mapped_column(Boolean)
@@ -170,7 +174,7 @@ class Survey2(BaseModel):
     # Seguimiento visita anterior
     objective: Mapped[Optional[str]] = mapped_column(String(500))
     visit_followup: Mapped[Optional[str]] = mapped_column(String(500))  # avances, dificultades, pendientes
-    fulfilled_previous_recommendations: Mapped[Optional[bool]]
+    fulfilled_previous_recommendations: Mapped[Optional[bool]] = mapped_column(Boolean, nullable=True)
     new_recommendations: Mapped[Optional[str]] = mapped_column(String(500))
     observations_seg: Mapped[Optional[str]] = mapped_column(String(500))
     
@@ -194,8 +198,6 @@ class Survey2(BaseModel):
     potential_replication: Mapped[Optional[str]] = mapped_column(String(500))
     observations_extensionist: Mapped[Optional[str]] = mapped_column(String(500))
     
-
-
     # cierre
     date_hour_end: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
     socilization_next_event: Mapped[Optional[str]] = mapped_column(String(500))
@@ -211,6 +213,14 @@ class Survey2(BaseModel):
 
     state: Mapped[Optional[str]] = mapped_column(String(50), nullable=False, default="PENDING")
 
+    # Otros campos
+    visit_date: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
+    attended_by: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    user: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    worker_up: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    Household_size: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
+    other: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)
+
 
 # ==============================
 # Survey 3 - Diagnóstico Final
@@ -219,10 +229,9 @@ class Survey3(BaseModel):
     __tablename__ = "survey_3"
 
     extensionist_id: Mapped[Optional[int]] = mapped_column(ForeignKey("user_extensionist.id"))
-    user_producter_id: Mapped[Optional[int]] = mapped_column(ForeignKey("user_producter.id")) # esta relacion esta de mas porque con la propiedad sabemos cual es
-    property_id: Mapped[Optional[int]] = mapped_column(ForeignKey("product_property.id")) # elimino propiedad porque ya esta en user_producter
+    user_producter_id: Mapped[Optional[int]] = mapped_column(ForeignKey("user_producter.id"))
+    property_id: Mapped[Optional[int]] = mapped_column(ForeignKey("product_property.id"))
 
-    # user_producter: Mapped["UserProducter"] = relationship(lazy="joined")
     property: Mapped["ProductProperty"] = relationship(lazy="joined")
 
     classification_user: Mapped[Optional[dict]] = mapped_column(JSONB)
@@ -232,7 +241,6 @@ class Survey3(BaseModel):
     objetive_accompaniment: Mapped[Optional[str]] = mapped_column(String(500))
     development_accompaniment: Mapped[Optional[str]] = mapped_column(String(500))
     final_diagnosis: Mapped[Optional[str]] = mapped_column(String(500))
-    # se cumplio las recomendaciones
     recommendations_commitments: Mapped[Optional[str]] = mapped_column(String(500))
     observations_visited: Mapped[Optional[str]] = mapped_column(String(500))
 
@@ -243,6 +251,7 @@ class Survey3(BaseModel):
     name_acompanamiento: Mapped[Optional[str]] = mapped_column(String(100))
     type_acompanamiento: Mapped[Optional[str]] = mapped_column(String(100))
     other_acompanamiento: Mapped[Optional[str]] = mapped_column(String(100))
+    
     # Fotos
     photo_user: Mapped[Optional[str]] = mapped_column(String(255))
     photo_interaction: Mapped[Optional[str]] = mapped_column(String(255))
@@ -255,6 +264,14 @@ class Survey3(BaseModel):
     copy_documentation_delivered: Mapped[Optional[str]] = mapped_column(String(50))
     socialization_events_group: Mapped[Optional[str]] = mapped_column(String(500))
     not_agend_new_visit: Mapped[Optional[str]] = mapped_column(String(500))
+
+    # Otros campos
+    visit_date: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
+    attended_by: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    user: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    worker_up: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    household_size: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
+    other: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)
 
 
     def set_classification_user(self, data: dict):

@@ -19,14 +19,34 @@ class Survey3(BaseModel):
     final_diagnosis: Optional[str]
     recommendations_commitments: Optional[str]
     observations_visited: Optional[str]
-    visit_date: Optional[datetime]
-    attended_by: Optional[str]
-    user: Optional[str]
-    worker_up: Optional[str]
-    Household_size: Optional[str]
-    other: Optional[str]
     photo_user: Optional[str]
     photo_interaction: Optional[str]
     photo_panorama: Optional[str]
     phono_extra_1: Optional[str]
     state: SurveyStatus = SurveyStatus.PENDING
+
+    # Cierre y despedida
+    date_hour_end: Optional[datetime] = None
+    copy_documentation_delivered: Optional[str] = None
+    socialization_events_group: Optional[str] = None
+    not_agend_new_visit: Optional[str] = None
+
+    # Datos de acompañamiento
+    date_acompanamiento: Optional[str] = None
+    hour_acompanamiento: Optional[str] = None
+    origen_register: Optional[str] = None
+    name_acompanamiento: Optional[str] = None
+    type_acompanamiento: Optional[str] = None
+    other_acompanamiento: Optional[str] = None
+
+    # Información complementaria
+    visit_date: Optional[datetime] = None
+    attended_by: Optional[str] = None
+    user: Optional[str] = None
+    worker_up: Optional[str] = None
+    household_size: Optional[str] = None
+    other: Optional[str] = None
+
+    class Config:
+        from_attributes = True
+        orm_mode = True

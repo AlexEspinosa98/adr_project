@@ -48,7 +48,7 @@ class CreateSurvey2UseCase:
             visit_development_follow_up_activities=input_dto.visit_development_follow_up_activities,
             previous_visit_recommendations_fulfilled=input_dto.previous_visit_recommendations_fulfilled,
             recommendations_commitments=input_dto.recommendations_commitments,
-            observations_visited=input_dto.observations,
+            observations_visited=input_dto.observations_visited,
             objective=input_dto.objective,
             visit_followup=input_dto.visit_followup,
             fulfilled_previous_recommendations=input_dto.fulfilled_previous_recommendations,
@@ -80,7 +80,13 @@ class CreateSurvey2UseCase:
             other=input_dto.other,
             state="PENDING",
             producter=None,
-            property=None
+            property=None,
+            date_acompanamiento=input_dto.date_acompanamiento,
+            hour_acompanamiento=input_dto.hour_acompanamiento,
+            origen_register=input_dto.origen_register,
+            name_acompanamiento=input_dto.name_acompanamiento,
+            type_acompanamiento=input_dto.type_acompanamiento,
+            other_acompanamiento=input_dto.other_acompanamiento
         )
 
         saved_survey = self._survey_repository.save(survey_entity)
