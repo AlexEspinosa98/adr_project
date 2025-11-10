@@ -12,7 +12,7 @@ from modules.admin.application_admin.dtos.output_dto.admin_survey_list_output_dt
 from modules.admin.domain_admin.repositories.admin_survey_repository import (
     AdminSurveyRepository as IAdminSurveyRepository,
 )
-from modules.surveys.application_surveys.dtos.output_dto.product_property_output_dto import ProductPropertyOutputDTO
+from modules.admin.application_admin.dtos.output_dto.product_property_output_dto import ProductPropertyOutputDTO
 
 
 _LOGGER: Logger = get_logger(__name__)
@@ -168,15 +168,15 @@ class PostgreSQLAdminSurveyRepository(
         SELECT DISTINCT
             pp.id,
             pp.name,
-            pp.cadastral_record,
             pp.latitude,
             pp.longitude,
-            pp.municipality,
-            pp.department,
+            pp.asnm,
+            pp.state,
             pp.city,
-            pp.neighborhood,
-            pp.address,
-            pp.is_active,
+            pp.village,
+            pp.linea_productive_primary,
+            pp.linea_productive_secondary,
+            pp.area_in_production,
             pp.created_at,
             pp.updated_at,
             pp.deleted_at
@@ -187,15 +187,15 @@ class PostgreSQLAdminSurveyRepository(
         SELECT DISTINCT
             pp.id,
             pp.name,
-            pp.cadastral_record,
             pp.latitude,
             pp.longitude,
-            pp.municipality,
-            pp.department,
+            pp.asnm,
+            pp.state,
             pp.city,
-            pp.neighborhood,
-            pp.address,
-            pp.is_active,
+            pp.village,
+            pp.linea_productive_primary,
+            pp.linea_productive_secondary,
+            pp.area_in_production,
             pp.created_at,
             pp.updated_at,
             pp.deleted_at
@@ -206,15 +206,15 @@ class PostgreSQLAdminSurveyRepository(
         SELECT DISTINCT
             pp.id,
             pp.name,
-            pp.cadastral_record,
             pp.latitude,
             pp.longitude,
-            pp.municipality,
-            pp.department,
+            pp.asnm,
+            pp.state,
             pp.city,
-            pp.neighborhood,
-            pp.address,
-            pp.is_active,
+            pp.village,
+            pp.linea_productive_primary,
+            pp.linea_productive_secondary,
+            pp.area_in_production,
             pp.created_at,
             pp.updated_at,
             pp.deleted_at

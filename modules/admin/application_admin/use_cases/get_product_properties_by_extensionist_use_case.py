@@ -3,7 +3,7 @@ from typing import List
 
 from common.infrastructure.logging.config import get_logger
 from modules.admin.domain_admin.repositories.admin_survey_repository import AdminSurveyRepository
-from modules.surveys.application_surveys.dtos.output_dto.product_property_output_dto import ProductPropertyOutputDTO
+from modules.admin.application_admin.dtos.output_dto.product_property_output_dto import ProductPropertyOutputDTO
 
 
 _LOGGER: Logger = get_logger(__name__)

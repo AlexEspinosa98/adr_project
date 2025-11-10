@@ -3,7 +3,7 @@ from typing import Optional, Dict
 from datetime import datetime
 from common.domain.enums.survey_status import SurveyStatus
 from modules.surveys.application_surveys.dtos.output_dto.user_producter_output_dto import UserProducterOutputDTO
-from modules.surveys.application_surveys.dtos.output_dto.product_property_output_dto import ProductPropertyOutputDTO
+from modules.admin.application_admin.dtos.output_dto.product_property_output_dto import ProductPropertyOutputDTO
 
 class AdminSurvey3DetailOutputDTO(BaseModel):
     id: int
