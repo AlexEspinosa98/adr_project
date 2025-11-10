@@ -12,6 +12,7 @@ from modules.admin.application_admin.dtos.output_dto.admin_survey_list_output_dt
 from modules.admin.domain_admin.repositories.admin_survey_repository import (
     AdminSurveyRepository as IAdminSurveyRepository,
 )
+from modules.surveys.application_surveys.dtos.output_dto.product_property_output_dto import ProductPropertyOutputDTO
 
 
 _LOGGER: Logger = get_logger(__name__)
@@ -157,3 +158,71 @@ class PostgreSQLAdminSurveyRepository(
             processed_results.append(AdminSurveyListOutputDTO.model_validate(survey_data))
         
         return processed_results
+
+    def find_product_properties_by_extensionist_id(
+        self, extensionist_id: int
+    ) -> List[ProductPropertyOutputDTO]:
+        _LOGGER.info(f"Finding unique product properties for extensionist ID: [{extensionist_id}]")
+
+        query = """
+        SELECT DISTINCT
+            pp.id,
+            pp.name,
+            pp.cadastral_record,
+            pp.latitude,
+            pp.longitude,
+            pp.municipality,
+            pp.department,
+            pp.city,
+            pp.neighborhood,
+            pp.address,
+            pp.is_active,
+            pp.created_at,
+            pp.updated_at,
+            pp.deleted_at
+        FROM product_property pp
+        JOIN survey_1 s1 ON pp.id = s1.property_id
+        WHERE s1.extensionist_id = :extensionist_id
+        UNION
+        SELECT DISTINCT
+            pp.id,
+            pp.name,
+            pp.cadastral_record,
+            pp.latitude,
+            pp.longitude,
+            pp.municipality,
+            pp.department,
+            pp.city,
+            pp.neighborhood,
+            pp.address,
+            pp.is_active,
+            pp.created_at,
+            pp.updated_at,
+            pp.deleted_at
+        FROM product_property pp
+        JOIN survey_2 s2 ON pp.id = s2.property_id
+        WHERE s2.extensionist_id = :extensionist_id
+        UNION
+        SELECT DISTINCT
+            pp.id,
+            pp.name,
+            pp.cadastral_record,
+            pp.latitude,
+            pp.longitude,
+            pp.municipality,
+            pp.department,
+            pp.city,
+            pp.neighborhood,
+            pp.address,
+            pp.is_active,
+            pp.created_at,
+            pp.updated_at,
+            pp.deleted_at
+        FROM product_property pp
+        JOIN survey_3 s3 ON pp.id = s3.property_id
+        WHERE s3.extensionist_id = :extensionist_id
+        """
+
+        result = self.session.execute(text(query), {"extensionist_id": extensionist_id}).fetchall()
+
+        return [ProductPropertyOutputDTO.model_validate(row._asdict()) for row in result]

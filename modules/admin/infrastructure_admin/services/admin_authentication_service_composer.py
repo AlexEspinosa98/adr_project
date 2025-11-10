@@ -12,6 +12,7 @@ from modules.admin.application_admin.use_cases.get_admin_survey_list_use_case im
 from modules.admin.application_admin.use_cases.get_admin_survey_detail_use_case import GetAdminSurveyDetailUseCase # New import
 from modules.admin.application_admin.use_cases.get_extensionist_list_use_case import GetExtensionistListUseCase
 from modules.admin.application_admin.use_cases.get_extensionist_name_id_phone_list_use_case import GetExtensionistNameIdPhoneListUseCase
+from modules.admin.application_admin.use_cases.get_product_properties_by_extensionist_use_case import GetProductPropertiesByExtensionistUseCase
 from modules.admin.infrastructure_admin.repositories.admin_authentication_repository import (
     AdminAuthenticationRepository,
 )
@@ -122,4 +123,17 @@ def get_get_extensionist_name_id_phone_list_use_case(
 
     return GetExtensionistNameIdPhoneListUseCase(
         extensionist_user_repository=extensionist_user_repository,
+    )
+
+
+def get_product_properties_by_extensionist_use_case(
+    session: Session = Depends(session_manager.get_session),
+) -> GetProductPropertiesByExtensionistUseCase:
+    """
+    Compose and return a configured GetProductPropertiesByExtensionistUseCase.
+    """
+    admin_survey_repository: AdminSurveyRepository = PostgreSQLAdminSurveyRepository(session=session)
+
+    return GetProductPropertiesByExtensionistUseCase(
+        admin_survey_repository=admin_survey_repository,
     )

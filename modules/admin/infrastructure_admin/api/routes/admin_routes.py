@@ -18,6 +18,7 @@ from modules.admin.application_admin.dtos.output_dto.admin_survey2_detail_output
 from modules.admin.application_admin.dtos.output_dto.admin_survey3_detail_output_dto import AdminSurvey3DetailOutputDTO
 from modules.admin.application_admin.dtos.output_dto.extensionist_output_dto import ExtensionistOutputDTO
 from modules.admin.application_admin.dtos.output_dto.extensionist_name_id_phone_output_dto import ExtensionistNameIdPhoneOutputDTO
+from modules.surveys.application_surveys.dtos.output_dto.product_property_output_dto import ProductPropertyOutputDTO
 from modules.admin.application_admin.services.admin_authentication_service import AdminAuthenticationService
 from modules.admin.application_admin.use_cases.login_admin_use_case import LoginAdminUseCase
 from modules.admin.application_admin.use_cases.register_admin_use_case import RegisterAdminUseCase
@@ -25,6 +26,7 @@ from modules.admin.application_admin.use_cases.get_admin_survey_list_use_case im
 from modules.admin.application_admin.use_cases.get_admin_survey_detail_use_case import GetAdminSurveyDetailUseCase
 from modules.admin.application_admin.use_cases.get_extensionist_list_use_case import GetExtensionistListUseCase
 from modules.admin.application_admin.use_cases.get_extensionist_name_id_phone_list_use_case import GetExtensionistNameIdPhoneListUseCase
+from modules.admin.application_admin.use_cases.get_product_properties_by_extensionist_use_case import GetProductPropertiesByExtensionistUseCase
 from modules.admin.infrastructure_admin.services.admin_authentication_service_composer import (
     get_admin_authentication_service,
     get_login_admin_use_case,
@@ -33,6 +35,7 @@ from modules.admin.infrastructure_admin.services.admin_authentication_service_co
     get_admin_survey_detail_use_case,
     get_get_extensionist_list_use_case,
     get_get_extensionist_name_id_phone_list_use_case,
+    get_product_properties_by_extensionist_use_case,
 )
 
 from fastapi import Depends, status, HTTPException
@@ -187,6 +190,30 @@ async def get_extensionist_name_id_phone_list(
     return ApiResponseDTO.success_response(
         data=extensionists,
         message="Extensionist names, identification, and phones list fetched successfully",
+    )
+
+
+@router.get(
+    "/extensionists/{extensionist_id}/product-properties",
+    response_model=ApiResponseDTO[List[ProductPropertyOutputDTO]],
+    status_code=status.HTTP_200_OK,
+    summary="Get Product Properties by Extensionist ID",
+    description="Retrieves a list of unique product properties associated with a given extensionist ID.",
+    tags=["Admin Surveys"],
+)
+@common_decorators.handle_exceptions
+@common_decorators.handle_authentication_exceptions
+async def get_product_properties_by_extensionist(
+    extensionist_id: int,
+    get_product_properties_by_extensionist_use_case: GetProductPropertiesByExtensionistUseCase = Depends(get_product_properties_by_extensionist_use_case),
+) -> ApiResponseDTO[List[ProductPropertyOutputDTO]]:
+    """
+    Handles fetching a list of unique product properties associated with a given extensionist ID.
+    """
+    product_properties = get_product_properties_by_extensionist_use_case.execute(extensionist_id)
+    return ApiResponseDTO.success_response(
+        data=product_properties,
+        message=f"Product properties for extensionist ID {extensionist_id} fetched successfully",
     )
 
 

@@ -4,6 +4,7 @@ from typing import List, Optional
 from modules.admin.application_admin.dtos.output_dto.admin_survey_list_output_dto import (
     AdminSurveyListOutputDTO,
 )
+from modules.surveys.application_surveys.dtos.output_dto.product_property_output_dto import ProductPropertyOutputDTO
 
 
 class AdminSurveyRepository(ABC):
@@ -16,4 +17,12 @@ class AdminSurveyRepository(ABC):
     ) -> List[AdminSurveyListOutputDTO]:
         """
         Finds surveys for admin with optional filters including city, extensionist identification, and name.
+        """
+
+    @abstractmethod
+    def find_product_properties_by_extensionist_id(
+        self, extensionist_id: int
+    ) -> List[ProductPropertyOutputDTO]:
+        """
+        Finds unique product properties associated with a given extensionist ID.
         """
