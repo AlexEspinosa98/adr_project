@@ -21,7 +21,7 @@ class AdminSurveyRepository(ABC):
 
     @abstractmethod
     def find_product_properties_by_extensionist_id(
-        self, extensionist_id: int
+        self, extensionist_id: int, property_name: Optional[str] = None
     ) -> List[ProductPropertyOutputDTO]:
         """
         Finds unique product properties associated with a given extensionist ID.

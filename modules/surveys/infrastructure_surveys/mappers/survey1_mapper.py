@@ -49,15 +49,23 @@ class Survey1Mapper:
 
     @staticmethod
     def to_entity(survey_model: Survey1Model) -> Survey1Entity:
+        def _parse_json(val):
+            if isinstance(val, str):
+                try:
+                    return json.loads(val)
+                except (json.JSONDecodeError, TypeError):
+                    return val
+            return val
+
         return Survey1Entity(
             id=survey_model.id,
             extensionist_id=survey_model.extensionist_id,
             user_producter_id=survey_model.user_producter_id,
             property_id=survey_model.property_id,
             property=ProductPropertyMapper.to_entity(survey_model.property) if survey_model.property else None,
-            medition_focalization=survey_model.medition_focalization,
-            classification_user=survey_model.classification_user,
-            objetive_accompaniment=survey_model.objetive_accompaniment,
+            medition_focalization=_parse_json(survey_model.medition_focalization),
+            classification_user=_parse_json(survey_model.classification_user),
+            objetive_accompaniment=_parse_json(survey_model.objetive_accompaniment),
             initial_diagnosis=survey_model.initial_diagnosis,
             recommendations_commitments=survey_model.recommendations_commitments,
             observations_visited=survey_model.observations_visited,

@@ -1,6 +1,7 @@
-from pydantic import BaseModel, Field
-from typing import Optional, Dict
+from pydantic import BaseModel, Field, validator
+from typing import Optional, Dict, Union
 from datetime import datetime
+import json
 from common.domain.enums.survey_status import SurveyStatus
 from modules.surveys.application_surveys.dtos.output_dto.user_producter_output_dto import UserProducterOutputDTO
 from modules.surveys.application_surveys.dtos.output_dto.product_property_output_dto import ProductPropertyOutputDTO
@@ -9,8 +10,9 @@ class Survey3DetailOutputDTO(BaseModel):
     id: int
     user_producter: Optional[UserProducterOutputDTO]
     property: Optional[ProductPropertyOutputDTO]
+    classification_user: Optional[Dict]
     medition_focalization: Optional[Dict]
-    objetive_accompaniment: Optional[str]
+    objetive_accompaniment: Optional[Union[Dict, str]]
     development_accompaniment: Optional[str]
     final_diagnosis: Optional[str]
     recommendations_commitments: Optional[str]
@@ -26,6 +28,12 @@ class Survey3DetailOutputDTO(BaseModel):
     photo_panorama: Optional[str]
     phono_extra_1: Optional[str]
     state: Optional[SurveyStatus] = SurveyStatus.PENDING
+
+    @validator('classification_user', 'medition_focalization', 'objetive_accompaniment', pre=True)
+    def parse_json_fields(cls, value):
+        if isinstance(value, str):
+            return json.loads(value)
+        return value
 
     class Config:
         from_attributes = True

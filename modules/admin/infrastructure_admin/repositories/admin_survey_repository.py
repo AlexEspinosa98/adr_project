@@ -160,11 +160,14 @@ class PostgreSQLAdminSurveyRepository(
         return processed_results
 
     def find_product_properties_by_extensionist_id(
-        self, extensionist_id: int
+        self, extensionist_id: int, property_name: Optional[str] = None
     ) -> List[ProductPropertyOutputDTO]:
-        _LOGGER.info(f"Finding unique product properties for extensionist ID: [{extensionist_id}]")
+        _LOGGER.info(
+            f"Finding unique product properties for extensionist ID: [{extensionist_id}] with property name filter: [{property_name}]"
+        )
 
-        query = """
+        # Primera consulta
+        base_query = """
         SELECT DISTINCT
             pp.id,
             pp.name,
@@ -183,7 +186,10 @@ class PostgreSQLAdminSurveyRepository(
         FROM product_property pp
         JOIN survey_1 s1 ON pp.id = s1.property_id
         WHERE s1.extensionist_id = :extensionist_id
-        UNION
+        """
+
+        # Segunda (sin UNION dentro)
+        union_query_part_2 = """
         SELECT DISTINCT
             pp.id,
             pp.name,
@@ -202,7 +208,10 @@ class PostgreSQLAdminSurveyRepository(
         FROM product_property pp
         JOIN survey_2 s2 ON pp.id = s2.property_id
         WHERE s2.extensionist_id = :extensionist_id
-        UNION
+        """
+
+        # Tercera (sin UNION dentro)
+        union_query_part_3 = """
         SELECT DISTINCT
             pp.id,
             pp.name,
@@ -223,6 +232,33 @@ class PostgreSQLAdminSurveyRepository(
         WHERE s3.extensionist_id = :extensionist_id
         """
 
-        result = self.session.execute(text(query), {"extensionist_id": extensionist_id}).fetchall()
+        # Unimos correctamente
+        full_query = f"""
+        {base_query}
+        UNION
+        {union_query_part_2}
+        UNION
+        {union_query_part_3}
+        """
+
+        params = {"extensionist_id": extensionist_id}
+
+        # Filtro opcional por nombre
+        if property_name:
+            full_query = f"""
+            SELECT * FROM (
+                {base_query}
+                UNION
+                {union_query_part_2}
+                UNION
+                {union_query_part_3}
+            ) AS combined_properties
+            WHERE combined_properties.name ILIKE :property_name
+            """
+            params["property_name"] = f"%{property_name}%"
+
+        # Ejecutar la consulta
+        result = self.session.execute(text(full_query), params).fetchall()
 
         return [ProductPropertyOutputDTO.model_validate(row._asdict()) for row in result]
+

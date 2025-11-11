@@ -148,7 +148,6 @@ class PostgreSQLListSurveysRepository(ListSurveysRepository):
         LEFT JOIN user_extensionist ue ON s.extensionist_id = ue.id
         UNION ALL
         SELECT
-            SELECT
             s.id,
             'Survey 3' as survey_type,
             s.extensionist_id,

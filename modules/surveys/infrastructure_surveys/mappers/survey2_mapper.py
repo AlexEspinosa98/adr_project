@@ -62,12 +62,20 @@ class Survey2Mapper:
 
     @staticmethod
     def to_entity(survey_model: Survey2Model) -> Survey2Entity:
+        def _parse_json(val):
+            if isinstance(val, str):
+                try:
+                    return json.loads(val)
+                except (json.JSONDecodeError, TypeError):
+                    return val
+            return val
+
         return Survey2Entity(
             id=survey_model.id,
             extensionist_id=survey_model.extensionist_id,
             producter_id=survey_model.producter_id,
             property_id=survey_model.property_id,
-            objective_accompaniment=survey_model.objective_accompaniment,
+            objective_accompaniment=_parse_json(survey_model.objective_accompaniment),
             visit_development_follow_up_activities=survey_model.visit_development_follow_up_activities,
             previous_visit_recommendations_fulfilled=survey_model.previous_visit_recommendations_fulfilled,
             recommendations_commitments=survey_model.recommendations_commitments,

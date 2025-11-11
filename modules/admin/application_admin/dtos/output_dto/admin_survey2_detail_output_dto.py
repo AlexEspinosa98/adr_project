@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import Optional
+from typing import Optional, Dict, Union
 from datetime import datetime
 from modules.surveys.application_surveys.dtos.output_dto.user_producter_output_dto import UserProducterOutputDTO
 from modules.admin.application_admin.dtos.output_dto.product_property_output_dto import ProductPropertyOutputDTO
@@ -8,7 +8,7 @@ class AdminSurvey2DetailOutputDTO(BaseModel):
     id: int
     producter: Optional[UserProducterOutputDTO]
     property: Optional[ProductPropertyOutputDTO]
-    objective_accompaniment: Optional[str] = Field(None, alias="objective_accompaniment")
+    objective_accompaniment: Optional[Union[Dict, str]] = Field(None, alias="objective_accompaniment")
     visit_development_follow_up_activities: Optional[str] = Field(None, alias="visit_development_follow_up_activities")
     previous_visit_recommendations_fulfilled: Optional[bool] = Field(None, alias="previous_visit_recommendations_fulfilled")
     recommendations_commitments: Optional[str] = Field(None, alias="recommendations_commitments")

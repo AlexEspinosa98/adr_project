@@ -6,6 +6,7 @@ from typing import Optional
 from common.infrastructure.database.models.base import BaseModel
 from pydantic import Field, BaseModel as PydanticBaseModel
 from sqlalchemy.dialects.postgresql import JSONB
+import json
 
 
 class UserProducter(BaseModel):
@@ -98,7 +99,7 @@ class Survey1(BaseModel):
     medition_focalization: Mapped[Optional[dict]] = mapped_column(JSONB) 
 
     #6.
-    objetive_accompaniment: Mapped[Optional[str]] = mapped_column(String(500))
+    objetive_accompaniment: Mapped[Optional[dict]] = mapped_column(JSONB)
     initial_diagnosis: Mapped[Optional[str]] = mapped_column(String(500))
     recommendations_commitments: Mapped[Optional[str]] = mapped_column(String(500))
     observations_visited: Mapped[Optional[str]] = mapped_column(String(500))
@@ -136,6 +137,8 @@ class Survey1(BaseModel):
     
     def get_classification_user(self) -> ClassificationUser:
         if self.classification_user:
+            if isinstance(self.classification_user, str):
+                return ClassificationUser(**json.loads(self.classification_user))
             return ClassificationUser(**self.classification_user)
         return None
     
@@ -145,6 +148,8 @@ class Survey1(BaseModel):
 
     def get_medition_focalization(self) -> ResultFocalization:
         if self.medition_focalization:
+            if isinstance(self.medition_focalization, str):
+                return ResultFocalization(**json.loads(self.medition_focalization))
             return ResultFocalization(**self.medition_focalization)
         return None
 
@@ -165,7 +170,7 @@ class Survey2(BaseModel):
     )
     property: Mapped["ProductProperty"] = relationship(lazy="joined")
 
-    objective_accompaniment: Mapped[Optional[str]] = mapped_column(String(500))
+    objective_accompaniment: Mapped[Optional[dict]] = mapped_column(JSONB)
     visit_development_follow_up_activities: Mapped[Optional[str]] = mapped_column(String(500))
     previous_visit_recommendations_fulfilled: Mapped[Optional[bool]] = mapped_column(Boolean)
     recommendations_commitments: Mapped[Optional[str]] = mapped_column(String(500))
@@ -238,7 +243,7 @@ class Survey3(BaseModel):
     medition_focalization: Mapped[Optional[dict]] = mapped_column(JSONB) 
 
     #6.
-    objetive_accompaniment: Mapped[Optional[str]] = mapped_column(String(500))
+    objetive_accompaniment: Mapped[Optional[dict]] = mapped_column(JSONB)
     development_accompaniment: Mapped[Optional[str]] = mapped_column(String(500))
     final_diagnosis: Mapped[Optional[str]] = mapped_column(String(500))
     recommendations_commitments: Mapped[Optional[str]] = mapped_column(String(500))
@@ -280,6 +285,8 @@ class Survey3(BaseModel):
     
     def get_classification_user(self) -> ClassificationUser:
         if self.classification_user:
+            if isinstance(self.classification_user, str):
+                return ClassificationUser(**json.loads(self.classification_user))
             return ClassificationUser(**self.classification_user)
         return None
     
@@ -289,6 +296,8 @@ class Survey3(BaseModel):
 
     def get_medition_focalization(self) -> ResultFocalization:
         if self.medition_focalization:
+            if isinstance(self.medition_focalization, str):
+                return ResultFocalization(**json.loads(self.medition_focalization))
             return ResultFocalization(**self.medition_focalization)
         return None
 

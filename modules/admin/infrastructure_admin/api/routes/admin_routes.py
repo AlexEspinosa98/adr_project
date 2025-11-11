@@ -198,19 +198,20 @@ async def get_extensionist_name_id_phone_list(
     response_model=ApiResponseDTO[List[ProductPropertyOutputDTO]],
     status_code=status.HTTP_200_OK,
     summary="Get Product Properties by Extensionist ID",
-    description="Retrieves a list of unique product properties associated with a given extensionist ID.",
+    description="Retrieves a list of unique product properties associated with a given extensionist ID, with optional filtering by property name.",
     tags=["Admin Surveys"],
 )
 @common_decorators.handle_exceptions
 @common_decorators.handle_authentication_exceptions
 async def get_product_properties_by_extensionist(
     extensionist_id: int,
+    property_name: Optional[str] = None,
     get_product_properties_by_extensionist_use_case: GetProductPropertiesByExtensionistUseCase = Depends(get_product_properties_by_extensionist_use_case),
 ) -> ApiResponseDTO[List[ProductPropertyOutputDTO]]:
     """
     Handles fetching a list of unique product properties associated with a given extensionist ID.
     """
-    product_properties = get_product_properties_by_extensionist_use_case.execute(extensionist_id)
+    product_properties = get_product_properties_by_extensionist_use_case.execute(extensionist_id, property_name)
     return ApiResponseDTO.success_response(
         data=product_properties,
         message=f"Product properties for extensionist ID {extensionist_id} fetched successfully",

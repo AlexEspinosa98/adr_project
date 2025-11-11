@@ -1,5 +1,6 @@
-from pydantic import BaseModel, Field
-from typing import Optional
+from pydantic import BaseModel, Field, validator
+from typing import Optional, Union, Dict
+import json
 from datetime import datetime
 from modules.surveys.application_surveys.dtos.output_dto.user_producter_output_dto import UserProducterOutputDTO
 from modules.surveys.application_surveys.dtos.output_dto.product_property_output_dto import ProductPropertyOutputDTO
@@ -8,7 +9,7 @@ class Survey2DetailOutputDTO(BaseModel):
     id: int
     producter: Optional[UserProducterOutputDTO]
     property: Optional[ProductPropertyOutputDTO]
-    objective_accompaniment: Optional[str] = Field(None, alias="objective_accompaniment")
+    objective_accompaniment: Optional[Union[Dict, str]] = Field(None, alias="objective_accompaniment")
     visit_development_follow_up_activities: Optional[str] = Field(None, alias="visit_development_follow_up_activities")
     previous_visit_recommendations_fulfilled: Optional[bool] = Field(None, alias="previous_visit_recommendations_fulfilled")
     recommendations_commitments: Optional[str] = Field(None, alias="recommendations_commitments")
@@ -51,6 +52,15 @@ class Survey2DetailOutputDTO(BaseModel):
     name_acompanamiento: Optional[str] = None
     type_acompanamiento: Optional[str] = None
     other_acompanamiento: Optional[str] = None
+
+    @validator('objective_accompaniment', pre=True)
+    def parse_json_fields(cls, value):
+        if isinstance(value, str):
+            try:
+                return json.loads(value)
+            except (json.JSONDecodeError, TypeError):
+                return value
+        return value
 
     class Config:
         from_attributes = True

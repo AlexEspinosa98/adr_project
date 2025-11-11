@@ -51,6 +51,14 @@ class Survey3Mapper:
 
     @staticmethod
     def to_entity(survey_model: Survey3Model) -> Survey3Entity:
+        def _parse_json(val):
+            if isinstance(val, str):
+                try:
+                    return json.loads(val)
+                except (json.JSONDecodeError, TypeError):
+                    return val
+            return val
+
         return Survey3Entity(
             id=survey_model.id,
             extensionist_id=survey_model.extensionist_id,
@@ -58,9 +66,9 @@ class Survey3Mapper:
             user_producter=UserProducterMapper.to_entity(survey_model.user_producter) if hasattr(survey_model, 'user_producter') and survey_model.user_producter else None,
             property_id=survey_model.property_id,
             property=ProductPropertyMapper.to_entity(survey_model.property) if survey_model.property else None,
-            classification_user=survey_model.classification_user,
-            medition_focalization=survey_model.medition_focalization,
-            objetive_accompaniment=survey_model.objetive_accompaniment,
+            classification_user=_parse_json(survey_model.classification_user),
+            medition_focalization=_parse_json(survey_model.medition_focalization),
+            objetive_accompaniment=_parse_json(survey_model.objetive_accompaniment),
             development_accompaniment=survey_model.development_accompaniment,
             final_diagnosis=survey_model.final_diagnosis,
             recommendations_commitments=survey_model.recommendations_commitments,

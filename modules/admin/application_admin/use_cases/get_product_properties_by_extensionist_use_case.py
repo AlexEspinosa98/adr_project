@@ -13,6 +13,6 @@ class GetProductPropertiesByExtensionistUseCase:
     def __init__(self, admin_survey_repository: AdminSurveyRepository) -> None:
         self._admin_survey_repository: AdminSurveyRepository = admin_survey_repository
 
-    def execute(self, extensionist_id: int) -> List[ProductPropertyOutputDTO]:
-        _LOGGER.info(f"Fetching unique product properties for extensionist ID: [{extensionist_id}]")
-        return self._admin_survey_repository.find_product_properties_by_extensionist_id(extensionist_id)
+    def execute(self, extensionist_id: int, property_name: str = None) -> List[ProductPropertyOutputDTO]:
+        _LOGGER.info(f"Fetching unique product properties for extensionist ID: [{extensionist_id}] with property name filter: [{property_name}]")
+        return self._admin_survey_repository.find_product_properties_by_extensionist_id(extensionist_id, property_name)

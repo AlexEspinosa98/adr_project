@@ -11,7 +11,7 @@ class AdminSurvey3DetailOutputDTO(BaseModel):
     property: Optional[ProductPropertyOutputDTO]
     classification_user: Optional[Dict]
     medition_focalization: Optional[Dict]
-    objetive_accompaniment: Optional[str]
+    objetive_accompaniment: Optional[Dict]
     initial_diagnosis: Optional[str]
     recommendations_commitments: Optional[str]
     observations: Optional[str]
