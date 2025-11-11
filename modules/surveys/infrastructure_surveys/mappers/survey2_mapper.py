@@ -2,6 +2,8 @@ from modules.surveys.domain_surveys.entities.survey2_entity import Survey2 as Su
 from common.infrastructure.database.models.survey import Survey2 as Survey2Model
 import json
 from datetime import datetime
+from modules.surveys.infrastructure_surveys.mappers.user_producter_mapper import UserProducterMapper
+from modules.surveys.infrastructure_surveys.mappers.product_property_mapper import ProductPropertyMapper
 
 class CustomJsonEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -110,8 +112,8 @@ class Survey2Mapper:
             Household_size=survey_model.Household_size,
             other=survey_model.other,
             state=survey_model.state,
-            producter=survey_model.producter,
-            property=survey_model.property,
+            producter=UserProducterMapper.to_entity(survey_model.producter) if survey_model.producter else None,
+            property=ProductPropertyMapper.to_entity(survey_model.property) if survey_model.property else None,
             date_acompanamiento=survey_model.date_acompanamiento,
             hour_acompanamiento=survey_model.hour_acompanamiento,
             origen_register=survey_model.origen_register,

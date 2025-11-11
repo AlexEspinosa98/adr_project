@@ -94,6 +94,11 @@ class Survey1(BaseModel):
     property_id: Mapped[Optional[int]] = mapped_column(ForeignKey("product_property.id"))
 
     property: Mapped["ProductProperty"] = relationship(lazy="joined")
+    user_producter: Mapped["UserProducter"] = relationship(
+        foreign_keys=[user_producter_id],
+        primaryjoin="Survey1.user_producter_id == UserProducter.id",
+        lazy="joined"
+    )
 
     classification_user: Mapped[Optional[dict]] = mapped_column(JSONB)
     medition_focalization: Mapped[Optional[dict]] = mapped_column(JSONB) 
@@ -170,6 +175,7 @@ class Survey2(BaseModel):
     )
     property: Mapped["ProductProperty"] = relationship(lazy="joined")
 
+
     objective_accompaniment: Mapped[Optional[dict]] = mapped_column(JSONB)
     visit_development_follow_up_activities: Mapped[Optional[str]] = mapped_column(String(500))
     previous_visit_recommendations_fulfilled: Mapped[Optional[bool]] = mapped_column(Boolean)
@@ -238,6 +244,11 @@ class Survey3(BaseModel):
     property_id: Mapped[Optional[int]] = mapped_column(ForeignKey("product_property.id"))
 
     property: Mapped["ProductProperty"] = relationship(lazy="joined")
+    user_producter: Mapped["UserProducter"] = relationship(
+        foreign_keys=[user_producter_id],
+        primaryjoin="Survey3.user_producter_id == UserProducter.id",
+        lazy="joined"
+    )
 
     classification_user: Mapped[Optional[dict]] = mapped_column(JSONB)
     medition_focalization: Mapped[Optional[dict]] = mapped_column(JSONB) 
@@ -305,7 +316,7 @@ class Survey3(BaseModel):
 class ClassificationUser(BaseModel):
     __tablename__ = "classification_user"
 
-    survey_idd1: Mapped[Optional[int]] = mapped_column(ForeignKey("survey_1.id"))
+    survey_idd1: Mapped[Optional[int]] = mapped_column(ForeignKey("survey_1.id")) #cambiar esta relacion en el futuro
     survey_idd3: Mapped[Optional[int]] = mapped_column(ForeignKey("survey_3.id"))
     # Aspect 1 - Human and Technical Capacities
     main_productive_activity: Mapped[Optional[int]] = mapped_column(Integer)  # Q1

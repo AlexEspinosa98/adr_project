@@ -11,10 +11,10 @@ class AdminSurvey1DetailOutputDTO(BaseModel):
     property: Optional[ProductPropertyOutputDTO]
     classification_user: Optional[Dict]
     medition_focalization: Optional[Dict]
-    objetive_accompaniment: Optional[Union[Dict, str]]
+    objetive_accompaniment: Optional[str]
     initial_diagnosis: Optional[str]
     recommendations_commitments: Optional[str]
-    observations: Optional[str]
+    observations_visited: Optional[str]
     visit_date: Optional[datetime]
     attended_by: Optional[str]
     user: Optional[str]
@@ -25,7 +25,8 @@ class AdminSurvey1DetailOutputDTO(BaseModel):
     photo_interaction: Optional[str]
     photo_panorama: Optional[str]
     phono_extra_1: Optional[str]
-    state: Optional[SurveyStatus] = SurveyStatus.PENDING
+    state: Optional[SurveyStatus]
+    
 
     class Config:
         from_attributes = True

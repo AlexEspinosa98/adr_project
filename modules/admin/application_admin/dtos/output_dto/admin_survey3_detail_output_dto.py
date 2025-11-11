@@ -14,7 +14,7 @@ class AdminSurvey3DetailOutputDTO(BaseModel):
     objetive_accompaniment: Optional[Dict]
     initial_diagnosis: Optional[str]
     recommendations_commitments: Optional[str]
-    observations: Optional[str]
+    observations_visited: Optional[str]
     visit_date: Optional[datetime]
     attended_by: Optional[str]
     user: Optional[str]

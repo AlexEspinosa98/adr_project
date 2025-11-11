@@ -20,15 +20,15 @@ class Survey1DetailOutputDTO(BaseModel):
     attended_by: Optional[str]
     user: Optional[str]
     worker_up: Optional[str]
-    Household_size: Optional[str]
     other: Optional[str]
     photo_user: Optional[str]
     photo_interaction: Optional[str]
     photo_panorama: Optional[str]
     phono_extra_1: Optional[str]
     state: Optional[SurveyStatus] = SurveyStatus.PENDING
+    classification_general: Optional[Dict]  # New field added
 
-    @validator('classification_user', 'medition_focalization', 'objetive_accompaniment', pre=True)
+    @validator('classification_user', 'medition_focalization', pre=True)
     def parse_json_fields(cls, value):
         if isinstance(value, str):
             return json.loads(value)

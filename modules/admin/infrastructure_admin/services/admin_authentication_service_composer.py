@@ -22,7 +22,9 @@ from modules.admin.infrastructure_admin.repositories.extensionist_user_repositor
 from modules.admin.domain_admin.repositories.admin_survey_repository import AdminSurveyRepository
 from modules.admin.infrastructure_admin.repositories.admin_survey_repository import PostgreSQLAdminSurveyRepository
 from modules.surveys.application_surveys.services.get_survey_detail_service import GetSurveyDetailService # New import
-from modules.surveys.infrastructure_surveys.services.get_survey_detail_service_composer import get_survey_detail_service # New import
+from modules.surveys.infrastructure_surveys.services.get_survey_detail_service_composer import get_survey_detail_service
+from modules.surveys.domain_surveys.repositories.classification_user_repository import ClassificationUserRepository
+from modules.surveys.infrastructure_surveys.repositories.postgresql.classification_user_repository import PostgreSQLClassificationUserRepository
 
 
 def get_admin_authentication_service(
@@ -89,14 +91,21 @@ def get_admin_survey_list_use_case(
         admin_survey_repository=admin_survey_repository,
     )
 
+def get_classification_user_repository(
+    session: Session = Depends(session_manager.get_session),
+) -> ClassificationUserRepository:
+    return PostgreSQLClassificationUserRepository(session)
+
 def get_admin_survey_detail_use_case(
     get_survey_detail_service: GetSurveyDetailService = Depends(get_survey_detail_service),
+    classification_user_repository: ClassificationUserRepository = Depends(get_classification_user_repository),
 ) -> GetAdminSurveyDetailUseCase:
     """
     Compose and return a configured GetAdminSurveyDetailUseCase.
     """
     return GetAdminSurveyDetailUseCase(
         get_survey_detail_service=get_survey_detail_service,
+        classification_user_repository=classification_user_repository,
     )
 
 

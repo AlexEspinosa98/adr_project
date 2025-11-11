@@ -18,3 +18,7 @@ class SurveyDetailRepository(ABC):
     @abstractmethod
     def get_survey_by_id_and_type(self, survey_id: int, survey_type: int) -> Optional[Union[Survey1, Survey2, Survey3]]:
         pass
+
+    @abstractmethod
+    def get_classification_user_by_survey_id(self, survey_id: int, survey_type: int) -> Optional[dict]:
+        pass

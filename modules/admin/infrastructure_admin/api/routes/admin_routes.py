@@ -16,6 +16,7 @@ from modules.admin.application_admin.dtos.output_dto.admin_survey_list_output_dt
 from modules.admin.application_admin.dtos.output_dto.admin_survey1_detail_output_dto import AdminSurvey1DetailOutputDTO # New import
 from modules.admin.application_admin.dtos.output_dto.admin_survey2_detail_output_dto import AdminSurvey2DetailOutputDTO # New import
 from modules.admin.application_admin.dtos.output_dto.admin_survey3_detail_output_dto import AdminSurvey3DetailOutputDTO
+from modules.admin.application_admin.dtos.output_dto.admin_survey_detail_wrapper_output_dto import AdminSurveyDetailWrapperOutputDTO
 from modules.admin.application_admin.dtos.output_dto.extensionist_output_dto import ExtensionistOutputDTO
 from modules.admin.application_admin.dtos.output_dto.extensionist_name_id_phone_output_dto import ExtensionistNameIdPhoneOutputDTO
 from modules.admin.application_admin.dtos.output_dto.product_property_output_dto import ProductPropertyOutputDTO
@@ -259,7 +260,7 @@ async def get_admin_survey_list(
 
 @router.get(
     "/surveys/{survey_type}/{survey_id}",
-    response_model=ApiResponseDTO[Union[AdminSurvey1DetailOutputDTO, AdminSurvey2DetailOutputDTO, AdminSurvey3DetailOutputDTO]], # Changed response_model
+    response_model=ApiResponseDTO[AdminSurveyDetailWrapperOutputDTO],
     status_code=status.HTTP_200_OK,
     summary="Get Admin Survey Detail",
     description="Retrieves full details of a single survey for admin.",
@@ -271,7 +272,7 @@ async def get_admin_survey_detail(
     survey_type: int,
     survey_id: int,
     get_admin_survey_detail_use_case: GetAdminSurveyDetailUseCase = Depends(get_admin_survey_detail_use_case),
-) -> ApiResponseDTO[Union[AdminSurvey1DetailOutputDTO, AdminSurvey2DetailOutputDTO, AdminSurvey3DetailOutputDTO]]: # Changed return type
+) -> ApiResponseDTO[AdminSurveyDetailWrapperOutputDTO]:
     """
     Handles fetching full details of a single survey for admin.
 
@@ -281,7 +282,7 @@ async def get_admin_survey_detail(
         get_admin_survey_detail_use_case (GetAdminSurveyDetailUseCase): The use case for getting admin survey detail.
 
     Returns:
-        ApiResponseDTO[Union[AdminSurvey1DetailOutputDTO, AdminSurvey2DetailOutputDTO, AdminSurvey3DetailOutputDTO]]: The API response containing the survey details.
+        ApiResponseDTO[AdminSurveyDetailWrapperOutputDTO]: The API response containing the survey details.
     """
     survey_detail = get_admin_survey_detail_use_case.execute(survey_id, survey_type)
 

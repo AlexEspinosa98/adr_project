@@ -22,6 +22,7 @@ class GetSurveyDetailUseCase:
         
         # Map the entity to the specific SurveyDetailOutputDTO
         if isinstance(survey_entity, Survey1):
+            classification_user = self._survey_detail_repository.get_classification_user_by_survey_id(survey_id, survey_type)
             return Survey1DetailOutputDTO(
                 id=survey_entity.id,
                 user_producter=UserProducterOutputDTO.model_validate(survey_entity.user_producter) if survey_entity.user_producter else None,
@@ -41,7 +42,8 @@ class GetSurveyDetailUseCase:
                 photo_interaction=survey_entity.photo_interaction,
                 photo_panorama=survey_entity.photo_panorama,
                 phono_extra_1=survey_entity.phono_extra_1,
-                state=survey_entity.state
+                state=survey_entity.state,
+                classification_general=classification_user
             )
         elif isinstance(survey_entity, Survey2):
             return Survey2DetailOutputDTO(

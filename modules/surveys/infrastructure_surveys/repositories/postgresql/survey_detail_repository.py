@@ -9,6 +9,7 @@ from modules.surveys.domain_surveys.entities.survey3_entity import Survey3
 from common.infrastructure.database.models.survey import Survey1 as Survey1Model
 from common.infrastructure.database.models.survey import Survey2 as Survey2Model
 from common.infrastructure.database.models.survey import Survey3 as Survey3Model
+from common.infrastructure.database.models.survey import ClassificationUser
 from modules.surveys.infrastructure_surveys.mappers.survey1_mapper import Survey1Mapper
 from modules.surveys.infrastructure_surveys.mappers.survey2_mapper import Survey2Mapper
 from modules.surveys.infrastructure_surveys.mappers.survey3_mapper import Survey3Mapper
@@ -30,5 +31,17 @@ class PostgreSQLSurveyDetailRepository(SurveyDetailRepository):
             stmt = select(Survey3Model).where(Survey3Model.id == survey_id)
             model = self.session.execute(stmt).scalar_one_or_none()
             return Survey3Mapper.to_entity(model) if model else None
+        else:
+            return None
+        
+    def get_classification_user_by_survey_id(self, survey_id: int, survey_type: int) -> Optional[dict]:
+        if survey_type == 1:
+            stmt = select(ClassificationUser).where(ClassificationUser.survey_idd1 == survey_id)
+            model = self.session.execute(stmt).scalar_one_or_none()
+            return model.data if model else None
+        elif survey_type == 3:
+            stmt = select(ClassificationUser).where(ClassificationUser.survey_idd3 == survey_id)
+            model = self.session.execute(stmt).scalar_one_or_none()
+            return model.data if model else None
         else:
             return None

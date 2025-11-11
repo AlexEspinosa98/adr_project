@@ -12,7 +12,7 @@ class AdminSurvey2DetailOutputDTO(BaseModel):
     visit_development_follow_up_activities: Optional[str] = Field(None, alias="visit_development_follow_up_activities")
     previous_visit_recommendations_fulfilled: Optional[bool] = Field(None, alias="previous_visit_recommendations_fulfilled")
     recommendations_commitments: Optional[str] = Field(None, alias="recommendations_commitments")
-    observations: Optional[str] = Field(None, alias="observations")
+    observations_visited: Optional[str] = Field(None, alias="observations_visited")
     objective: Optional[str] = Field(None, alias="objective")
     visit_followup: Optional[str] = Field(None, alias="visit_followup")
     fulfilled_previous_recommendations: Optional[bool] = Field(None, alias="fulfilled_previous_recommendations")

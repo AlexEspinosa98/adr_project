@@ -5,6 +5,7 @@ from datetime import datetime
 from modules.surveys.domain_surveys.entities.user_producter_entity import UserProducter
 from modules.surveys.domain_surveys.entities.product_property_entity import ProductProperty
 from modules.surveys.infrastructure_surveys.mappers.product_property_mapper import ProductPropertyMapper
+from modules.surveys.infrastructure_surveys.mappers.user_producter_mapper import UserProducterMapper
 
 class CustomJsonEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -62,6 +63,7 @@ class Survey1Mapper:
             extensionist_id=survey_model.extensionist_id,
             user_producter_id=survey_model.user_producter_id,
             property_id=survey_model.property_id,
+            user_producter=UserProducterMapper.to_entity(survey_model.user_producter) if survey_model.user_producter else None,
             property=ProductPropertyMapper.to_entity(survey_model.property) if survey_model.property else None,
             medition_focalization=_parse_json(survey_model.medition_focalization),
             classification_user=_parse_json(survey_model.classification_user),
