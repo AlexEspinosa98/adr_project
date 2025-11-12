@@ -27,6 +27,15 @@ class Survey1DetailOutputDTO(BaseModel):
     phono_extra_1: Optional[str]
     state: Optional[SurveyStatus] = SurveyStatus.PENDING
     classification_general: Optional[Dict]  # New field added
+    copy_documentation_delivered: Optional[str]
+    date_hour_end: Optional[datetime]
+    date_acompanamiento: Optional[datetime]
+    origen_register: Optional[str]
+    name_acompanamiento: Optional[str]
+    type_acompanamiento: Optional[str]
+    other_acompanamiento: Optional[str]
+    household_size: Optional[str]
+
 
     @validator('classification_user', 'medition_focalization', pre=True)
     def parse_json_fields(cls, value):

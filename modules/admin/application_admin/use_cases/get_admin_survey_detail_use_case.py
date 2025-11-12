@@ -57,5 +57,5 @@ class GetAdminSurveyDetailUseCase:
             data_survey=admin_survey_detail_dto,
             property=property_info,
             user_producter=user_producter,
-            classification_general=classification_general.model_dump() if classification_general else None,
+            classification_general=admin_survey_detail_dto.classification_general
         )

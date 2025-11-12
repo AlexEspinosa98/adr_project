@@ -38,10 +38,10 @@ class PostgreSQLSurveyDetailRepository(SurveyDetailRepository):
         if survey_type == 1:
             stmt = select(ClassificationUser).where(ClassificationUser.survey_idd1 == survey_id)
             model = self.session.execute(stmt).scalar_one_or_none()
-            return model.data if model else None
+            return model.__dict__ if model else None
         elif survey_type == 3:
             stmt = select(ClassificationUser).where(ClassificationUser.survey_idd3 == survey_id)
             model = self.session.execute(stmt).scalar_one_or_none()
-            return model.data if model else None
+            return model.__dict__ if model else None
         else:
             return None
