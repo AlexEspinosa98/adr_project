@@ -8,6 +8,3 @@ from .product_property_output_dto import ProductPropertyOutputDTO
 
 class AdminSurveyDetailWrapperOutputDTO(BaseModel):
     data_survey: Union[AdminSurvey1DetailOutputDTO, AdminSurvey2DetailOutputDTO, AdminSurvey3DetailOutputDTO]
-    property: Optional[ProductPropertyOutputDTO]
-    user_producter: Optional[UserProducterOutputDTO]
-    classification_general: Optional[Any]
