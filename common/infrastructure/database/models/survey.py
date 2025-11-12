@@ -1,16 +1,15 @@
-from sqlalchemy import String, Text, Integer, Date, Boolean, ForeignKey, Enum, DateTime
+from sqlalchemy import String, Integer, Boolean, ForeignKey, DateTime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from datetime import datetime
 from typing import Optional
 from common.infrastructure.database.models.base import BaseModel
-from pydantic import Field, BaseModel as PydanticBaseModel
+from pydantic import BaseModel as PydanticBaseModel
 from sqlalchemy.dialects.postgresql import JSONB
 import json
 
 
 class UserProducter(BaseModel):
-
     __tablename__ = "user_producter"
 
     # metadata
@@ -26,19 +25,23 @@ class UserProducter(BaseModel):
     is_narp: Mapped[Optional[bool]] = mapped_column(Boolean, nullable=True)
 
     # organization
-    is_producer_organization_member: Mapped[Optional[bool]] = mapped_column(Boolean, nullable=True)
+    is_producer_organization_member: Mapped[Optional[bool]] = mapped_column(
+        Boolean, nullable=True
+    )
     organization_name: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
-    representantive1_name: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
-
+    representantive1_name: Mapped[Optional[str]] = mapped_column(
+        String(255), nullable=True
+    )
 
 
 class ProductProperty(BaseModel):
-
     __tablename__ = "product_property"
 
     # Metadata
     # fk with user_producter
-    user_producter_id: Mapped[Optional[int]] = mapped_column(ForeignKey("user_producter.id"), nullable=True)
+    user_producter_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("user_producter.id"), nullable=True
+    )
     # identify property
     name: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     latitude: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
@@ -53,16 +56,16 @@ class ProductProperty(BaseModel):
     linea_productive_secondary: Mapped[Optional[str]] = mapped_column(String(255))
     area_in_production: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
 
-class ObjetcEvaluation(PydanticBaseModel):
 
+class ObjetcEvaluation(PydanticBaseModel):
     observation: Optional[str]
     score: Optional[int]
-    
+
     class Config:
         extra = "allow"
 
-class ClassificationUser(PydanticBaseModel):
 
+class ClassificationUser(PydanticBaseModel):
     development_human_capacity: Optional[ObjetcEvaluation]
     development_social_capacity: Optional[ObjetcEvaluation]
     access_adaptative_adoption_information: Optional[ObjetcEvaluation]
@@ -74,7 +77,6 @@ class ClassificationUser(PydanticBaseModel):
 
 
 class ResultFocalization(PydanticBaseModel):
-
     control_resources: Optional[ObjetcEvaluation]
     voice_influence_decision: Optional[ObjetcEvaluation]
     leadership_innovation: Optional[ObjetcEvaluation]
@@ -83,27 +85,34 @@ class ResultFocalization(PydanticBaseModel):
     class Config:
         extra = "allow"
 
+
 # ==============================
 # Survey 1 - Diagnóstico Inicial
 # ==============================
 class Survey1(BaseModel):
     __tablename__ = "survey_1"
 
-    extensionist_id: Mapped[Optional[int]] = mapped_column(ForeignKey("user_extensionist.id"))
-    user_producter_id: Mapped[Optional[int]] = mapped_column(ForeignKey("user_producter.id"))
-    property_id: Mapped[Optional[int]] = mapped_column(ForeignKey("product_property.id"))
+    extensionist_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("user_extensionist.id")
+    )
+    user_producter_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("user_producter.id")
+    )
+    property_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("product_property.id")
+    )
 
     property: Mapped["ProductProperty"] = relationship(lazy="joined")
     user_producter: Mapped["UserProducter"] = relationship(
         foreign_keys=[user_producter_id],
         primaryjoin="Survey1.user_producter_id == UserProducter.id",
-        lazy="joined"
+        lazy="joined",
     )
 
     classification_user: Mapped[Optional[dict]] = mapped_column(JSONB)
-    medition_focalization: Mapped[Optional[dict]] = mapped_column(JSONB) 
+    medition_focalization: Mapped[Optional[dict]] = mapped_column(JSONB)
 
-    #6.
+    # 6.
     objetive_accompaniment: Mapped[Optional[dict]] = mapped_column(JSONB)
     initial_diagnosis: Mapped[Optional[str]] = mapped_column(String(500))
     recommendations_commitments: Mapped[Optional[str]] = mapped_column(String(500))
@@ -114,13 +123,15 @@ class Survey1(BaseModel):
     photo_interaction: Mapped[Optional[str]] = mapped_column(String(255))
     photo_panorama: Mapped[Optional[str]] = mapped_column(String(255))
     phono_extra_1: Mapped[Optional[str]] = mapped_column(String(255))
-    state: Mapped[Optional[str]] = mapped_column(String(50), nullable=False, default="PENDING")
+    state: Mapped[Optional[str]] = mapped_column(
+        String(50), nullable=False, default="PENDING"
+    )
 
     # closed and despedida
     date_hour_end: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
     copy_documentation_delivered: Mapped[Optional[str]] = mapped_column(String(50))
 
-    #Date acompañamiento
+    # Date acompañamiento
     date_acompanamiento: Mapped[Optional[str]] = mapped_column(String(50))
     hour_acompanamiento: Mapped[Optional[str]] = mapped_column(String(50))
     origen_register: Mapped[Optional[str]] = mapped_column(String(100))
@@ -129,7 +140,9 @@ class Survey1(BaseModel):
     other_acompanamiento: Mapped[Optional[str]] = mapped_column(String(100))
 
     # Otros campos
-    visit_date: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
+    visit_date: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
     attended_by: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     user: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     worker_up: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
@@ -139,14 +152,14 @@ class Survey1(BaseModel):
     def set_classification_user(self, data: dict):
         validated = ClassificationUser(**data)
         self.classification_user = validated.model_dump()
-    
+
     def get_classification_user(self) -> ClassificationUser:
         if self.classification_user:
             if isinstance(self.classification_user, str):
                 return ClassificationUser(**json.loads(self.classification_user))
             return ClassificationUser(**self.classification_user)
         return None
-    
+
     def set_medition_focalization(self, data: dict):
         validated = ResultFocalization(**data)
         self.medition_focalization = validated.model_dump()
@@ -158,37 +171,49 @@ class Survey1(BaseModel):
             return ResultFocalization(**self.medition_focalization)
         return None
 
+
 # ==============================
 # Survey 2 - Seguimiento y Co-Innovación
 # ==============================
 class Survey2(BaseModel):
     __tablename__ = "survey_2"
 
-    extensionist_id: Mapped[Optional[int]] = mapped_column(ForeignKey("user_extensionist.id"))
+    extensionist_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("user_extensionist.id")
+    )
     producter_id: Mapped[Optional[int]] = mapped_column(ForeignKey("user_producter.id"))
-    property_id: Mapped[Optional[int]] = mapped_column(ForeignKey("product_property.id"))
+    property_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("product_property.id")
+    )
 
     producter: Mapped["UserProducter"] = relationship(
         foreign_keys=[producter_id],
         primaryjoin="Survey2.producter_id == UserProducter.id",
-        lazy="joined"
+        lazy="joined",
     )
     property: Mapped["ProductProperty"] = relationship(lazy="joined")
 
-
     objective_accompaniment: Mapped[Optional[dict]] = mapped_column(JSONB)
-    visit_development_follow_up_activities: Mapped[Optional[str]] = mapped_column(String(500))
-    previous_visit_recommendations_fulfilled: Mapped[Optional[bool]] = mapped_column(Boolean)
+    visit_development_follow_up_activities: Mapped[Optional[str]] = mapped_column(
+        String(500)
+    )
+    previous_visit_recommendations_fulfilled: Mapped[Optional[bool]] = mapped_column(
+        Boolean
+    )
     recommendations_commitments: Mapped[Optional[str]] = mapped_column(String(500))
     observations_visited: Mapped[Optional[str]] = mapped_column(String(700))
 
     # Seguimiento visita anterior
     objective: Mapped[Optional[str]] = mapped_column(String(500))
-    visit_followup: Mapped[Optional[str]] = mapped_column(String(500))  # avances, dificultades, pendientes
-    fulfilled_previous_recommendations: Mapped[Optional[bool]] = mapped_column(Boolean, nullable=True)
+    visit_followup: Mapped[Optional[str]] = mapped_column(
+        String(500)
+    )  # avances, dificultades, pendientes
+    fulfilled_previous_recommendations: Mapped[Optional[bool]] = mapped_column(
+        Boolean, nullable=True
+    )
     new_recommendations: Mapped[Optional[str]] = mapped_column(String(500))
     observations_seg: Mapped[Optional[str]] = mapped_column(String(500))
-    
+
     # Fotos
     photo_user: Mapped[Optional[str]] = mapped_column(String(255))
     photo_interaction: Mapped[Optional[str]] = mapped_column(String(255))
@@ -197,8 +222,12 @@ class Survey2(BaseModel):
 
     # 4. Co-innovación
     register_coinnovation: Mapped[Optional[str]] = mapped_column(String(500))
-    local_practice_tool_technology_coinnovation_identified: Mapped[Optional[bool]] = mapped_column(Boolean)
-    local_coinovation_or_technology_record: Mapped[Optional[bool]] = mapped_column(Boolean)
+    local_practice_tool_technology_coinnovation_identified: Mapped[Optional[bool]] = (
+        mapped_column(Boolean)
+    )
+    local_coinovation_or_technology_record: Mapped[Optional[bool]] = mapped_column(
+        Boolean
+    )
 
     name_innovation: Mapped[Optional[str]] = mapped_column(String(150))
     description_innovation: Mapped[Optional[str]] = mapped_column(String(500))
@@ -208,7 +237,7 @@ class Survey2(BaseModel):
     process_functioning: Mapped[Optional[str]] = mapped_column(String(500))
     potential_replication: Mapped[Optional[str]] = mapped_column(String(500))
     observations_extensionist: Mapped[Optional[str]] = mapped_column(String(500))
-    
+
     # cierre
     date_hour_end: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
     socilization_next_event: Mapped[Optional[str]] = mapped_column(String(500))
@@ -222,10 +251,14 @@ class Survey2(BaseModel):
     type_acompanamiento: Mapped[Optional[str]] = mapped_column(String(100))
     other_acompanamiento: Mapped[Optional[str]] = mapped_column(String(100))
 
-    state: Mapped[Optional[str]] = mapped_column(String(50), nullable=False, default="PENDING")
+    state: Mapped[Optional[str]] = mapped_column(
+        String(50), nullable=False, default="PENDING"
+    )
 
     # Otros campos
-    visit_date: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
+    visit_date: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
     attended_by: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     user: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     worker_up: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
@@ -239,21 +272,27 @@ class Survey2(BaseModel):
 class Survey3(BaseModel):
     __tablename__ = "survey_3"
 
-    extensionist_id: Mapped[Optional[int]] = mapped_column(ForeignKey("user_extensionist.id"))
-    user_producter_id: Mapped[Optional[int]] = mapped_column(ForeignKey("user_producter.id"))
-    property_id: Mapped[Optional[int]] = mapped_column(ForeignKey("product_property.id"))
+    extensionist_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("user_extensionist.id")
+    )
+    user_producter_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("user_producter.id")
+    )
+    property_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("product_property.id")
+    )
 
     property: Mapped["ProductProperty"] = relationship(lazy="joined")
     user_producter: Mapped["UserProducter"] = relationship(
         foreign_keys=[user_producter_id],
         primaryjoin="Survey3.user_producter_id == UserProducter.id",
-        lazy="joined"
+        lazy="joined",
     )
 
     classification_user: Mapped[Optional[dict]] = mapped_column(JSONB)
-    medition_focalization: Mapped[Optional[dict]] = mapped_column(JSONB) 
+    medition_focalization: Mapped[Optional[dict]] = mapped_column(JSONB)
 
-    #6.
+    # 6.
     objetive_accompaniment: Mapped[Optional[dict]] = mapped_column(JSONB)
     development_accompaniment: Mapped[Optional[str]] = mapped_column(String(500))
     final_diagnosis: Mapped[Optional[str]] = mapped_column(String(500))
@@ -267,13 +306,15 @@ class Survey3(BaseModel):
     name_acompanamiento: Mapped[Optional[str]] = mapped_column(String(100))
     type_acompanamiento: Mapped[Optional[str]] = mapped_column(String(100))
     other_acompanamiento: Mapped[Optional[str]] = mapped_column(String(100))
-    
+
     # Fotos
     photo_user: Mapped[Optional[str]] = mapped_column(String(255))
     photo_interaction: Mapped[Optional[str]] = mapped_column(String(255))
     photo_panorama: Mapped[Optional[str]] = mapped_column(String(255))
     phono_extra_1: Mapped[Optional[str]] = mapped_column(String(255))
-    state: Mapped[Optional[str]] = mapped_column(String(50), nullable=False, default="PENDING")
+    state: Mapped[Optional[str]] = mapped_column(
+        String(50), nullable=False, default="PENDING"
+    )
 
     # closed and despedida
     date_hour_end: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
@@ -282,25 +323,26 @@ class Survey3(BaseModel):
     not_agend_new_visit: Mapped[Optional[str]] = mapped_column(String(500))
 
     # Otros campos
-    visit_date: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
+    visit_date: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
     attended_by: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     user: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     worker_up: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     household_size: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
     other: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)
 
-
     def set_classification_user(self, data: dict):
         validated = ClassificationUser(**data)
         self.classification_user = validated.model_dump()
-    
+
     def get_classification_user(self) -> ClassificationUser:
         if self.classification_user:
             if isinstance(self.classification_user, str):
                 return ClassificationUser(**json.loads(self.classification_user))
             return ClassificationUser(**self.classification_user)
         return None
-    
+
     def set_medition_focalization(self, data: dict):
         validated = ResultFocalization(**data)
         self.medition_focalization = validated.model_dump()
@@ -316,11 +358,15 @@ class Survey3(BaseModel):
 class ClassificationUser(BaseModel):
     __tablename__ = "classification_user"
 
-    survey_idd1: Mapped[Optional[int]] = mapped_column(ForeignKey("survey_1.id")) #cambiar esta relacion en el futuro
+    survey_idd1: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("survey_1.id")
+    )  # cambiar esta relacion en el futuro
     survey_idd3: Mapped[Optional[int]] = mapped_column(ForeignKey("survey_3.id"))
     # Aspect 1 - Human and Technical Capacities
     main_productive_activity: Mapped[Optional[int]] = mapped_column(Integer)  # Q1
-    secondary_productive_activities: Mapped[Optional[int]] = mapped_column(Integer)  # Q2
+    secondary_productive_activities: Mapped[Optional[int]] = mapped_column(
+        Integer
+    )  # Q2
     tools_and_equipment: Mapped[Optional[int]] = mapped_column(Integer)  # Q3
     good_agricultural_practices: Mapped[Optional[int]] = mapped_column(Integer)  # Q4
     commercialization_structure: Mapped[Optional[int]] = mapped_column(Integer)  # Q5
@@ -333,7 +379,9 @@ class ClassificationUser(BaseModel):
     # Aspect 2 - Social Capacities & Associativity
     organization_membership: Mapped[Optional[int]] = mapped_column(Integer)  # Q11
     collective_activities: Mapped[Optional[int]] = mapped_column(Integer)  # Q12
-    entrepreneurship_associativity: Mapped[Optional[int]] = mapped_column(Integer)  # Q13
+    entrepreneurship_associativity: Mapped[Optional[int]] = mapped_column(
+        Integer
+    )  # Q13
     commercial_alliances: Mapped[Optional[int]] = mapped_column(Integer)  # Q14
     technical_support: Mapped[Optional[int]] = mapped_column(Integer)  # Q15
     quality_certifications: Mapped[Optional[int]] = mapped_column(Integer)  # Q16
@@ -357,5 +405,3 @@ class ClassificationUser(BaseModel):
     participation_tools: Mapped[Optional[int]] = mapped_column(Integer)  # Q28
     political_social_control: Mapped[Optional[int]] = mapped_column(Integer)  # Q29
     community_self_management: Mapped[Optional[int]] = mapped_column(Integer)  # Q30
-
-    

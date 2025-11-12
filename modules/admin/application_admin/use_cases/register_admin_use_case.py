@@ -3,8 +3,12 @@ from logging import Logger
 from common.domain import exceptions as common_exceptions
 from common.infrastructure.logging.config import get_logger
 
-from modules.admin.domain_admin.repositories.admin_authentication_repository import AdminAuthenticationRepository
-from modules.admin.domain_admin.entities.admin_user_entity import AdminUser as AdminUserEntity
+from modules.admin.domain_admin.repositories.admin_authentication_repository import (
+    AdminAuthenticationRepository,
+)
+from modules.admin.domain_admin.entities.admin_user_entity import (
+    AdminUser as AdminUserEntity,
+)
 
 
 _LOGGER: Logger = get_logger(__name__)
@@ -31,7 +35,9 @@ class RegisterAdminUseCase:
             admin_authentication_repository (AdminAuthenticationRepository): Repository for admin authentication data access
             token_register_env (str): Registration token from environment variables
         """
-        self._admin_authentication_repository: AdminAuthenticationRepository = admin_authentication_repository
+        self._admin_authentication_repository: AdminAuthenticationRepository = (
+            admin_authentication_repository
+        )
         self._token_register_env: str = token_register_env
 
     def execute(
@@ -68,23 +74,29 @@ class RegisterAdminUseCase:
 
         if token_register != self._token_register_env:
             _LOGGER.error("Invalid registration token provided")
-            raise common_exceptions.AuthenticationException("Invalid registration token")
+            raise common_exceptions.AuthenticationException(
+                "Invalid registration token"
+            )
 
-        existing_admin_user = self._admin_authentication_repository.find_admin_user_by_email(email)
+        existing_admin_user = (
+            self._admin_authentication_repository.find_admin_user_by_email(email)
+        )
         if existing_admin_user:
             _LOGGER.error(f"Admin user with email [{email}] already exists")
-            raise common_exceptions.AuthenticationException("Admin user with this email already exists")
+            raise common_exceptions.AuthenticationException(
+                "Admin user with this email already exists"
+            )
 
         new_admin_user = AdminUserEntity(
             name=name,
             last_name=last_name,
             email=email,
-            password=password, # Password should be hashed before saving
+            password=password,  # Password should be hashed before saving
             phone=phone,
             rol=rol,
             identification=identification,
             token_register=token_register,
-            is_active=True, # New users are active by default
+            is_active=True,  # New users are active by default
         )
 
         created_admin_user = self._admin_authentication_repository.save(new_admin_user)

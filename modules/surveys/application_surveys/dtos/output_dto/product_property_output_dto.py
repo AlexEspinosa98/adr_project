@@ -1,6 +1,7 @@
 from pydantic import BaseModel, Field
 from typing import Optional
 
+
 class ProductPropertyOutputDTO(BaseModel):
     id: int
     name: Optional[str] = Field(None, description="Product property name")
@@ -11,10 +12,18 @@ class ProductPropertyOutputDTO(BaseModel):
     city: Optional[str] = Field(None, description="city of property")
     village: Optional[str] = Field(None, description="village of property")
     total_area: Optional[str] = Field(None, description="area total property")
-    linea_productive_primary: Optional[str] = Field(None, description="linea productive primary")
-    area_total_linea_productive_primary: Optional[str] = Field(None, description="area total linea primary")
-    linea_productive_secondary: Optional[str] = Field(None, description="linea productive secondary")
-    area_total_linea_productive_secondary: Optional[str] = Field(None, description="area total in secondary linea")
+    linea_productive_primary: Optional[str] = Field(
+        None, description="linea productive primary"
+    )
+    area_total_linea_productive_primary: Optional[str] = Field(
+        None, description="area total linea primary"
+    )
+    linea_productive_secondary: Optional[str] = Field(
+        None, description="linea productive secondary"
+    )
+    area_total_linea_productive_secondary: Optional[str] = Field(
+        None, description="area total in secondary linea"
+    )
     area_in_production: Optional[str] = Field(None, description="area in production")
 
     class Config:

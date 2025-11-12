@@ -5,7 +5,6 @@ from sqlalchemy import pool
 
 from alembic import context
 from common.infrastructure.database.models.base import Base
-from common.infrastructure.database.models import auth, survey, admin # Asegúrate de importar tu Base aquí
 from common.config.common.settings import Settings
 
 
@@ -24,12 +23,14 @@ if config.config_file_name is not None:
 settings = Settings()
 print("Settings", settings)
 # Build url to connect to the database
-DATABASE_URL = "postgresql+psycopg2://{user}:{password}@{host}:{port}/{database}".format(
-    user=settings.db_user,
-    password=settings.db_password,
-    host=settings.db_host,
-    port=settings.db_port,
-    database=settings.db_name
+DATABASE_URL = (
+    "postgresql+psycopg2://{user}:{password}@{host}:{port}/{database}".format(
+        user=settings.db_user,
+        password=settings.db_password,
+        host=settings.db_host,
+        port=settings.db_port,
+        database=settings.db_name,
+    )
 )
 config.set_main_option("sqlalchemy.url", DATABASE_URL)
 
@@ -82,9 +83,7 @@ def run_migrations_online() -> None:
     )
 
     with connectable.connect() as connection:
-        context.configure(
-            connection=connection, target_metadata=target_metadata
-        )
+        context.configure(connection=connection, target_metadata=target_metadata)
 
         with context.begin_transaction():
             context.run_migrations()

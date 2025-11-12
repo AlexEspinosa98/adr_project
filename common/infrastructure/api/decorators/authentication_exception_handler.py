@@ -5,7 +5,7 @@ Authentication exception handler decorator for FastAPI endpoints.
 import functools
 import logging
 from typing import Any, Callable, TypeVar
-import inspect # New import
+import inspect  # New import
 
 from fastapi import HTTPException, status
 from sqlalchemy import exc

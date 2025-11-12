@@ -8,9 +8,15 @@ from common.domain import (
 )
 from common.infrastructure.logging.config import get_logger
 
-from modules.admin.domain_admin.aggregates.admin_authentication_aggregate import AdminAuthenticationAggregate
-from modules.admin.domain_admin.repositories.admin_authentication_repository import AdminAuthenticationRepository
-from modules.admin.domain_admin.entities.admin_user_entity import AdminUser as AdminUserEntity
+from modules.admin.domain_admin.aggregates.admin_authentication_aggregate import (
+    AdminAuthenticationAggregate,
+)
+from modules.admin.domain_admin.repositories.admin_authentication_repository import (
+    AdminAuthenticationRepository,
+)
+from modules.admin.domain_admin.entities.admin_user_entity import (
+    AdminUser as AdminUserEntity,
+)
 
 
 _LOGGER: Logger = get_logger(__name__)
@@ -37,7 +43,9 @@ class AuthenticateAdminUserUseCase:
             admin_authentication_repository (AdminAuthenticationRepository): Repository for admin authentication data access
             secret_key (str): JWT secret key for token validation
         """
-        self._admin_authentication_repository: AdminAuthenticationRepository = admin_authentication_repository
+        self._admin_authentication_repository: AdminAuthenticationRepository = (
+            admin_authentication_repository
+        )
         self._secret_key: str = secret_key
 
     def execute(self, raw_token: str) -> AdminAuthenticationAggregate:
@@ -67,7 +75,9 @@ class AuthenticateAdminUserUseCase:
 
         _LOGGER.info(f"Finding admin user by ID: [{user_id}]")
         admin_user: AdminUserEntity | None = (
-            self._admin_authentication_repository.find_active_admin_user_by_id(user_id=user_id)
+            self._admin_authentication_repository.find_active_admin_user_by_id(
+                user_id=user_id
+            )
         )
 
         if not admin_user:
@@ -77,6 +87,4 @@ class AuthenticateAdminUserUseCase:
         _LOGGER.info(
             f"Admin user [{admin_user.get_identity()}] authenticated successfully"
         )
-        return AdminAuthenticationAggregate(
-            user=admin_user, token=token
-        )
+        return AdminAuthenticationAggregate(user=admin_user, token=token)

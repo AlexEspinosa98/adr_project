@@ -3,6 +3,7 @@ from typing import Optional
 
 from modules.auth.domain_auth.entities.auth_entities import UserExtensionist
 
+
 class AuthRepository(ABC):
     """
     Repository interface for Auth-specific operations.
@@ -14,7 +15,9 @@ class AuthRepository(ABC):
         pass
 
     @abstractmethod
-    def get_user_by_identification(self, identification: str) -> Optional[UserExtensionist]:
+    def get_user_by_identification(
+        self, identification: str
+    ) -> Optional[UserExtensionist]:
         """Find a user by identification."""
         pass
 

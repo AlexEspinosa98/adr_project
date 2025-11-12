@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
-from typing import List
 
-from modules.admin.domain_admin.entities.admin_user_entity import AdminUser as AdminUserEntity
+from modules.admin.domain_admin.entities.admin_user_entity import (
+    AdminUser as AdminUserEntity,
+)
 from common.domain import repositories as common_repositories
 
 
@@ -13,9 +14,7 @@ class AdminAuthenticationRepository(
     """
 
     @abstractmethod
-    def find_active_admin_user_by_id(
-        self, user_id: int
-    ) -> AdminUserEntity | None:
+    def find_active_admin_user_by_id(self, user_id: int) -> AdminUserEntity | None:
         """
         Find active admin user for authentication by ID.
 
@@ -29,9 +28,7 @@ class AdminAuthenticationRepository(
         """Find admin user by email and password for authentication."""
 
     @abstractmethod
-    def find_admin_user_by_email(
-        self, email: str
-    ) -> AdminUserEntity | None:
+    def find_admin_user_by_email(self, email: str) -> AdminUserEntity | None:
         """Find admin user by email."""
 
     @abstractmethod

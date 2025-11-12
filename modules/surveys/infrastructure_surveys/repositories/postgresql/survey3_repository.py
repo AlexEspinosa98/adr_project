@@ -1,8 +1,11 @@
 from sqlalchemy.orm import Session
 from modules.surveys.domain_surveys.entities.survey3_entity import Survey3
-from modules.surveys.domain_surveys.repositories.survey3_repository import Survey3Repository
+from modules.surveys.domain_surveys.repositories.survey3_repository import (
+    Survey3Repository,
+)
 from modules.surveys.infrastructure_surveys.mappers.survey3_mapper import Survey3Mapper
 from common.infrastructure.database.models.survey import Survey3 as Survey3Model
+
 
 class PostgreSQLSurvey3Repository(Survey3Repository):
     def __init__(self, session: Session):

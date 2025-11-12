@@ -4,7 +4,10 @@ from sqlalchemy import select
 
 from modules.auth.domain_auth.entities.auth_entities import UserExtensionist
 from modules.auth.domain_auth.repositories.auth_repository import AuthRepository
-from common.infrastructure.database.models.auth import UserExtensionist as UserExtensionistModel
+from common.infrastructure.database.models.auth import (
+    UserExtensionist as UserExtensionistModel,
+)
+
 
 class PostgreSQLAuthRepository(AuthRepository):
     def __init__(self, session: Session):
@@ -15,18 +18,26 @@ class PostgreSQLAuthRepository(AuthRepository):
         model = self.session.execute(stmt).scalar_one_or_none()
         return self._to_domain_entity(model) if model else None
 
-    def get_user_by_identification(self, identification: str) -> Optional[UserExtensionist]:
-        stmt = select(UserExtensionistModel).where(UserExtensionistModel.identification == identification)
+    def get_user_by_identification(
+        self, identification: str
+    ) -> Optional[UserExtensionist]:
+        stmt = select(UserExtensionistModel).where(
+            UserExtensionistModel.identification == identification
+        )
         model = self.session.execute(stmt).scalar_one_or_none()
         return self._to_domain_entity(model) if model else None
 
     def get_user_by_token(self, token: str) -> Optional[UserExtensionist]:
-        stmt = select(UserExtensionistModel).where(UserExtensionistModel.api_token == token)
+        stmt = select(UserExtensionistModel).where(
+            UserExtensionistModel.api_token == token
+        )
         model = self.session.execute(stmt).scalar_one_or_none()
         return self._to_domain_entity(model) if model else None
 
     def get_user_by_api_key(self, api_key: str) -> Optional[UserExtensionist]:
-        stmt = select(UserExtensionistModel).where(UserExtensionistModel.api_token == api_key)
+        stmt = select(UserExtensionistModel).where(
+            UserExtensionistModel.api_token == api_key
+        )
         model = self.session.execute(stmt).scalar_one_or_none()
         return self._to_domain_entity(model) if model else None
 
@@ -36,19 +47,19 @@ class PostgreSQLAuthRepository(AuthRepository):
         self.session.commit()
         self.session.refresh(extensionist_model)
         return self._to_domain_entity(extensionist_model)
-    
+
     def update_extensionist(self, extensionist: UserExtensionist) -> UserExtensionist:
         existing_model = self.session.get(UserExtensionistModel, extensionist.id)
         if not existing_model:
             raise ValueError(f"Extensionist with ID {extensionist.id} does not exist.")
-        
+
         for field, value in vars(extensionist).items():
             setattr(existing_model, field, value)
-        
+
         self.session.commit()
         self.session.refresh(existing_model)
         return self._to_domain_entity(existing_model)
-    
+
     def get_by_id(self, user_id: int) -> Optional[UserExtensionist]:
         stmt = select(UserExtensionistModel).where(UserExtensionistModel.id == user_id)
         model = self.session.execute(stmt).scalar_one_or_none()

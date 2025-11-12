@@ -1,8 +1,8 @@
 from pydantic import BaseModel
 from typing import Optional, Dict
 from datetime import datetime
-from .survey_user_producter import SurveyUserProducterInputDTO
 from common.domain.enums.survey_status import SurveyStatus
+
 
 class CreateSurvey1InputDTO(BaseModel):
     # Campos JSON
@@ -43,4 +43,3 @@ class CreateSurvey1InputDTO(BaseModel):
     worker_up: Optional[str] = None
     household_size: Optional[str] = None
     other: Optional[str] = None
-

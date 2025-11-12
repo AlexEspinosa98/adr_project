@@ -1,10 +1,13 @@
 from logging import Logger
 from modules.auth.domain_auth.entities.auth_entities import UserExtensionist
 from modules.auth.domain_auth.repositories.auth_repository import AuthRepository
-from modules.auth.application_auth.dtos.input_dto.update_user_extensionist import UpdateUserExtensionistInputDTO
+from modules.auth.application_auth.dtos.input_dto.update_user_extensionist import (
+    UpdateUserExtensionistInputDTO,
+)
 from common.infrastructure.logging.config import get_logger
 
 _LOGGER: Logger = get_logger(__name__)
+
 
 class UpdateUserExtensionistUseCase:
     def __init__(self, auth_repository: AuthRepository):

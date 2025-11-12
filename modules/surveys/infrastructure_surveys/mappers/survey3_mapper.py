@@ -1,15 +1,23 @@
-from modules.surveys.domain_surveys.entities.survey3_entity import Survey3 as Survey3Entity
+from modules.surveys.domain_surveys.entities.survey3_entity import (
+    Survey3 as Survey3Entity,
+)
 from common.infrastructure.database.models.survey import Survey3 as Survey3Model
-from modules.surveys.infrastructure_surveys.mappers.user_producter_mapper import UserProducterMapper
-from modules.surveys.infrastructure_surveys.mappers.product_property_mapper import ProductPropertyMapper
+from modules.surveys.infrastructure_surveys.mappers.user_producter_mapper import (
+    UserProducterMapper,
+)
+from modules.surveys.infrastructure_surveys.mappers.product_property_mapper import (
+    ProductPropertyMapper,
+)
 import json
 from datetime import datetime
+
 
 class CustomJsonEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, datetime):
             return obj.isoformat()
         return json.JSONEncoder.default(self, obj)
+
 
 class Survey3Mapper:
     @staticmethod
@@ -46,7 +54,7 @@ class Survey3Mapper:
             user=survey_entity.user,
             worker_up=survey_entity.worker_up,
             household_size=survey_entity.household_size,
-            other=survey_entity.other
+            other=survey_entity.other,
         )
 
     @staticmethod
@@ -63,9 +71,13 @@ class Survey3Mapper:
             id=survey_model.id,
             extensionist_id=survey_model.extensionist_id,
             user_producter_id=survey_model.user_producter_id,
-            user_producter=UserProducterMapper.to_entity(survey_model.user_producter) if hasattr(survey_model, 'user_producter') and survey_model.user_producter else None,
+            user_producter=UserProducterMapper.to_entity(survey_model.user_producter)
+            if hasattr(survey_model, "user_producter") and survey_model.user_producter
+            else None,
             property_id=survey_model.property_id,
-            property=ProductPropertyMapper.to_entity(survey_model.property) if survey_model.property else None,
+            property=ProductPropertyMapper.to_entity(survey_model.property)
+            if survey_model.property
+            else None,
             classification_user=_parse_json(survey_model.classification_user),
             medition_focalization=_parse_json(survey_model.medition_focalization),
             objetive_accompaniment=_parse_json(survey_model.objetive_accompaniment),
@@ -93,5 +105,5 @@ class Survey3Mapper:
             user=survey_model.user,
             worker_up=survey_model.worker_up,
             household_size=survey_model.household_size,
-            other=survey_model.other
+            other=survey_model.other,
         )

@@ -1,5 +1,10 @@
-from modules.surveys.domain_surveys.entities.product_property_entity import ProductProperty as ProductPropertyEntity
-from common.infrastructure.database.models.survey import ProductProperty as ProductPropertyModel
+from modules.surveys.domain_surveys.entities.product_property_entity import (
+    ProductProperty as ProductPropertyEntity,
+)
+from common.infrastructure.database.models.survey import (
+    ProductProperty as ProductPropertyModel,
+)
+
 
 class ProductPropertyMapper:
     @staticmethod

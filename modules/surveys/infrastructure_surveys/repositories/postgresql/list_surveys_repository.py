@@ -2,11 +2,17 @@ from sqlalchemy.orm import Session
 from sqlalchemy import text
 from typing import Optional, Tuple, List
 from datetime import datetime
-from modules.surveys.application_surveys.dtos.output_dto.survey_list_item_dto import SurveyListItemDTO
-from modules.surveys.domain_surveys.repositories.list_surveys_repository import ListSurveysRepository
+from modules.surveys.application_surveys.dtos.output_dto.survey_list_item_dto import (
+    SurveyListItemDTO,
+)
+from modules.surveys.domain_surveys.repositories.list_surveys_repository import (
+    ListSurveysRepository,
+)
 from common.application.dtos.input_dto.pagination_dto import PaginationInputDTO
 from modules.surveys.domain_surveys.entities.survey_entity import Survey
-from modules.surveys.domain_surveys.entities.product_property_entity import ProductProperty
+from modules.surveys.domain_surveys.entities.product_property_entity import (
+    ProductProperty,
+)
 from modules.surveys.domain_surveys.entities.user_producter_entity import UserProducter
 
 
@@ -23,7 +29,6 @@ class PostgreSQLListSurveysRepository(ListSurveysRepository):
         farm_name: Optional[str] = None,
         survey_type: Optional[int] = None,
     ) -> Tuple[list[SurveyListItemDTO], int]:
-        
         base_query = """
         (SELECT s.id, 'Survey 1' as survey_type, pp.name as farm_name, s.visit_date, s.state, up.name as producter_name, ue.name as extensionist_name, ue.api_token, s.created_at
         FROM survey_1 s
@@ -47,7 +52,7 @@ class PostgreSQLListSurveysRepository(ListSurveysRepository):
         filters = []
         params = {}
 
-        if api_key: # Changed
+        if api_key:  # Changed
             filters.append("api_token = :api_key")
             params["api_key"] = api_key
 
@@ -64,7 +69,7 @@ class PostgreSQLListSurveysRepository(ListSurveysRepository):
             filters.append(f"survey_type = 'Survey {survey_type}'")
 
         if filters:
-            base_query = f"SELECT * FROM ({base_query}) as all_surveys WHERE {" AND ".join(filters)}"
+            base_query = f"SELECT * FROM ({base_query}) as all_surveys WHERE {' AND '.join(filters)}"
         else:
             base_query = f"SELECT * FROM ({base_query}) as all_surveys"
 
@@ -77,7 +82,10 @@ class PostgreSQLListSurveysRepository(ListSurveysRepository):
 
         result = self.session.execute(text(base_query), params).fetchall()
 
-        return [SurveyListItemDTO.model_validate(row, from_attributes=True) for row in result], total_items
+        return [
+            SurveyListItemDTO.model_validate(row, from_attributes=True)
+            for row in result
+        ], total_items
 
     def find_admin_surveys_with_filters(
         self, city: Optional[str] = None, extensionist: Optional[str] = None
@@ -191,7 +199,7 @@ class PostgreSQLListSurveysRepository(ListSurveysRepository):
             params["extensionist"] = f"%{extensionist}%"
 
         if filters:
-            final_query = f"SELECT * FROM ({base_query}) as all_admin_surveys WHERE {" AND ".join(filters)}"
+            final_query = f"SELECT * FROM ({base_query}) as all_admin_surveys WHERE {' AND '.join(filters)}"
         else:
             final_query = f"SELECT * FROM ({base_query}) as all_admin_surveys"
 
@@ -231,7 +239,9 @@ class PostgreSQLListSurveysRepository(ListSurveysRepository):
                     property=product_property,
                     objetive_accompaniment=survey_data.get("objetive_accompaniment"),
                     initial_diagnosis=survey_data.get("initial_diagnosis"),
-                    recommendations_commitments=survey_data.get("recommendations_commitments"),
+                    recommendations_commitments=survey_data.get(
+                        "recommendations_commitments"
+                    ),
                     observations=survey_data.get("observations"),
                     visit_date=survey_data.get("visit_date"),
                     attended_by=survey_data.get("attended_by"),
@@ -246,27 +256,43 @@ class PostgreSQLListSurveysRepository(ListSurveysRepository):
                     classification_user=survey_data.get("classification_user"),
                     medition_focalization=survey_data.get("medition_focalization"),
                     # Survey2 specific fields
-                    visit_development_follow_up_activities=survey_data.get("visit_development_follow_up_activities"),
-                    previous_visit_recommendations_fulfilled=survey_data.get("previous_visit_recommendations_fulfilled"),
+                    visit_development_follow_up_activities=survey_data.get(
+                        "visit_development_follow_up_activities"
+                    ),
+                    previous_visit_recommendations_fulfilled=survey_data.get(
+                        "previous_visit_recommendations_fulfilled"
+                    ),
                     objective=survey_data.get("objective"),
                     visit_followup=survey_data.get("visit_followup"),
-                    fulfilled_previous_recommendations=survey_data.get("fulfilled_previous_recommendations"),
+                    fulfilled_previous_recommendations=survey_data.get(
+                        "fulfilled_previous_recommendations"
+                    ),
                     new_recommendations=survey_data.get("new_recommendations"),
                     observations_seg=survey_data.get("observations_seg"),
                     register_coinnovation=survey_data.get("register_coinnovation"),
-                    local_practice_tool_technology_coinnovation_identified=survey_data.get("local_practice_tool_technology_coinnovation_identified"),
-                    local_coinovation_or_technology_record=survey_data.get("local_coinovation_or_technology_record"),
+                    local_practice_tool_technology_coinnovation_identified=survey_data.get(
+                        "local_practice_tool_technology_coinnovation_identified"
+                    ),
+                    local_coinovation_or_technology_record=survey_data.get(
+                        "local_coinovation_or_technology_record"
+                    ),
                     name_innovation=survey_data.get("name_innovation"),
                     description_innovation=survey_data.get("description_innovation"),
-                    problem_solution_innovation=survey_data.get("problem_solution_innovation"),
+                    problem_solution_innovation=survey_data.get(
+                        "problem_solution_innovation"
+                    ),
                     origin_and_developers=survey_data.get("origin_and_developers"),
                     materials_and_resources=survey_data.get("materials_and_resources"),
                     process_functioning=survey_data.get("process_functioning"),
                     potential_replication=survey_data.get("potential_replication"),
-                    observations_extensionist=survey_data.get("observations_extensionist"),
+                    observations_extensionist=survey_data.get(
+                        "observations_extensionist"
+                    ),
                     date_hour_end=survey_data.get("date_hour_end"),
                     socilization_next_event=survey_data.get("socilization_next_event"),
-                    copy_documentation_delivered=survey_data.get("copy_documentation_delivered"),
+                    copy_documentation_delivered=survey_data.get(
+                        "copy_documentation_delivered"
+                    ),
                 )
             )
         return surveys

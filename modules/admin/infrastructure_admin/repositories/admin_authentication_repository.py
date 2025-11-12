@@ -1,5 +1,5 @@
 from logging import Logger
-from typing import List, Optional, Tuple
+from typing import Optional, Tuple
 
 from sqlalchemy import Result, Select, select
 from sqlalchemy.orm import Session
@@ -9,8 +9,12 @@ from common.infrastructure.repositories import (
 )
 from common.infrastructure.logging.config import get_logger
 
-from modules.admin.domain_admin.repositories.admin_authentication_repository import AdminAuthenticationRepository as IAdminAuthenticationRepository
-from modules.admin.domain_admin.entities.admin_user_entity import AdminUser as AdminUserEntity
+from modules.admin.domain_admin.repositories.admin_authentication_repository import (
+    AdminAuthenticationRepository as IAdminAuthenticationRepository,
+)
+from modules.admin.domain_admin.entities.admin_user_entity import (
+    AdminUser as AdminUserEntity,
+)
 from common.infrastructure.database.models.admin import AdminUser as AdminUserModel
 
 
@@ -32,25 +36,17 @@ class AdminAuthenticationRepository(
     def __init__(self, session: Session) -> None:
         super().__init__(session, AdminUserModel)
 
-    def find_active_admin_user_by_id(
-        self, user_id: int
-    ) -> Optional[AdminUserEntity]:
+    def find_active_admin_user_by_id(self, user_id: int) -> Optional[AdminUserEntity]:
         """Find active user for authentication using select()."""
         _LOGGER.info(f"Finding active admin user for authentication: [{user_id}]")
 
-        stmt: Select[Tuple[AdminUserModel]] = select(
-            AdminUserModel
-        ).where(
+        stmt: Select[Tuple[AdminUserModel]] = select(AdminUserModel).where(
             AdminUserModel.id == user_id,
-            AdminUserModel.is_active == True,
+            AdminUserModel.is_active,
         )
 
-        result: Result[Tuple[AdminUserModel]] = self._session.execute(
-            stmt
-        )
-        user_model: AdminUserModel | None = (
-            result.scalar_one_or_none()
-        )
+        result: Result[Tuple[AdminUserModel]] = self._session.execute(stmt)
+        user_model: AdminUserModel | None = result.scalar_one_or_none()
 
         if not user_model:
             _LOGGER.info(f"Admin user with ID [{user_id}] not found or not active")
@@ -64,20 +60,14 @@ class AdminAuthenticationRepository(
         """Find user by email and password for authentication."""
         _LOGGER.info(f"Finding admin user by email: [{email}]")
 
-        stmt: Select[Tuple[AdminUserModel]] = select(
-            AdminUserModel
-        ).where(
+        stmt: Select[Tuple[AdminUserModel]] = select(AdminUserModel).where(
             AdminUserModel.email == email,
-            AdminUserModel.password == password, # Password should be hashed
-            AdminUserModel.is_active == True,
+            AdminUserModel.password == password,  # Password should be hashed
+            AdminUserModel.is_active,
         )
 
-        result: Result[Tuple[AdminUserModel]] = self._session.execute(
-            stmt
-        )
-        user_model: AdminUserModel | None = (
-            result.scalar_one_or_none()
-        )
+        result: Result[Tuple[AdminUserModel]] = self._session.execute(stmt)
+        user_model: AdminUserModel | None = result.scalar_one_or_none()
 
         if not user_model:
             _LOGGER.info(f"Admin user with email [{email}] not found or not active")
@@ -91,7 +81,7 @@ class AdminAuthenticationRepository(
 
         stmt: Select[Tuple[AdminUserModel]] = select(AdminUserModel).where(
             AdminUserModel.email == email,
-            AdminUserModel.is_active == True,
+            AdminUserModel.is_active,
         )
 
         result: Result[Tuple[AdminUserModel]] = self._session.execute(stmt)
@@ -111,7 +101,7 @@ class AdminAuthenticationRepository(
 
         stmt: Select[Tuple[AdminUserModel]] = select(AdminUserModel).where(
             AdminUserModel.token_register == token_register,
-            AdminUserModel.is_active == True,
+            AdminUserModel.is_active,
         )
 
         result: Result[Tuple[AdminUserModel]] = self._session.execute(stmt)
@@ -125,9 +115,7 @@ class AdminAuthenticationRepository(
 
         return self._to_domain_entity(model=user_model)
 
-    def _to_domain_entity(
-        self, model: AdminUserModel
-    ) -> AdminUserEntity:
+    def _to_domain_entity(self, model: AdminUserModel) -> AdminUserEntity:
         _LOGGER.info(f"Converting AdminUserModel to AdminUserEntity: [{model.id}]")
         return AdminUserEntity(
             email=model.email,
@@ -144,9 +132,7 @@ class AdminAuthenticationRepository(
             token_register=model.token_register,
         )
 
-    def _to_database_model(
-        self, entity: AdminUserEntity
-    ) -> AdminUserModel:
+    def _to_database_model(self, entity: AdminUserEntity) -> AdminUserModel:
         """
         Convert admin user entity to database model.
         """

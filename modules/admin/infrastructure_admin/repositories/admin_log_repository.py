@@ -1,10 +1,19 @@
 from sqlalchemy.orm import Session
-from common.infrastructure.repositories.postgresql.base_repository import BasePostgreSQLRepository
-from modules.admin.domain_admin.repositories.admin_log_repository import AdminLogRepository as IAdminLogRepository
-from modules.admin.domain_admin.entities.admin_log_entity import AdminLog as AdminLogEntity
+from common.infrastructure.repositories.postgresql.base_repository import (
+    BasePostgreSQLRepository,
+)
+from modules.admin.domain_admin.repositories.admin_log_repository import (
+    AdminLogRepository as IAdminLogRepository,
+)
+from modules.admin.domain_admin.entities.admin_log_entity import (
+    AdminLog as AdminLogEntity,
+)
 from common.infrastructure.database.models.admin import AdminLogger as AdminLogModel
 
-class AdminLogRepository(BasePostgreSQLRepository[AdminLogEntity, AdminLogModel], IAdminLogRepository):
+
+class AdminLogRepository(
+    BasePostgreSQLRepository[AdminLogEntity, AdminLogModel], IAdminLogRepository
+):
     def __init__(self, session: Session) -> None:
         super().__init__(session, AdminLogModel)
 
@@ -17,7 +26,7 @@ class AdminLogRepository(BasePostgreSQLRepository[AdminLogEntity, AdminLogModel]
             admin_user_id=model.admin_user_id,
             action_id=model.action,
             description=model.description,
-            timestamp=model.timestamp
+            timestamp=model.timestamp,
         )
 
     def _to_database_model(self, entity: AdminLogEntity) -> AdminLogModel:
@@ -27,5 +36,5 @@ class AdminLogRepository(BasePostgreSQLRepository[AdminLogEntity, AdminLogModel]
             admin_user_id=entity.admin_user_id,
             action=entity.action_id,
             description=entity.description,
-            timestamp=entity.timestamp
+            timestamp=entity.timestamp,
         )

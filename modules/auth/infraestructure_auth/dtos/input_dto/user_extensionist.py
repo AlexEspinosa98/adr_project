@@ -12,6 +12,7 @@ class UserExtensionistInputDTO(common_dtos.BaseDTO):
     Infrastructure input DTO for user extensionist operations.
     Used by API endpoints.
     """
+
     name: str
     email: str
     type_id: str
@@ -19,7 +20,7 @@ class UserExtensionistInputDTO(common_dtos.BaseDTO):
     city: str
     zone: str
     phone: str
-    
+
     class Config:
         json_schema_extra: dict[str, dict[str, Any]] = {
             "example": {
@@ -29,6 +30,6 @@ class UserExtensionistInputDTO(common_dtos.BaseDTO):
                 "identification": "123456789",
                 "city": "Sample City",
                 "zone": "Sample Zone",
-                "phone": "123-456-7890"
+                "phone": "123-456-7890",
             }
         }

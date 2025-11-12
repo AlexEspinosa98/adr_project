@@ -1,5 +1,7 @@
 from modules.admin.application_admin.dtos.output_dto.admin_user_dto import AdminUserDTO
-from modules.admin.domain_admin.entities.admin_user_entity import AdminUser as AdminUserEntity
+from modules.admin.domain_admin.entities.admin_user_entity import (
+    AdminUser as AdminUserEntity,
+)
 
 
 class AdminAuthenticationMapper:

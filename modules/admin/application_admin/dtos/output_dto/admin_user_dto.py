@@ -2,8 +2,6 @@ from datetime import datetime
 from typing import Optional
 
 from common.application import dtos as common_dtos
-from common.domain import enums as common_enums
-from pydantic import Field
 
 
 class AdminUserDTO(common_dtos.BaseDTO):

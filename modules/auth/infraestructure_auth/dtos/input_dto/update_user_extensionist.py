@@ -1,6 +1,7 @@
 from typing import Optional
 from common.application.dtos.base_dto import BaseDTO
 
+
 class UpdateUserExtensionistBodyDTO(BaseDTO):
     name: Optional[str] = None
     phone: Optional[str] = None

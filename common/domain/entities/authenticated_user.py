@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic import EmailStr, Field
+from pydantic import Field
 
 from common.domain import (
     entities as common_entities,

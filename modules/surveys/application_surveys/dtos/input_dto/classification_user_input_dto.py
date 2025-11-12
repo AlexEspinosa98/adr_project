@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from typing import Optional
 
+
 class ClassificationUserInputDTO(BaseModel):
     main_productive_activity: Optional[int] = None
     secondary_productive_activities: Optional[int] = None

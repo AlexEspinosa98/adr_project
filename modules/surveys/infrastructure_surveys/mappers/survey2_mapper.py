@@ -1,15 +1,23 @@
-from modules.surveys.domain_surveys.entities.survey2_entity import Survey2 as Survey2Entity
+from modules.surveys.domain_surveys.entities.survey2_entity import (
+    Survey2 as Survey2Entity,
+)
 from common.infrastructure.database.models.survey import Survey2 as Survey2Model
 import json
 from datetime import datetime
-from modules.surveys.infrastructure_surveys.mappers.user_producter_mapper import UserProducterMapper
-from modules.surveys.infrastructure_surveys.mappers.product_property_mapper import ProductPropertyMapper
+from modules.surveys.infrastructure_surveys.mappers.user_producter_mapper import (
+    UserProducterMapper,
+)
+from modules.surveys.infrastructure_surveys.mappers.product_property_mapper import (
+    ProductPropertyMapper,
+)
+
 
 class CustomJsonEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, datetime):
             return obj.isoformat()
         return json.JSONEncoder.default(self, obj)
+
 
 class Survey2Mapper:
     @staticmethod
@@ -59,7 +67,7 @@ class Survey2Mapper:
             origen_register=survey_entity.origen_register,
             name_acompanamiento=survey_entity.name_acompanamiento,
             type_acompanamiento=survey_entity.type_acompanamiento,
-            other_acompanamiento=survey_entity.other_acompanamiento
+            other_acompanamiento=survey_entity.other_acompanamiento,
         )
 
     @staticmethod
@@ -112,12 +120,16 @@ class Survey2Mapper:
             Household_size=survey_model.Household_size,
             other=survey_model.other,
             state=survey_model.state,
-            producter=UserProducterMapper.to_entity(survey_model.producter) if survey_model.producter else None,
-            property=ProductPropertyMapper.to_entity(survey_model.property) if survey_model.property else None,
+            producter=UserProducterMapper.to_entity(survey_model.producter)
+            if survey_model.producter
+            else None,
+            property=ProductPropertyMapper.to_entity(survey_model.property)
+            if survey_model.property
+            else None,
             date_acompanamiento=survey_model.date_acompanamiento,
             hour_acompanamiento=survey_model.hour_acompanamiento,
             origen_register=survey_model.origen_register,
             name_acompanamiento=survey_model.name_acompanamiento,
             type_acompanamiento=survey_model.type_acompanamiento,
-            other_acompanamiento=survey_model.other_acompanamiento
+            other_acompanamiento=survey_model.other_acompanamiento,
         )

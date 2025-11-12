@@ -135,7 +135,7 @@ class TestDependencyIntegration:
         )
 
         # Assert
-        assert type(required_result) == type(optional_result)
+        assert type(required_result) is type(optional_result)
         assert required_result.page == optional_result.page
         assert required_result.limit == optional_result.limit
 
@@ -150,6 +150,6 @@ class TestDependencyIntegration:
         )
 
         # Assert
-        assert type(required_result) == type(optional_result)
+        assert type(required_result) is type(optional_result)
         assert required_result.page == optional_result.page
         assert required_result.limit == optional_result.limit

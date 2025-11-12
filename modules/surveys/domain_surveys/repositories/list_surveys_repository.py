@@ -1,9 +1,13 @@
 from abc import ABC, abstractmethod
 from typing import Optional, Tuple, List
 from datetime import datetime
-from modules.surveys.application_surveys.dtos.output_dto.survey_list_item_dto import SurveyListItemDTO
+from modules.surveys.application_surveys.dtos.output_dto.survey_list_item_dto import (
+    SurveyListItemDTO,
+)
 from common.application.dtos.input_dto.pagination_dto import PaginationInputDTO
-from modules.surveys.domain_surveys.entities.survey_entity import Survey # Import the new combined Survey entity
+from modules.surveys.domain_surveys.entities.survey_entity import (
+    Survey,
+)  # Import the new combined Survey entity
 
 
 class ListSurveysRepository(ABC):

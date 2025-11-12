@@ -1,10 +1,15 @@
-from pydantic import BaseModel, Field, field_validator
-from typing import Optional, Dict, Union, Any
+from pydantic import BaseModel, field_validator
+from typing import Optional, Dict, Any
 from datetime import datetime
 from common.domain.enums.survey_status import SurveyStatus
-from modules.surveys.application_surveys.dtos.output_dto.user_producter_output_dto import UserProducterOutputDTO
-from modules.admin.application_admin.dtos.output_dto.product_property_output_dto import ProductPropertyOutputDTO
+from modules.surveys.application_surveys.dtos.output_dto.user_producter_output_dto import (
+    UserProducterOutputDTO,
+)
+from modules.admin.application_admin.dtos.output_dto.product_property_output_dto import (
+    ProductPropertyOutputDTO,
+)
 import json
+
 
 class AdminSurvey1DetailOutputDTO(BaseModel):
     id: int
@@ -16,7 +21,7 @@ class AdminSurvey1DetailOutputDTO(BaseModel):
     # Estructuras JSON (diccionarios)
     classification_user: Optional[Dict]
     medition_focalization: Optional[Dict]
-    classification_general: Optional[Dict]   # ← Campo adicional en tu JSON
+    classification_general: Optional[Dict]  # ← Campo adicional en tu JSON
 
     # Campos de texto
     objetive_accompaniment: Optional[Dict]
@@ -54,7 +59,7 @@ class AdminSurvey1DetailOutputDTO(BaseModel):
 
     class Config:
         from_attributes = True
-    
+
     @field_validator("objetive_accompaniment", mode="before")
     @classmethod
     def parse_objetive_accompaniment(cls, value: Any) -> Optional[Dict]:

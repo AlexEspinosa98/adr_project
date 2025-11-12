@@ -1,12 +1,18 @@
 from logging import Logger
 
-from modules.admin.application_admin.mappers.admin_authentication_mapper import AdminAuthenticationMapper
+from modules.admin.application_admin.mappers.admin_authentication_mapper import (
+    AdminAuthenticationMapper,
+)
 from modules.admin.application_admin.dtos.output_dto.admin_user_dto import AdminUserDTO
 from modules.admin.application_admin.use_cases.authenticate_admin_user import (
     AuthenticateAdminUserUseCase,
 )
-from modules.admin.domain_admin.aggregates.admin_authentication_aggregate import AdminAuthenticationAggregate
-from modules.admin.domain_admin.repositories.admin_authentication_repository import AdminAuthenticationRepository
+from modules.admin.domain_admin.aggregates.admin_authentication_aggregate import (
+    AdminAuthenticationAggregate,
+)
+from modules.admin.domain_admin.repositories.admin_authentication_repository import (
+    AdminAuthenticationRepository,
+)
 
 from common.infrastructure.logging.config import get_logger
 
@@ -34,16 +40,16 @@ class AdminAuthenticationService:
             admin_authentication_repository (AdminAuthenticationRepository): Repository for admin authentication data access
             secret_key (str): JWT secret key for token validation
         """
-        self._admin_authentication_repository: AdminAuthenticationRepository = admin_authentication_repository
+        self._admin_authentication_repository: AdminAuthenticationRepository = (
+            admin_authentication_repository
+        )
         self._secret_key: str = secret_key
         self._authenticate_admin_user_use_case = AuthenticateAdminUserUseCase(
             admin_authentication_repository, secret_key
         )
         self._mapper = AdminAuthenticationMapper()
 
-    def authenticate_admin_user_from_token(
-        self, raw_token: str
-    ) -> AdminUserDTO:
+    def authenticate_admin_user_from_token(self, raw_token: str) -> AdminUserDTO:
         """
         Authenticate an admin user from a JWT token and return user information.
         This is the main method that infrastructure will call to authenticate admin users.

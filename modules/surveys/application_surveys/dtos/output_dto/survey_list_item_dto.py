@@ -2,6 +2,7 @@ from pydantic import BaseModel
 from datetime import datetime
 from typing import Optional
 
+
 class SurveyListItemDTO(BaseModel):
     id: int
     survey_type: str

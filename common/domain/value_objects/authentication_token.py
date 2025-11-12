@@ -33,7 +33,11 @@ class AuthenticationToken(common_value_objects.BaseValueObject):
         return token
 
     @staticmethod
-    def create_token(payload: dict[str, Any], secret_key: str, expires_delta: timedelta = timedelta(hours=1)) -> "AuthenticationToken":
+    def create_token(
+        payload: dict[str, Any],
+        secret_key: str,
+        expires_delta: timedelta = timedelta(hours=8),
+    ) -> "AuthenticationToken":
         """
         Create a JWT token from a payload and secret key.
 

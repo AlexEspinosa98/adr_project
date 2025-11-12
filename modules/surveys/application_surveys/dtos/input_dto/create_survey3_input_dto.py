@@ -3,6 +3,7 @@ from typing import Optional, Dict
 from datetime import datetime
 from common.domain.enums.survey_status import SurveyStatus
 
+
 class CreateSurvey3InputDTO(BaseModel):
     # Campos JSON
     classification_user: Optional[Dict] = None

@@ -9,7 +9,6 @@ from common.domain import (
     enums as common_enums,
     repositories as common_repositories,
 )
-from common.infrastructure.database import models as common_database_models
 from common.infrastructure.database.models.auth import UserExtensionist
 from common.infrastructure.logging.config import get_logger
 from common.infrastructure.repositories import (
@@ -41,20 +40,13 @@ class PostgreSQLAuthenticationRepository(
         """Find active user for authentication using select()."""
         _LOGGER.info(f"Finding active user for authentication: [{user_id}]")
 
-        stmt: Select[Tuple[UserExtensionist]] = select(
-            UserExtensionist
-        ).where(
+        stmt: Select[Tuple[UserExtensionist]] = select(UserExtensionist).where(
             UserExtensionist.id == user_id,
-            UserExtensionist.is_active
-            == common_enums.UserStatus.ACTIVE,
+            UserExtensionist.is_active == common_enums.UserStatus.ACTIVE,
         )
 
-        result: Result[Tuple[UserExtensionist]] = self._session.execute(
-            stmt
-        )
-        user_model: UserExtensionist | None = (
-            result.scalar_one_or_none()
-        )
+        result: Result[Tuple[UserExtensionist]] = self._session.execute(stmt)
+        user_model: UserExtensionist | None = result.scalar_one_or_none()
 
         if not user_model:
             _LOGGER.info(f"User with ID [{user_id}] not found or not active")

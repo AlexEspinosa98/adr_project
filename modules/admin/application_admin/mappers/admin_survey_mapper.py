@@ -1,6 +1,8 @@
 from typing import Optional
 
-from modules.admin.application_admin.dtos.output_dto.admin_survey_output_dto import AdminSurveyOutputDTO
+from modules.admin.application_admin.dtos.output_dto.admin_survey_output_dto import (
+    AdminSurveyOutputDTO,
+)
 from modules.surveys.domain_surveys.entities.survey_entity import Survey
 
 
@@ -13,13 +15,16 @@ class AdminSurveyMapper:
     ) -> AdminSurveyOutputDTO:
         return AdminSurveyOutputDTO(
             id=survey_entity.id,
-            survey_type=survey_entity.survey_type, # New field
-            farm_name=survey_entity.property.name if survey_entity.property else None, # New field
+            survey_type=survey_entity.survey_type,  # New field
+            farm_name=survey_entity.property.name
+            if survey_entity.property
+            else None,  # New field
             extensionist_id=survey_entity.extensionist_id,
             name_extensionist=extensionist_name or survey_entity.attended_by,
             user_producter_id=survey_entity.user_producter_id,
             property_id=survey_entity.property_id,
-            city=city_name or (survey_entity.property.city if survey_entity.property else None),
+            city=city_name
+            or (survey_entity.property.city if survey_entity.property else None),
             visit_date=survey_entity.visit_date,
             state=survey_entity.state,
             objetive_accompaniment=survey_entity.objetive_accompaniment,

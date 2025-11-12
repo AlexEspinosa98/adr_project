@@ -4,8 +4,12 @@ from typing import List, Optional
 from modules.admin.application_admin.dtos.output_dto.admin_survey_list_output_dto import (
     AdminSurveyListOutputDTO,
 )
-from modules.admin.application_admin.dtos.output_dto.product_property_output_dto import ProductPropertyOutputDTO
-from modules.admin.application_admin.dtos.output_dto.property_survey_output_dto import PropertySurveyOutputDTO
+from modules.admin.application_admin.dtos.output_dto.product_property_output_dto import (
+    ProductPropertyOutputDTO,
+)
+from modules.admin.application_admin.dtos.output_dto.property_survey_output_dto import (
+    PropertySurveyOutputDTO,
+)
 
 
 class AdminSurveyRepository(ABC):

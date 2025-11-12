@@ -7,6 +7,7 @@ from common.infrastructure.logging.config import get_logger
 _LOGGER: Logger = get_logger(__name__)
 IMAGE_DIR = "images/signing"
 
+
 class UploadSigningImageUseCase:
     def __init__(self, auth_repository: AuthRepository):
         self._auth_repository = auth_repository
@@ -20,11 +21,11 @@ class UploadSigningImageUseCase:
 
         if not os.path.exists(IMAGE_DIR):
             os.makedirs(IMAGE_DIR)
-            
+
         file_extension = image_content_type.split("/")[-1]
         if not file_extension:
-            file_extension = "png" # default
-            
+            file_extension = "png"  # default
+
         image_filename = f"{uuid.uuid4()}.{file_extension}"
         image_path = os.path.join(IMAGE_DIR, image_filename)
 

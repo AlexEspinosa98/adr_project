@@ -5,7 +5,9 @@ from common.domain import (
     exceptions as common_exceptions,
     value_objects as common_value_objects,
 )
-from modules.admin.domain_admin.entities.admin_user_entity import AdminUser as AdminUserEntity
+from modules.admin.domain_admin.entities.admin_user_entity import (
+    AdminUser as AdminUserEntity,
+)
 
 
 class AdminAuthenticationAggregate(common_aggregates.BaseAggregate):

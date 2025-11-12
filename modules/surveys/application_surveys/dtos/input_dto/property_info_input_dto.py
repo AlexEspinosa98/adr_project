@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from typing import Optional
 
+
 class PropertyInfoInputDTO(BaseModel):
     name: str
     latitude: Optional[str] = None

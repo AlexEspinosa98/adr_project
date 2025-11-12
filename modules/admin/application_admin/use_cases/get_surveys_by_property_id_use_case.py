@@ -2,8 +2,12 @@ from logging import Logger
 from typing import List
 
 from common.infrastructure.logging.config import get_logger
-from modules.admin.domain_admin.repositories.admin_survey_repository import AdminSurveyRepository
-from modules.admin.application_admin.dtos.output_dto.property_survey_output_dto import PropertySurveyOutputDTO
+from modules.admin.domain_admin.repositories.admin_survey_repository import (
+    AdminSurveyRepository,
+)
+from modules.admin.application_admin.dtos.output_dto.property_survey_output_dto import (
+    PropertySurveyOutputDTO,
+)
 
 
 _LOGGER: Logger = get_logger(__name__)

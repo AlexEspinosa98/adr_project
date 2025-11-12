@@ -2,6 +2,7 @@ from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime
 
+
 class CreateSurvey1OutputDTO(BaseModel):
     id: int
     extensionist_id: Optional[int]

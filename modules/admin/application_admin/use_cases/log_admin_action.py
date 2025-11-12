@@ -1,7 +1,10 @@
 from datetime import datetime
 from sqlalchemy.orm import Session
 from modules.admin.domain_admin.entities.admin_log_entity import AdminLog
-from modules.admin.infrastructure_admin.repositories.admin_log_repository import AdminLogRepository
+from modules.admin.infrastructure_admin.repositories.admin_log_repository import (
+    AdminLogRepository,
+)
+
 
 class LogAdminAction:
     def __init__(self, db_session: Session):
@@ -14,6 +17,6 @@ class LogAdminAction:
             action_id=action_id,
             description=description,
             timestamp=datetime.now(),
-            id=None # Add this to satisfy the pydantic model
+            id=None,  # Add this to satisfy the pydantic model
         )
         return self.admin_log_repository.log_action(log_entry)

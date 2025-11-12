@@ -3,22 +3,36 @@ from typing import Optional, Dict
 from pydantic import BaseModel, Field
 
 from modules.surveys.domain_surveys.entities.user_producter_entity import UserProducter
-from modules.surveys.domain_surveys.entities.product_property_entity import ProductProperty
+from modules.surveys.domain_surveys.entities.product_property_entity import (
+    ProductProperty,
+)
 
 
 class Survey(BaseModel):
-    id: Optional[int] = Field(None, gt=0, description="Unique identifier for the entity")
-    survey_type: Optional[str] = Field(None, description="Type of the survey (e.g., 'Survey 1', 'Survey 2')")
+    id: Optional[int] = Field(
+        None, gt=0, description="Unique identifier for the entity"
+    )
+    survey_type: Optional[str] = Field(
+        None, description="Type of the survey (e.g., 'Survey 1', 'Survey 2')"
+    )
     extensionist_id: Optional[int] = Field(None, description="ID of the extensionist")
-    user_producter_id: Optional[int] = Field(None, description="ID of the user producer")
+    user_producter_id: Optional[int] = Field(
+        None, description="ID of the user producer"
+    )
     user_producter: Optional[UserProducter] = Field(None)
     property_id: Optional[int] = Field(None, description="ID of the property")
     property: Optional[ProductProperty] = Field(None)
-    objetive_accompaniment: Optional[str] = Field(None, description="Objective of accompaniment")
-    recommendations_commitments: Optional[str] = Field(None, description="Recommendations and commitments")
+    objetive_accompaniment: Optional[str] = Field(
+        None, description="Objective of accompaniment"
+    )
+    recommendations_commitments: Optional[str] = Field(
+        None, description="Recommendations and commitments"
+    )
     observations: Optional[str] = Field(None, description="Observations")
     visit_date: Optional[datetime] = Field(None, description="Date of the visit")
-    attended_by: Optional[str] = Field(None, description="Person who attended the survey")
+    attended_by: Optional[str] = Field(
+        None, description="Person who attended the survey"
+    )
     user: Optional[str] = Field(None, description="User associated with the survey")
     Household_size: Optional[str] = Field(None, description="Household size")
     other: Optional[str] = Field(None, description="Other information")

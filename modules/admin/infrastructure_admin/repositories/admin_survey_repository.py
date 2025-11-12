@@ -1,19 +1,22 @@
 from logging import Logger
-from typing import List, Optional, Tuple
+from typing import List, Optional
 
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 import json
 from common.infrastructure.logging.config import get_logger
-from common.infrastructure.repositories.postgresql import BasePostgreSQLRepository
 from modules.admin.application_admin.dtos.output_dto.admin_survey_list_output_dto import (
     AdminSurveyListOutputDTO,
 )
 from modules.admin.domain_admin.repositories.admin_survey_repository import (
     AdminSurveyRepository as IAdminSurveyRepository,
 )
-from modules.admin.application_admin.dtos.output_dto.product_property_output_dto import ProductPropertyOutputDTO
-from modules.admin.application_admin.dtos.output_dto.property_survey_output_dto import PropertySurveyOutputDTO
+from modules.admin.application_admin.dtos.output_dto.product_property_output_dto import (
+    ProductPropertyOutputDTO,
+)
+from modules.admin.application_admin.dtos.output_dto.property_survey_output_dto import (
+    PropertySurveyOutputDTO,
+)
 
 
 _LOGGER: Logger = get_logger(__name__)
@@ -136,14 +139,16 @@ class PostgreSQLAdminSurveyRepository(
             filters.append("property_city ILIKE :city")
             params["city"] = f"%{city}%"
         if extensionist_identification:
-            filters.append("extensionist_identification ILIKE :extensionist_identification")
+            filters.append(
+                "extensionist_identification ILIKE :extensionist_identification"
+            )
             params["extensionist_identification"] = f"%{extensionist_identification}%"
         if extensionist_name:
             filters.append("extensionist_name ILIKE :extensionist_name")
             params["extensionist_name"] = f"%{extensionist_name}%"
 
         if filters:
-            final_query = f"SELECT * FROM ({base_query}) as all_admin_surveys WHERE {" AND ".join(filters)}"
+            final_query = f"SELECT * FROM ({base_query}) as all_admin_surveys WHERE {' AND '.join(filters)}"
         else:
             final_query = f"SELECT * FROM ({base_query}) as all_admin_surveys"
 
@@ -152,12 +157,22 @@ class PostgreSQLAdminSurveyRepository(
         processed_results = []
         for row in result:
             survey_data = row._asdict()
-            if survey_data.get("classification_user") and isinstance(survey_data["classification_user"], str):
-                survey_data["classification_user"] = json.loads(survey_data["classification_user"])
-            if survey_data.get("medition_focalization") and isinstance(survey_data["medition_focalization"], str):
-                survey_data["medition_focalization"] = json.loads(survey_data["medition_focalization"])
-            processed_results.append(AdminSurveyListOutputDTO.model_validate(survey_data))
-        
+            if survey_data.get("classification_user") and isinstance(
+                survey_data["classification_user"], str
+            ):
+                survey_data["classification_user"] = json.loads(
+                    survey_data["classification_user"]
+                )
+            if survey_data.get("medition_focalization") and isinstance(
+                survey_data["medition_focalization"], str
+            ):
+                survey_data["medition_focalization"] = json.loads(
+                    survey_data["medition_focalization"]
+                )
+            processed_results.append(
+                AdminSurveyListOutputDTO.model_validate(survey_data)
+            )
+
         return processed_results
 
     def find_product_properties_by_extensionist_id(
@@ -261,7 +276,9 @@ class PostgreSQLAdminSurveyRepository(
         # Ejecutar la consulta
         result = self.session.execute(text(full_query), params).fetchall()
 
-        return [ProductPropertyOutputDTO.model_validate(row._asdict()) for row in result]
+        return [
+            ProductPropertyOutputDTO.model_validate(row._asdict()) for row in result
+        ]
 
     def find_surveys_by_property_id(
         self, property_id: int
@@ -276,7 +293,8 @@ class PostgreSQLAdminSurveyRepository(
         SELECT id, 'Survey 3' as survey_type, visit_date as date, state FROM survey_3 WHERE property_id = :property_id
         """
 
-        result = self.session.execute(text(query), {"property_id": property_id}).fetchall()
+        result = self.session.execute(
+            text(query), {"property_id": property_id}
+        ).fetchall()
 
         return [PropertySurveyOutputDTO.model_validate(row._asdict()) for row in result]
-

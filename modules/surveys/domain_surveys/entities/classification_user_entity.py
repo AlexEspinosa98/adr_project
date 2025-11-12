@@ -2,6 +2,7 @@ from typing import Optional
 from common.domain import entities as common_entities
 from pydantic import Field
 
+
 class ClassificationUser(common_entities.BaseEntity):
     survey_idd1: Optional[int] = Field(None)
     survey_idd3: Optional[int] = Field(None)

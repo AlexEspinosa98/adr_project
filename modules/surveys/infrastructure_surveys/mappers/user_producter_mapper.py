@@ -1,5 +1,10 @@
-from modules.surveys.domain_surveys.entities.user_producter_entity import UserProducter as UserProducterEntity
-from common.infrastructure.database.models.survey import UserProducter as UserProducterModel
+from modules.surveys.domain_surveys.entities.user_producter_entity import (
+    UserProducter as UserProducterEntity,
+)
+from common.infrastructure.database.models.survey import (
+    UserProducter as UserProducterModel,
+)
+
 
 class UserProducterMapper:
     @staticmethod

@@ -1,37 +1,63 @@
-from typing import List, Optional, Union # Modified import
+from typing import List, Optional  # Modified import
 
-from fastapi import APIRouter, Depends, status, HTTPException # Added HTTPException
-from fastapi.responses import JSONResponse
+from fastapi import APIRouter, Depends, status, HTTPException  # Added HTTPException
 
 from common.infrastructure.api import decorators as common_decorators
 from common.infrastructure.api.dtos.response_dto import ApiResponseDTO
 
-from modules.admin.application_admin.dtos.input_dto.admin_login_dto import AdminLoginInputDTO
-from modules.admin.application_admin.dtos.input_dto.admin_register_dto import AdminRegisterInputDTO
-from modules.admin.application_admin.dtos.input_dto.admin_survey_filter_input_dto import AdminSurveyFilterInputDTO
-from modules.admin.application_admin.dtos.output_dto.admin_login_output_dto import AdminLoginOutputDTO
+from modules.admin.application_admin.dtos.input_dto.admin_login_dto import (
+    AdminLoginInputDTO,
+)
+from modules.admin.application_admin.dtos.input_dto.admin_register_dto import (
+    AdminRegisterInputDTO,
+)
+from modules.admin.application_admin.dtos.output_dto.admin_login_output_dto import (
+    AdminLoginOutputDTO,
+)
 from modules.admin.application_admin.dtos.output_dto.admin_user_dto import AdminUserDTO
-from modules.admin.application_admin.dtos.output_dto.admin_survey_output_dto import AdminSurveyOutputDTO
-from modules.admin.application_admin.dtos.output_dto.admin_survey_list_output_dto import AdminSurveyListOutputDTO
-from modules.admin.application_admin.dtos.output_dto.admin_survey1_detail_output_dto import AdminSurvey1DetailOutputDTO # New import
-from modules.admin.application_admin.dtos.output_dto.admin_survey2_detail_output_dto import AdminSurvey2DetailOutputDTO # New import
-from modules.admin.application_admin.dtos.output_dto.admin_survey3_detail_output_dto import AdminSurvey3DetailOutputDTO
-from modules.admin.application_admin.dtos.output_dto.admin_survey_detail_wrapper_output_dto import AdminSurveyDetailWrapperOutputDTO
-from modules.admin.application_admin.dtos.output_dto.extensionist_output_dto import ExtensionistOutputDTO
-from modules.admin.application_admin.dtos.output_dto.extensionist_name_id_phone_output_dto import ExtensionistNameIdPhoneOutputDTO
-from modules.admin.application_admin.dtos.output_dto.product_property_output_dto import ProductPropertyOutputDTO
-from modules.admin.application_admin.dtos.output_dto.property_survey_output_dto import PropertySurveyOutputDTO
-from modules.admin.application_admin.services.admin_authentication_service import AdminAuthenticationService
-from modules.admin.application_admin.use_cases.login_admin_use_case import LoginAdminUseCase
-from modules.admin.application_admin.use_cases.register_admin_use_case import RegisterAdminUseCase
-from modules.admin.application_admin.use_cases.get_admin_survey_list_use_case import GetAdminSurveyListUseCase
-from modules.admin.application_admin.use_cases.get_admin_survey_detail_use_case import GetAdminSurveyDetailUseCase
-from modules.admin.application_admin.use_cases.get_extensionist_list_use_case import GetExtensionistListUseCase
-from modules.admin.application_admin.use_cases.get_extensionist_name_id_phone_list_use_case import GetExtensionistNameIdPhoneListUseCase
-from modules.admin.application_admin.use_cases.get_product_properties_by_extensionist_use_case import GetProductPropertiesByExtensionistUseCase
-from modules.admin.application_admin.use_cases.get_surveys_by_property_id_use_case import GetSurveysByPropertyIdUseCase
+from modules.admin.application_admin.dtos.output_dto.admin_survey_list_output_dto import (
+    AdminSurveyListOutputDTO,
+)
+from modules.admin.application_admin.dtos.output_dto.admin_survey_detail_wrapper_output_dto import (
+    AdminSurveyDetailWrapperOutputDTO,
+)
+from modules.admin.application_admin.dtos.output_dto.extensionist_output_dto import (
+    ExtensionistOutputDTO,
+)
+from modules.admin.application_admin.dtos.output_dto.extensionist_name_id_phone_output_dto import (
+    ExtensionistNameIdPhoneOutputDTO,
+)
+from modules.admin.application_admin.dtos.output_dto.product_property_output_dto import (
+    ProductPropertyOutputDTO,
+)
+from modules.admin.application_admin.dtos.output_dto.property_survey_output_dto import (
+    PropertySurveyOutputDTO,
+)
+from modules.admin.application_admin.use_cases.login_admin_use_case import (
+    LoginAdminUseCase,
+)
+from modules.admin.application_admin.use_cases.register_admin_use_case import (
+    RegisterAdminUseCase,
+)
+from modules.admin.application_admin.use_cases.get_admin_survey_list_use_case import (
+    GetAdminSurveyListUseCase,
+)
+from modules.admin.application_admin.use_cases.get_admin_survey_detail_use_case import (
+    GetAdminSurveyDetailUseCase,
+)
+from modules.admin.application_admin.use_cases.get_extensionist_list_use_case import (
+    GetExtensionistListUseCase,
+)
+from modules.admin.application_admin.use_cases.get_extensionist_name_id_phone_list_use_case import (
+    GetExtensionistNameIdPhoneListUseCase,
+)
+from modules.admin.application_admin.use_cases.get_product_properties_by_extensionist_use_case import (
+    GetProductPropertiesByExtensionistUseCase,
+)
+from modules.admin.application_admin.use_cases.get_surveys_by_property_id_use_case import (
+    GetSurveysByPropertyIdUseCase,
+)
 from modules.admin.infrastructure_admin.services.admin_authentication_service_composer import (
-    get_admin_authentication_service,
     get_login_admin_use_case,
     get_register_admin_use_case,
     get_admin_survey_list_use_case,
@@ -42,17 +68,21 @@ from modules.admin.infrastructure_admin.services.admin_authentication_service_co
     get_surveys_by_property_id_use_case,
 )
 
-from fastapi import Depends, status, HTTPException
-from common.infrastructure.api.dtos.response_dto import ApiResponseDTO
-from common.infrastructure.authentication.user_authorizer import get_current_user
-from common.application.dtos.output_dto.authentication_dto import AuthenticatedUserDTO
+from modules.admin.infrastructure_admin.api.auth.admin_authorizer import (
+    get_current_admin_user,
+)
 from common.infrastructure.database.session import session_manager
 from sqlalchemy.orm import Session
-from modules.surveys.application_surveys.use_cases.update_survey_state import UpdateSurveyState
-from modules.surveys.application_surveys.dtos.input_dto.update_survey_state_input_dto import UpdateSurveyStateInputDTO
-# Removed old imports for Survey1DetailOutputDTO, Survey2DetailOutputDTO, Survey3DetailOutputDTO
-#logger setup
+from modules.surveys.application_surveys.use_cases.update_survey_state import (
+    UpdateSurveyState,
+)
+from modules.surveys.application_surveys.dtos.input_dto.update_survey_state_input_dto import (
+    UpdateSurveyStateInputDTO,
+)
+
+# logger setup
 from common.infrastructure.logging.config import get_logger
+
 _LOGGER = get_logger(__name__)
 
 router = APIRouter(prefix="/admin", tags=["Admin"])
@@ -101,7 +131,9 @@ async def admin_login(
 @common_decorators.handle_authentication_exceptions
 async def admin_register(
     register_data: AdminRegisterInputDTO,
-    register_admin_use_case: RegisterAdminUseCase = Depends(get_register_admin_use_case),
+    register_admin_use_case: RegisterAdminUseCase = Depends(
+        get_register_admin_use_case
+    ),
 ) -> ApiResponseDTO[AdminUserDTO]:
     """
     Handles admin user registration.
@@ -210,12 +242,16 @@ async def get_extensionist_name_id_phone_list(
 async def get_product_properties_by_extensionist(
     extensionist_id: int,
     property_name: Optional[str] = None,
-    get_product_properties_by_extensionist_use_case: GetProductPropertiesByExtensionistUseCase = Depends(get_product_properties_by_extensionist_use_case),
+    get_product_properties_by_extensionist_use_case: GetProductPropertiesByExtensionistUseCase = Depends(
+        get_product_properties_by_extensionist_use_case
+    ),
 ) -> ApiResponseDTO[List[ProductPropertyOutputDTO]]:
     """
     Handles fetching a list of unique product properties associated with a given extensionist ID.
     """
-    product_properties = get_product_properties_by_extensionist_use_case.execute(extensionist_id, property_name)
+    product_properties = get_product_properties_by_extensionist_use_case.execute(
+        extensionist_id, property_name
+    )
     return ApiResponseDTO.success_response(
         data=product_properties,
         message=f"Product properties for extensionist ID {extensionist_id} fetched successfully",
@@ -234,7 +270,9 @@ async def get_product_properties_by_extensionist(
 @common_decorators.handle_authentication_exceptions
 async def get_surveys_by_property_id(
     property_id: int,
-    use_case: GetSurveysByPropertyIdUseCase = Depends(get_surveys_by_property_id_use_case),
+    use_case: GetSurveysByPropertyIdUseCase = Depends(
+        get_surveys_by_property_id_use_case
+    ),
 ) -> ApiResponseDTO[List[PropertySurveyOutputDTO]]:
     """
     Handles fetching a list of surveys associated with a given property ID.
@@ -260,7 +298,9 @@ async def get_admin_survey_list(
     city: Optional[str] = None,
     extensionist_identification: Optional[str] = None,
     extensionist_name: Optional[str] = None,
-    get_admin_survey_list_use_case: GetAdminSurveyListUseCase = Depends(get_admin_survey_list_use_case),
+    get_admin_survey_list_use_case: GetAdminSurveyListUseCase = Depends(
+        get_admin_survey_list_use_case
+    ),
 ) -> ApiResponseDTO[List[AdminSurveyListOutputDTO]]:
     """
     Handles fetching a list of surveys for admin with optional filters.
@@ -298,7 +338,10 @@ async def get_admin_survey_list(
 async def get_admin_survey_detail(
     survey_type: int,
     survey_id: int,
-    get_admin_survey_detail_use_case: GetAdminSurveyDetailUseCase = Depends(get_admin_survey_detail_use_case),
+    get_admin_survey_detail_use_case: GetAdminSurveyDetailUseCase = Depends(
+        get_admin_survey_detail_use_case
+    ),
+
 ) -> ApiResponseDTO[AdminSurveyDetailWrapperOutputDTO]:
     """
     Handles fetching full details of a single survey for admin.
@@ -314,7 +357,9 @@ async def get_admin_survey_detail(
     survey_detail = get_admin_survey_detail_use_case.execute(survey_id, survey_type)
 
     if not survey_detail:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Survey not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Survey not found"
+        )
 
     return ApiResponseDTO.success_response(
         data=survey_detail,
@@ -330,16 +375,18 @@ async def get_admin_survey_detail(
     description="Updates the state of a specific survey (1, 2, or 3) to ACCEPTED or REJECTED.",
     tags=["Admin Surveys"],
 )
-# @common_decorators.handle_exceptions
-# @common_decorators.handle_authentication_exceptions
+@common_decorators.handle_exceptions
+@common_decorators.handle_authentication_exceptions
 async def update_survey_state(
     survey_type: int,
     survey_id: int,
     state_update: UpdateSurveyStateInputDTO,
-    current_user: AuthenticatedUserDTO = Depends(get_current_user),
+    current_user: AdminUserDTO = Depends(get_current_admin_user),
     db_session: Session = Depends(session_manager.get_session),
 ) -> ApiResponseDTO[str]:
-    _LOGGER.info(f"Admin user {current_user.user_id} updating state for survey type {survey_type} with ID {survey_id} to {state_update.new_state}")
+    _LOGGER.info(
+        f"Admin user {current_user.id} updating state for survey type {survey_type} with ID {survey_id} to {state_update.new_state}"
+    )
 
     try:
         update_survey_state_use_case = UpdateSurveyState(db_session)
@@ -347,7 +394,7 @@ async def update_survey_state(
             survey_type=survey_type,
             survey_id=survey_id,
             new_state=state_update.new_state,
-            admin_user_id=current_user.user_id,
+            admin_user_id=current_user.id,
         )
         return ApiResponseDTO.success_response(
             data=f"Survey {survey_type} with ID {survey_id} state updated to {updated_survey.state}",
@@ -358,5 +405,7 @@ async def update_survey_state(
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
     except Exception as e:
         _LOGGER.error(f"Unexpected error updating survey state: {e}", exc_info=True)
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="An unexpected error occurred.")
-
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="An unexpected error occurred.",
+        )
