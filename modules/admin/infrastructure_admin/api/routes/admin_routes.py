@@ -20,6 +20,7 @@ from modules.admin.application_admin.dtos.output_dto.admin_survey_detail_wrapper
 from modules.admin.application_admin.dtos.output_dto.extensionist_output_dto import ExtensionistOutputDTO
 from modules.admin.application_admin.dtos.output_dto.extensionist_name_id_phone_output_dto import ExtensionistNameIdPhoneOutputDTO
 from modules.admin.application_admin.dtos.output_dto.product_property_output_dto import ProductPropertyOutputDTO
+from modules.admin.application_admin.dtos.output_dto.property_survey_output_dto import PropertySurveyOutputDTO
 from modules.admin.application_admin.services.admin_authentication_service import AdminAuthenticationService
 from modules.admin.application_admin.use_cases.login_admin_use_case import LoginAdminUseCase
 from modules.admin.application_admin.use_cases.register_admin_use_case import RegisterAdminUseCase
@@ -28,6 +29,7 @@ from modules.admin.application_admin.use_cases.get_admin_survey_detail_use_case 
 from modules.admin.application_admin.use_cases.get_extensionist_list_use_case import GetExtensionistListUseCase
 from modules.admin.application_admin.use_cases.get_extensionist_name_id_phone_list_use_case import GetExtensionistNameIdPhoneListUseCase
 from modules.admin.application_admin.use_cases.get_product_properties_by_extensionist_use_case import GetProductPropertiesByExtensionistUseCase
+from modules.admin.application_admin.use_cases.get_surveys_by_property_id_use_case import GetSurveysByPropertyIdUseCase
 from modules.admin.infrastructure_admin.services.admin_authentication_service_composer import (
     get_admin_authentication_service,
     get_login_admin_use_case,
@@ -37,6 +39,7 @@ from modules.admin.infrastructure_admin.services.admin_authentication_service_co
     get_get_extensionist_list_use_case,
     get_get_extensionist_name_id_phone_list_use_case,
     get_product_properties_by_extensionist_use_case,
+    get_surveys_by_property_id_use_case,
 )
 
 from fastapi import Depends, status, HTTPException
@@ -216,6 +219,30 @@ async def get_product_properties_by_extensionist(
     return ApiResponseDTO.success_response(
         data=product_properties,
         message=f"Product properties for extensionist ID {extensionist_id} fetched successfully",
+    )
+
+
+@router.get(
+    "/properties/{property_id}/surveys",
+    response_model=ApiResponseDTO[List[PropertySurveyOutputDTO]],
+    status_code=status.HTTP_200_OK,
+    summary="Get Surveys by Property ID",
+    description="Retrieves a list of all surveys (1, 2, and 3) associated with a specific property ID.",
+    tags=["Admin Surveys"],
+)
+@common_decorators.handle_exceptions
+@common_decorators.handle_authentication_exceptions
+async def get_surveys_by_property_id(
+    property_id: int,
+    use_case: GetSurveysByPropertyIdUseCase = Depends(get_surveys_by_property_id_use_case),
+) -> ApiResponseDTO[List[PropertySurveyOutputDTO]]:
+    """
+    Handles fetching a list of surveys associated with a given property ID.
+    """
+    surveys = use_case.execute(property_id)
+    return ApiResponseDTO.success_response(
+        data=surveys,
+        message=f"Surveys for property ID {property_id} fetched successfully",
     )
 
 

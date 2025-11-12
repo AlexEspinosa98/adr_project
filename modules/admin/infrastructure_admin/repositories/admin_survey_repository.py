@@ -13,6 +13,7 @@ from modules.admin.domain_admin.repositories.admin_survey_repository import (
     AdminSurveyRepository as IAdminSurveyRepository,
 )
 from modules.admin.application_admin.dtos.output_dto.product_property_output_dto import ProductPropertyOutputDTO
+from modules.admin.application_admin.dtos.output_dto.property_survey_output_dto import PropertySurveyOutputDTO
 
 
 _LOGGER: Logger = get_logger(__name__)
@@ -261,4 +262,21 @@ class PostgreSQLAdminSurveyRepository(
         result = self.session.execute(text(full_query), params).fetchall()
 
         return [ProductPropertyOutputDTO.model_validate(row._asdict()) for row in result]
+
+    def find_surveys_by_property_id(
+        self, property_id: int
+    ) -> List[PropertySurveyOutputDTO]:
+        _LOGGER.info(f"Finding surveys for property ID: [{property_id}]")
+
+        query = """
+        SELECT id, 'Survey 1' as survey_type, visit_date as date, state FROM survey_1 WHERE property_id = :property_id
+        UNION ALL
+        SELECT id, 'Survey 2' as survey_type, visit_date as date, state FROM survey_2 WHERE property_id = :property_id
+        UNION ALL
+        SELECT id, 'Survey 3' as survey_type, visit_date as date, state FROM survey_3 WHERE property_id = :property_id
+        """
+
+        result = self.session.execute(text(query), {"property_id": property_id}).fetchall()
+
+        return [PropertySurveyOutputDTO.model_validate(row._asdict()) for row in result]
 

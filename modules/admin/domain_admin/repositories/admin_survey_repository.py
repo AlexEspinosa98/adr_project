@@ -5,6 +5,7 @@ from modules.admin.application_admin.dtos.output_dto.admin_survey_list_output_dt
     AdminSurveyListOutputDTO,
 )
 from modules.admin.application_admin.dtos.output_dto.product_property_output_dto import ProductPropertyOutputDTO
+from modules.admin.application_admin.dtos.output_dto.property_survey_output_dto import PropertySurveyOutputDTO
 
 
 class AdminSurveyRepository(ABC):
@@ -25,4 +26,12 @@ class AdminSurveyRepository(ABC):
     ) -> List[ProductPropertyOutputDTO]:
         """
         Finds unique product properties associated with a given extensionist ID.
+        """
+
+    @abstractmethod
+    def find_surveys_by_property_id(
+        self, property_id: int
+    ) -> List[PropertySurveyOutputDTO]:
+        """
+        Finds all surveys (1, 2, and 3) associated with a property ID.
         """

@@ -7,3 +7,4 @@ from .log_admin_action import LogAdminAction
 from .login_admin_use_case import LoginAdminUseCase
 from .register_admin_use_case import RegisterAdminUseCase
 from .get_product_properties_by_extensionist_use_case import GetProductPropertiesByExtensionistUseCase
+from .get_surveys_by_property_id_use_case import GetSurveysByPropertyIdUseCase

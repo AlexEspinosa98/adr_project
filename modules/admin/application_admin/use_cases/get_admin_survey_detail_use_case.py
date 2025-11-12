@@ -55,7 +55,4 @@ class GetAdminSurveyDetailUseCase:
 
         return AdminSurveyDetailWrapperOutputDTO(
             data_survey=admin_survey_detail_dto,
-            property=property_info,
-            user_producter=user_producter,
-            classification_general=admin_survey_detail_dto.classification_general
         )
