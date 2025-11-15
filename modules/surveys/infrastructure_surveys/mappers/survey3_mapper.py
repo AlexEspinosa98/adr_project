@@ -89,7 +89,7 @@ class Survey3Mapper:
             photo_interaction=survey_model.photo_interaction,
             photo_panorama=survey_model.photo_panorama,
             phono_extra_1=survey_model.phono_extra_1,
-            state=survey_model.state,
+            state=str.lower(survey_model.state),
             date_hour_end=survey_model.date_hour_end,
             copy_documentation_delivered=survey_model.copy_documentation_delivered,
             socialization_events_group=survey_model.socialization_events_group,

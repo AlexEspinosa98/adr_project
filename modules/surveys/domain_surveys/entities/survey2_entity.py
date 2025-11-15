@@ -1,6 +1,7 @@
 from pydantic import BaseModel, Field
 from typing import Optional
 from datetime import datetime
+from common.domain.enums.survey_status import SurveyStatus
 from modules.surveys.domain_surveys.entities.user_producter_entity import UserProducter
 from modules.surveys.domain_surveys.entities.product_property_entity import (
     ProductProperty,
@@ -48,9 +49,9 @@ class Survey2(BaseModel):
     attended_by: Optional[str]
     user: Optional[str]
     worker_up: Optional[str]
-    Household_size: Optional[str]
+    household_size: Optional[str]
     other: Optional[str]
-    state: str
+    state: SurveyStatus
 
     # Data companionship
     date_acompanamiento: Optional[str] = None

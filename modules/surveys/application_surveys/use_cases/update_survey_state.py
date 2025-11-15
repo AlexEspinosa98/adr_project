@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+from common.domain.enums.survey_status import SurveyStatus
 from modules.surveys.infrastructure_surveys.repositories.postgresql.survey1_repository import (
     PostgreSQLSurvey1Repository,
 )
@@ -33,19 +34,25 @@ class UpdateSurveyState:
         if not survey:
             raise ValueError("Survey not found")
 
-        old_state = survey.state
-        survey.state = new_state
+        old_state_value = (
+            survey.state.value if isinstance(survey.state, SurveyStatus) else survey.state
+        )
 
-        # The save method in the survey repositories commits the session.
-        # This is not ideal for a use case that does multiple things.
-        # I will assume for now that this is the intended behavior of the application.
+        try:
+            survey.state = SurveyStatus(new_state.lower())
+        except ValueError:
+            valid_states = ", ".join([s.value for s in SurveyStatus])
+            raise ValueError(
+                f"Invalid state: '{new_state}'. Must be one of {valid_states}"
+            )
+
         updated_survey = repository.save(survey)
 
         # Log the action
         self.log_admin_action.execute(
             admin_user_id=admin_user_id,
             action_id=2,  # 'Aprobar/Rechazar Encuesta'
-            description=f"Survey {survey_type} with ID {survey_id} state changed from {old_state} to {new_state}",
+            description=f"Survey {survey_type} with ID {survey_id} state changed from {old_state_value} to {new_state}",
         )
 
         return updated_survey

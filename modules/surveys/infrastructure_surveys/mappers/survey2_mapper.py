@@ -59,7 +59,7 @@ class Survey2Mapper:
             attended_by=survey_entity.attended_by,
             user=survey_entity.user,
             worker_up=survey_entity.worker_up,
-            Household_size=survey_entity.Household_size,
+            household_size=survey_entity.household_size,
             other=survey_entity.other,
             state=survey_entity.state,
             date_acompanamiento=survey_entity.date_acompanamiento,
@@ -117,9 +117,9 @@ class Survey2Mapper:
             attended_by=survey_model.attended_by,
             user=survey_model.user,
             worker_up=survey_model.worker_up,
-            Household_size=survey_model.Household_size,
+            household_size=survey_model.household_size,
             other=survey_model.other,
-            state=survey_model.state,
+            state=str.lower(survey_model.state),
             producter=UserProducterMapper.to_entity(survey_model.producter)
             if survey_model.producter
             else None,
