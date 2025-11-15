@@ -39,7 +39,7 @@ This document provides detailed information about the API endpoints available in
   "objetive_accompaniment": "Objective of the visit",
   "initial_diagnosis": "Initial diagnosis of the property",
   "recommendations_commitments": "Recommendations and commitments",
-  "observations": "Observations from the visit",
+  "observations_visited": "Observations from the visit",
   "visit_date": "2025-11-07T10:00:00",
   "attended_by": "Name of the person attended",
   "user": "Associated user",
@@ -214,7 +214,7 @@ This document provides detailed information about the API endpoints available in
 
 ### Success Response
 
-- **Status Code:** `201 CREATED`
+- **Status Code:** `201-CREATED`
 - **Body:**
 ```json
 {
@@ -301,6 +301,88 @@ This document provides detailed information about the API endpoints available in
   }
 }
 ```
+
+---
+
+## Update Survey
+
+- **Method:** `PUT`
+- **Path:** `/surveys/{survey_type}/{survey_id}`
+- **Description:** Updates an existing survey. This action is only permitted if the survey's current status is `rejected`. After a successful update, the survey's status is automatically set back to `pending` for re-evaluation.
+
+### Request
+
+- **Path Parameters:**
+  - `survey_type` (integer, required): The type of survey to update (1, 2, or 3).
+  - `survey_id` (integer, required): The ID of the survey to update.
+
+- **Headers:**
+  - `Content-Type`: `multipart/form-data`
+
+- **Form Data:**
+  - `api_key` (string, required): The API key of the extensionist.
+  - `survey_data` (string, required): A JSON string representing the `UpdateSurveyXInputDTO` with the fields to be updated.
+  - `files` (file, optional): Up to 4 new image files. If provided, they will replace the existing ones.
+
+#### Example `survey_data` for Survey 1 (`/surveys/1/{survey_id}`):
+Note: `classification_user` cannot be updated.
+```json
+{
+  "objetive_accompaniment": "Corrected objective of the visit",
+  "recommendations_commitments": "Updated recommendations and commitments after review."
+}
+```
+
+#### Example `survey_data` for Survey 2 (`/surveys/2/{survey_id}`):
+```json
+{
+  "recommendations_commitments": "Adjusted recommendations for co-innovation.",
+  "observations_visited": "Additional observations noted during the follow-up."
+}
+```
+
+#### Example `survey_data` for Survey 3 (`/surveys/3/{survey_id}`):
+Note: `classification_user` cannot be updated.
+```json
+{
+    "final_diagnosis": "Revised final diagnosis based on feedback.",
+    "other": "Correction on final notes."
+}
+```
+
+### Success Response
+
+- **Status Code:** `200 OK`
+- **Body:**
+```json
+{
+  "status": "success",
+  "message": "Survey 1 with ID 123 updated successfully and set to pending.",
+  "data": {
+    "id": 123,
+    "state": "pending"
+  }
+}
+```
+
+### Error Responses
+
+- **Status Code:** `403 FORBIDDEN`
+  - **Condition:** The survey's current state is not `rejected`.
+  - **Body:** 
+    ```json
+    {
+      "detail": "Survey can only be edited if its state is 'rejected'. Current state is 'pending'."
+    }
+    ```
+- **Status Code:** `404 NOT FOUND`
+  - **Condition:** The survey with the given `survey_id` and `survey_type` does not exist.
+  - **Body:** 
+    ```json
+    {
+      "detail": "Survey not found"
+    }
+    ```
 
 ---
 

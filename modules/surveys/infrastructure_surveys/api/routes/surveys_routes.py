@@ -93,6 +93,24 @@ from modules.surveys.application_surveys.dtos.output_dto.survey3_detail_output_d
     Survey3DetailOutputDTO,
 )
 
+# Imports for Update endpoint
+from modules.surveys.application_surveys.dtos.input_dto.update_survey1_input_dto import (
+    UpdateSurvey1InputDTO,
+)
+from modules.surveys.application_surveys.dtos.input_dto.update_survey2_input_dto import (
+    UpdateSurvey2InputDTO,
+)
+from modules.surveys.application_surveys.dtos.input_dto.update_survey3_input_dto import (
+    UpdateSurvey3InputDTO,
+)
+from modules.surveys.application_surveys.services.update_survey_service import (
+    UpdateSurveyService,
+)
+from modules.surveys.infrastructure_surveys.services.update_survey_service_composer import (
+    get_update_survey_service,
+)
+
+
 _LOGGER: Logger = get_logger(__name__)
 
 router = APIRouter(prefix="/surveys", tags=["surveys"])
@@ -248,6 +266,63 @@ async def create_survey3(
     return ApiResponseDTO.success_response(
         data=result, message="Survey 3 created successfully"
     )
+
+
+@router.put("/{survey_type}/{survey_id}", status_code=response_status.HTTP_200_OK)
+async def update_survey(
+    survey_type: int,
+    survey_id: int,
+    api_key: str = Form(...),
+    survey_data: str = Form(...),
+    files: Optional[List[UploadFile]] = File(None),
+    update_survey_service: UpdateSurveyService = Depends(get_update_survey_service),
+):
+    _LOGGER.info(f"Updating survey type {survey_type}, ID {survey_id}")
+
+    image_paths = []
+    if files:
+        if not os.path.exists(UPLOAD_DIRECTORY):
+            os.makedirs(UPLOAD_DIRECTORY)
+        for file in files:
+            file_path = os.path.join(UPLOAD_DIRECTORY, file.filename)
+            with open(file_path, "wb") as buffer:
+                shutil.copyfileobj(file.file, buffer)
+            image_paths.append(file_path)
+
+    try:
+        survey_data_dict = json.loads(survey_data)
+        
+        dto_class = None
+        if survey_type == 1:
+            dto_class = UpdateSurvey1InputDTO
+        elif survey_type == 2:
+            dto_class = UpdateSurvey2InputDTO
+        elif survey_type == 3:
+            dto_class = UpdateSurvey3InputDTO
+        else:
+            raise HTTPException(status_code=400, detail="Invalid survey type")
+
+        update_dto = dto_class(**survey_data_dict)
+
+        result = update_survey_service.update_survey(
+            survey_type=survey_type,
+            survey_id=survey_id,
+            update_dto=update_dto,
+            image_paths=image_paths if image_paths else None,
+        )
+        return ApiResponseDTO.success_response(
+            data={"id": result.id, "state": result.state.value},
+            message=f"Survey {survey_type} with ID {survey_id} updated successfully and set to pending.",
+        )
+    except PermissionError as e:
+        _LOGGER.error(f"Permission error updating survey: {e}")
+        raise HTTPException(status_code=403, detail=str(e))
+    except ValueError as e:
+        _LOGGER.error(f"Validation error updating survey: {e}")
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        _LOGGER.error(f"Error updating survey: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail="Error updating survey.")
 
 
 @router.get("", response_model=PaginatedApiResponseDTO[SurveyListItemDTO])
