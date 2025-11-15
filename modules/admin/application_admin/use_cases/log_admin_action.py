@@ -17,6 +17,5 @@ class LogAdminAction:
             action_id=action_id,
             description=description,
             timestamp=datetime.now(),
-            id=None,  # Add this to satisfy the pydantic model
         )
         return self.admin_log_repository.log_action(log_entry)

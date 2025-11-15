@@ -2,7 +2,7 @@ from common.infrastructure.database.models.base import BaseModel
 from typing import Optional
 
 from sqlalchemy import String, Integer, Date, Text, ForeignKey
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 
 class AdminUser(BaseModel):
@@ -31,8 +31,12 @@ class ActionsLog(BaseModel):
 class AdminLogger(BaseModel):
     __tablename__ = "admin_logger"
     # metadata
-    admin_user_id: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
-    # action fk
+    # fk with admin_user
+    admin_user_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("user_admin.id"), nullable=True
+    )
+
+    admin_user: Mapped[Optional[AdminUser]] = relationship("AdminUser")
     action: Mapped[Optional[int]] = mapped_column(
         ForeignKey("actions_log.id"), nullable=True
     )

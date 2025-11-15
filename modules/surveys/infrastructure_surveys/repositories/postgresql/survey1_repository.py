@@ -13,6 +13,18 @@ class PostgreSQLSurvey1Repository(Survey1Repository):
 
     def save(self, survey: Survey1) -> Survey1:
         survey_model = Survey1Mapper.to_db_model(survey)
+
+        if survey_model.id:  # Si tiene ID, se asume que ya existe -> actualizar
+            existing_survey = self.session.get(Survey1Model, survey_model.id)
+            if existing_survey:
+                for key, value in survey_model.__dict__.items():
+                    if key != "_sa_instance_state":
+                        setattr(existing_survey, key, value)
+                self.session.commit()
+                self.session.refresh(existing_survey)
+                return Survey1Mapper.to_entity(existing_survey)
+
+        # Si no tiene ID, crear nuevo
         self.session.add(survey_model)
         self.session.commit()
         self.session.refresh(survey_model)

@@ -1,10 +1,10 @@
-from pydantic import BaseModel, Field
 from typing import Optional
 from datetime import datetime
 
+from common.domain import entities as common_entities
 
-class AdminLog(BaseModel):
-    id: Optional[int] = Field(None, gt=0)
+
+class AdminLog(common_entities.BaseEntity):
     admin_user_id: int
     action_id: int
     description: str

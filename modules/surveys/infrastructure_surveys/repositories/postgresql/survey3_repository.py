@@ -13,10 +13,10 @@ class PostgreSQLSurvey3Repository(Survey3Repository):
 
     def save(self, survey: Survey3) -> Survey3:
         survey_model = Survey3Mapper.to_db_model(survey)
-        self.session.add(survey_model)
+        merged_model = self.session.merge(survey_model)
         self.session.commit()
-        self.session.refresh(survey_model)
-        return Survey3Mapper.to_entity(survey_model)
+        self.session.refresh(merged_model)
+        return Survey3Mapper.to_entity(merged_model)
 
     def get_by_id(self, survey_id: int) -> Survey3 | None:
         survey_model = self.session.query(Survey3Model).filter_by(id=survey_id).first()

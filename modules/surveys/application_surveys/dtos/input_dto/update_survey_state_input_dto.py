@@ -3,4 +3,4 @@ from typing import Literal
 
 
 class UpdateSurveyStateInputDTO(BaseModel):
-    new_state: Literal["ACCEPTED", "REJECTED"]
+    new_state: Literal["accepted", "rejected"]

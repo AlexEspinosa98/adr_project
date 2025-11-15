@@ -42,8 +42,9 @@ class BasePostgreSQLRepository(
             if model:
                 self._update_model_from_entity(model=model, entity=entity)
             else:
-                model = self._to_database_model(entity=entity)
-                self._session.add(model)
+                raise ValueError(
+                    f"Entity with ID {entity.get_identity()} not found for update."
+                )
         else:
             # Create new entity
             model = self._to_database_model(entity)
