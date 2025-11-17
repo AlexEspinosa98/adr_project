@@ -1,6 +1,16 @@
-from typing import List, Optional  # Modified import
-
-from fastapi import APIRouter, Depends, status, HTTPException  # Added HTTPException
+from typing import List, Optional, Union
+import json
+import os
+import shutil
+from fastapi import (
+    APIRouter,
+    Depends,
+    status,
+    HTTPException,
+    File,
+    UploadFile,
+    Form,
+)
 
 from common.infrastructure.api import decorators as common_decorators
 from common.infrastructure.api.dtos.response_dto import ApiResponseDTO
@@ -66,6 +76,7 @@ from modules.admin.infrastructure_admin.services.admin_authentication_service_co
     get_get_extensionist_name_id_phone_list_use_case,
     get_product_properties_by_extensionist_use_case,
     get_surveys_by_property_id_use_case,
+    get_admin_update_survey_use_case,
 )
 
 from modules.admin.infrastructure_admin.api.auth.admin_authorizer import (
@@ -80,12 +91,28 @@ from modules.surveys.application_surveys.dtos.input_dto.update_survey_state_inpu
     UpdateSurveyStateInputDTO,
 )
 
+# Imports for Update endpoint
+from modules.surveys.application_surveys.dtos.input_dto.update_survey1_input_dto import (
+    UpdateSurvey1InputDTO,
+)
+from modules.surveys.application_surveys.dtos.input_dto.update_survey2_input_dto import (
+    UpdateSurvey2InputDTO,
+)
+from modules.surveys.application_surveys.dtos.input_dto.update_survey3_input_dto import (
+    UpdateSurvey3InputDTO,
+)
+from modules.admin.application_admin.use_cases.admin_update_survey_use_case import (
+    AdminUpdateSurveyUseCase,
+)
+
 # logger setup
 from common.infrastructure.logging.config import get_logger
 
 _LOGGER = get_logger(__name__)
 
 router = APIRouter(prefix="/admin", tags=["Admin"])
+
+UPLOAD_DIRECTORY = "./uploads"
 
 
 @router.post(
@@ -397,7 +424,7 @@ async def update_survey_state(
             admin_user_id=current_user.id,
         )
         return ApiResponseDTO.success_response(
-            data=f"Survey {survey_type} with ID {survey_id} state updated to {updated_survey.state}",
+            data=f"Survey {survey_type} with ID {survey_id} state updated to {updated_survey.state.value}",
             message="Survey state updated successfully",
         )
     except ValueError as e:
@@ -408,4 +435,77 @@ async def update_survey_state(
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="An unexpected error occurred.",
+        )
+
+
+@router.put(
+    "/surveys/{survey_type}/{survey_id}",
+    status_code=status.HTTP_200_OK,
+    summary="Admin Update Survey",
+    description="Allows an admin to update a survey that has been rejected. The survey state is reset to 'pending' after update.",
+    tags=["Admin Surveys"],
+)
+@common_decorators.handle_exceptions
+@common_decorators.handle_authentication_exceptions
+async def admin_update_survey(
+    survey_type: int,
+    survey_id: int,
+    survey_data: str = Form(...),
+    files: Optional[List[UploadFile]] = File(None),
+    current_user: AdminUserDTO = Depends(get_current_admin_user),
+    admin_update_use_case: AdminUpdateSurveyUseCase = Depends(
+        get_admin_update_survey_use_case
+    ),
+):
+    _LOGGER.info(
+        f"Admin {current_user.id} attempting to update survey type {survey_type}, ID {survey_id}"
+    )
+
+    image_paths = []
+    if files:
+        if not os.path.exists(UPLOAD_DIRECTORY):
+            os.makedirs(UPLOAD_DIRECTORY)
+        for file in files:
+            file_path = os.path.join(UPLOAD_DIRECTORY, file.filename)
+            with open(file_path, "wb") as buffer:
+                shutil.copyfileobj(file.file, buffer)
+            image_paths.append(file_path)
+
+    try:
+        survey_data_dict = json.loads(survey_data)
+
+        dto_class = None
+        if survey_type == 1:
+            dto_class = UpdateSurvey1InputDTO
+        elif survey_type == 2:
+            dto_class = UpdateSurvey2InputDTO
+        elif survey_type == 3:
+            dto_class = UpdateSurvey3InputDTO
+        else:
+            raise HTTPException(status_code=400, detail="Invalid survey type")
+
+        update_dto = dto_class(**survey_data_dict)
+
+        result = admin_update_use_case.execute(
+            admin_user_id=current_user.id,
+            survey_type=survey_type,
+            survey_id=survey_id,
+            update_dto=update_dto,
+            image_paths=image_paths if image_paths else None,
+        )
+        return ApiResponseDTO.success_response(
+            data={"id": result.id, "state": result.state.value},
+            message=f"Survey {survey_type} with ID {survey_id} updated successfully by admin {current_user.id} and set to pending.",
+        )
+    except PermissionError as e:
+        _LOGGER.error(f"Permission error updating survey: {e}")
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=str(e))
+    except ValueError as e:
+        _LOGGER.error(f"Validation or not found error updating survey: {e}")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
+    except Exception as e:
+        _LOGGER.error(f"Error updating survey by admin: {e}", exc_info=True)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Error updating survey.",
         )

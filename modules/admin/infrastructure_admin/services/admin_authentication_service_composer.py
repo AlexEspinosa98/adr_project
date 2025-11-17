@@ -21,7 +21,7 @@ from modules.admin.application_admin.use_cases.get_admin_survey_list_use_case im
 )
 from modules.admin.application_admin.use_cases.get_admin_survey_detail_use_case import (
     GetAdminSurveyDetailUseCase,
-)  # New import
+)
 from modules.admin.application_admin.use_cases.get_extensionist_list_use_case import (
     GetExtensionistListUseCase,
 )
@@ -48,7 +48,7 @@ from modules.admin.infrastructure_admin.repositories.admin_survey_repository imp
 )
 from modules.surveys.application_surveys.services.get_survey_detail_service import (
     GetSurveyDetailService,
-)  # New import
+)
 from modules.surveys.infrastructure_surveys.services.get_survey_detail_service_composer import (
     get_survey_detail_service,
 )
@@ -57,6 +57,18 @@ from modules.surveys.domain_surveys.repositories.classification_user_repository 
 )
 from modules.surveys.infrastructure_surveys.repositories.postgresql.classification_user_repository import (
     PostgreSQLClassificationUserRepository,
+)
+
+# Imports for AdminUpdateSurveyUseCase
+from modules.admin.application_admin.use_cases.admin_update_survey_use_case import (
+    AdminUpdateSurveyUseCase,
+)
+from modules.admin.application_admin.use_cases.log_admin_action import LogAdminAction
+from modules.surveys.application_surveys.services.update_survey_service import (
+    UpdateSurveyService,
+)
+from modules.surveys.infrastructure_surveys.services.update_survey_service_composer import (
+    get_update_survey_service,
 )
 
 
@@ -206,4 +218,18 @@ def get_surveys_by_property_id_use_case(
     )
     return GetSurveysByPropertyIdUseCase(
         admin_survey_repository=admin_survey_repository
+    )
+
+
+def get_admin_update_survey_use_case(
+    session: Session = Depends(session_manager.get_session),
+    update_survey_service: UpdateSurveyService = Depends(get_update_survey_service),
+) -> AdminUpdateSurveyUseCase:
+    """
+    Compose and return a configured AdminUpdateSurveyUseCase.
+    """
+    log_admin_action = LogAdminAction(db_session=session)
+    return AdminUpdateSurveyUseCase(
+        update_survey_service=update_survey_service,
+        log_admin_action=log_admin_action,
     )
