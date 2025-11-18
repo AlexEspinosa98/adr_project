@@ -24,7 +24,6 @@ class AuthMapper:
         user: UserExtensionist,
     ) -> UpdateUserExtensionistOutputDTO:
         return UpdateUserExtensionistOutputDTO(
-            id=user.id,
             name=user.name,
             email=user.email,
             phone=user.phone,
