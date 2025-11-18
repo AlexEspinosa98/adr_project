@@ -113,7 +113,7 @@ def upload_signing_image(
 @router.put("/register_extensionist", status_code=response_status.HTTP_200_OK)
 def update_extensionist(
     input_dto: UpdateUserExtensionistBodyDTO,
-    current_user: UserExtensionist = Depends(get_current_user_from_token),
+    current_user: UserExtensionist = Depends(get_current_user_from_query_token),
     auth_service: AuthService = Depends(get_auth_service),
 ) -> ApiResponseDTO[UpdateUserExtensionistOutputDTO]:
     _LOGGER.info(f"Updating extensionist {current_user.email}")

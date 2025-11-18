@@ -35,3 +35,8 @@ class AuthRepository(ABC):
     def save_extensionist(self, extensionist: UserExtensionist) -> UserExtensionist:
         """Save an extensionist."""
         pass
+
+    @abstractmethod
+    def update_extensionist(self, extensionist: UserExtensionist) -> UserExtensionist:
+        """Update an extensionist."""
+        pass

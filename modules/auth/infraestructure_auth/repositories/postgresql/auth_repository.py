@@ -43,22 +43,20 @@ class PostgreSQLAuthRepository(AuthRepository):
 
     def save_extensionist(self, extensionist: UserExtensionist) -> UserExtensionist:
         extensionist_model = self._to_database_model(extensionist)
-        self.session.add(extensionist_model)
+        merged_model = self.session.merge(extensionist_model)
         self.session.commit()
-        self.session.refresh(extensionist_model)
-        return self._to_domain_entity(extensionist_model)
+        self.session.refresh(merged_model)
+        return self._to_domain_entity(merged_model)
 
     def update_extensionist(self, extensionist: UserExtensionist) -> UserExtensionist:
+        if not extensionist.id:
+            raise ValueError("Cannot update an extensionist without an ID.")
+
         existing_model = self.session.get(UserExtensionistModel, extensionist.id)
         if not existing_model:
             raise ValueError(f"Extensionist with ID {extensionist.id} does not exist.")
 
-        for field, value in vars(extensionist).items():
-            setattr(existing_model, field, value)
-
-        self.session.commit()
-        self.session.refresh(existing_model)
-        return self._to_domain_entity(existing_model)
+        return self.save_extensionist(extensionist)
 
     def get_by_id(self, user_id: int) -> Optional[UserExtensionist]:
         stmt = select(UserExtensionistModel).where(UserExtensionistModel.id == user_id)
