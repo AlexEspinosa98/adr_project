@@ -14,6 +14,7 @@ from datetime import datetime
 import json
 import shutil
 import os
+import uuid
 
 from modules.surveys.application_surveys.dtos.input_dto.create_survey1_input_dto import (
     CreateSurvey1InputDTO,
@@ -118,6 +119,21 @@ router = APIRouter(prefix="/surveys", tags=["surveys"])
 UPLOAD_DIRECTORY = "./uploads"
 
 
+def save_uploaded_files(files: List[UploadFile]) -> List[str]:
+    if not os.path.exists(UPLOAD_DIRECTORY):
+        os.makedirs(UPLOAD_DIRECTORY)
+
+    image_paths = []
+    for file in files:
+        _, extension = os.path.splitext(file.filename)
+        unique_filename = f"{uuid.uuid4()}{extension}"
+        file_path = os.path.join(UPLOAD_DIRECTORY, unique_filename)
+        with open(file_path, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+        image_paths.append(file_path)
+    return image_paths
+
+
 @router.post("/1", status_code=response_status.HTTP_201_CREATED)
 async def create_survey1(
     api_key: str = Form(...),
@@ -130,15 +146,7 @@ async def create_survey1(
 ) -> ApiResponseDTO[CreateSurvey1OutputDTO]:
     _LOGGER.info("Creating new survey 1")
 
-    if not os.path.exists(UPLOAD_DIRECTORY):
-        os.makedirs(UPLOAD_DIRECTORY)
-
-    image_paths = []
-    for file in files:
-        file_path = os.path.join(UPLOAD_DIRECTORY, file.filename)
-        with open(file_path, "wb") as buffer:
-            shutil.copyfileobj(file.file, buffer)
-        image_paths.append(file_path)
+    image_paths = save_uploaded_files(files)
 
     try:
         survey_data_dict = json.loads(survey_data)
@@ -181,15 +189,7 @@ async def create_survey2(
 ) -> ApiResponseDTO[CreateSurvey2OutputDTO]:
     _LOGGER.info("Creating new survey 2")
 
-    if not os.path.exists(UPLOAD_DIRECTORY):
-        os.makedirs(UPLOAD_DIRECTORY)
-
-    image_paths = []
-    for file in files:
-        file_path = os.path.join(UPLOAD_DIRECTORY, file.filename)
-        with open(file_path, "wb") as buffer:
-            shutil.copyfileobj(file.file, buffer)
-        image_paths.append(file_path)
+    image_paths = save_uploaded_files(files)
 
     try:
         survey_data_dict = json.loads(survey_data)
@@ -228,15 +228,7 @@ async def create_survey3(
 ) -> ApiResponseDTO[CreateSurvey3OutputDTO]:
     _LOGGER.info("Creating new survey 3")
 
-    if not os.path.exists(UPLOAD_DIRECTORY):
-        os.makedirs(UPLOAD_DIRECTORY)
-
-    image_paths = []
-    for file in files:
-        file_path = os.path.join(UPLOAD_DIRECTORY, file.filename)
-        with open(file_path, "wb") as buffer:
-            shutil.copyfileobj(file.file, buffer)
-        image_paths.append(file_path)
+    image_paths = save_uploaded_files(files)
 
     try:
         survey_data_dict = json.loads(survey_data)
@@ -281,13 +273,7 @@ async def update_survey(
 
     image_paths = []
     if files:
-        if not os.path.exists(UPLOAD_DIRECTORY):
-            os.makedirs(UPLOAD_DIRECTORY)
-        for file in files:
-            file_path = os.path.join(UPLOAD_DIRECTORY, file.filename)
-            with open(file_path, "wb") as buffer:
-                shutil.copyfileobj(file.file, buffer)
-            image_paths.append(file_path)
+        image_paths = save_uploaded_files(files)
 
     try:
         survey_data_dict = json.loads(survey_data)
