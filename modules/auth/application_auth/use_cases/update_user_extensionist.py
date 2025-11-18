@@ -28,6 +28,8 @@ class UpdateUserExtensionistUseCase:
             user_entity.city = input_dto.city
         if input_dto.zone is not None:
             user_entity.zone = input_dto.zone
+        if input_dto.email is not None:
+            user_entity.email = input_dto.email
 
         updated_user = self._auth_repository.save_extensionist(user_entity)
         _LOGGER.info(f"User extensionist with ID {updated_user.id} updated.")

@@ -8,3 +8,4 @@ class UpdateUserExtensionistInputDTO(BaseDTO):
     phone: Optional[str] = None
     city: Optional[str] = None
     zone: Optional[str] = None
+    email: Optional[str] = None
