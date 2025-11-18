@@ -22,6 +22,7 @@ class ListSurveysService:
         end_date: Optional[datetime] = None,
         farm_name: Optional[str] = None,
         survey_type: Optional[int] = None,
+        status: Optional[int] = None,
     ) -> PaginatedOutputDTO[SurveyListItemDTO]:
         return self._list_surveys_use_case.execute(
             pagination=pagination,
@@ -30,4 +31,5 @@ class ListSurveysService:
             end_date=end_date,
             farm_name=farm_name,
             survey_type=survey_type,
+            status=status,
         )

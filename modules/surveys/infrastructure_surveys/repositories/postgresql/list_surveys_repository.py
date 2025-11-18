@@ -28,6 +28,7 @@ class PostgreSQLListSurveysRepository(ListSurveysRepository):
         end_date: Optional[datetime] = None,
         farm_name: Optional[str] = None,
         survey_type: Optional[int] = None,
+        status: Optional[int] = None,
     ) -> Tuple[list[SurveyListItemDTO], int]:
         base_query = """
         (SELECT s.id, 'Survey 1' as survey_type, pp.name as farm_name, s.visit_date, s.state, up.name as producter_name, ue.name as extensionist_name, ue.api_token, s.created_at
@@ -67,6 +68,9 @@ class PostgreSQLListSurveysRepository(ListSurveysRepository):
             params["farm_name"] = f"%{farm_name}%"
         if survey_type:
             filters.append(f"survey_type = 'Survey {survey_type}'")
+        if status is not None:            
+            filters.append("state = :state")
+            params["state"] = status
 
         if filters:
             base_query = f"SELECT * FROM ({base_query}) as all_surveys WHERE {' AND '.join(filters)}"

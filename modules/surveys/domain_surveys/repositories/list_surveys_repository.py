@@ -20,6 +20,7 @@ class ListSurveysRepository(ABC):
         end_date: Optional[datetime] = None,
         farm_name: Optional[str] = None,
         survey_type: Optional[int] = None,
+        status: Optional[int] = None,
     ) -> Tuple[list[SurveyListItemDTO], int]:
         pass
 

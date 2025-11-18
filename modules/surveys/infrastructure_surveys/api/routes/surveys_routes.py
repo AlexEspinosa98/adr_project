@@ -333,6 +333,7 @@ async def list_surveys(
     end_date: Optional[datetime] = None,
     farm_name: Optional[str] = None,
     survey_type: Optional[int] = None,
+    status: Optional[str] = None,
     list_surveys_service: ListSurveysService = Depends(get_list_surveys_service),
 ):
     paginated_result = list_surveys_service.list_surveys(
@@ -342,6 +343,7 @@ async def list_surveys(
         end_date=end_date,
         farm_name=farm_name,
         survey_type=survey_type,
+        status=status,
     )
     return PaginatedApiResponseDTO.create_paginated_success(
         items=paginated_result.items,
