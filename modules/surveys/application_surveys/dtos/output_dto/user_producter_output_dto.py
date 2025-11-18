@@ -5,7 +5,7 @@ from typing import Optional
 class UserProducterOutputDTO(BaseModel):
     id: int
     name: Optional[str] = Field(None, description="Producter name")
-    type_id: Optional[int] = Field(None, description="Producter type id")
+    type_id: Optional[str] = Field(None, description="Producter type id")
     identification: Optional[str] = Field(None, description="Producter identification")
     is_woman_rural: Optional[bool] = Field(None, description="Is woman rural")
     is_young_rural: Optional[bool] = Field(None, description="Is young rural")
