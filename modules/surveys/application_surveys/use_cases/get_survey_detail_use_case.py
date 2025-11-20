@@ -20,6 +20,8 @@ from modules.surveys.application_surveys.dtos.output_dto.user_producter_output_d
 from modules.surveys.application_surveys.dtos.output_dto.product_property_output_dto import (
     ProductPropertyOutputDTO,
 )
+from modules.surveys.domain_surveys.repositories.survey_rejection_repository import SurveyRejectionRepository
+from common.domain.enums.survey_status import SurveyStatus
 
 
 # Todo retirar
@@ -94,8 +96,9 @@ def calcular_media_geometrica_usuario(data: dict):
 
 
 class GetSurveyDetailUseCase:
-    def __init__(self, survey_detail_repository: SurveyDetailRepository):
+    def __init__(self, survey_detail_repository: SurveyDetailRepository, survey_rejection_repository: SurveyRejectionRepository):
         self._survey_detail_repository = survey_detail_repository
+        self._survey_rejection_repository = survey_rejection_repository
 
     def execute(
         self, survey_id: int, survey_type: int
@@ -108,6 +111,12 @@ class GetSurveyDetailUseCase:
 
         if not survey_entity:
             return None
+
+        rejection_reason = None
+        if survey_entity.state == SurveyStatus.REJECTED:
+            rejection = self._survey_rejection_repository.get_by_survey_id_and_type(survey_id, survey_type)
+            if rejection:
+                rejection_reason = rejection.reason
 
         # Map the entity to the specific SurveyDetailOutputDTO
         if isinstance(survey_entity, Survey1):
@@ -155,7 +164,8 @@ class GetSurveyDetailUseCase:
                 name_acompanamiento=survey_entity.name_acompanamiento,
                 type_acompanamiento=survey_entity.type_acompanamiento,
                 other_acompanamiento=survey_entity.other_acompanamiento,
-                household_size=survey_entity.hour_acompanamiento,
+                household_size=survey_entity.household_size,
+                rejection_reason=rejection_reason,
             )
         elif isinstance(survey_entity, Survey2):
             return Survey2DetailOutputDTO(
@@ -202,7 +212,7 @@ class GetSurveyDetailUseCase:
                 attended_by=survey_entity.attended_by,
                 user=survey_entity.user,
                 worker_up=survey_entity.worker_up,
-                Household_size=survey_entity.Household_size,
+                household_size=survey_entity.household_size,
                 other=survey_entity.other,
                 state=survey_entity.state,
                 date_acompanamiento=survey_entity.date_acompanamiento,
@@ -211,6 +221,7 @@ class GetSurveyDetailUseCase:
                 name_acompanamiento=survey_entity.name_acompanamiento,
                 type_acompanamiento=survey_entity.type_acompanamiento,
                 other_acompanamiento=survey_entity.other_acompanamiento,
+                rejection_reason=rejection_reason,
             )
         elif isinstance(survey_entity, Survey3):
             return Survey3DetailOutputDTO(
@@ -233,13 +244,14 @@ class GetSurveyDetailUseCase:
                 attended_by=survey_entity.attended_by,
                 user=survey_entity.user,
                 worker_up=survey_entity.worker_up,
-                Household_size=survey_entity.household_size,
+                household_size=survey_entity.household_size,
                 other=survey_entity.other,
                 photo_user=survey_entity.photo_user,
                 photo_interaction=survey_entity.photo_interaction,
                 photo_panorama=survey_entity.photo_panorama,
                 phono_extra_1=survey_entity.phono_extra_1,
                 state=survey_entity.state,
+                rejection_reason=rejection_reason,
             )
         else:
             return None

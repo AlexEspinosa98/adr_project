@@ -1,4 +1,4 @@
-from sqlalchemy import String, Integer, Boolean, ForeignKey, DateTime
+from sqlalchemy import String, Integer, Boolean, ForeignKey, DateTime, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from datetime import datetime
@@ -405,3 +405,12 @@ class ClassificationUser(BaseModel):
     participation_tools: Mapped[Optional[int]] = mapped_column(Integer)  # Q28
     political_social_control: Mapped[Optional[int]] = mapped_column(Integer)  # Q29
     community_self_management: Mapped[Optional[int]] = mapped_column(Integer)  # Q30
+
+
+class SurveyRejection(BaseModel):
+    __tablename__ = "survey_rejection"
+
+    survey_id: Mapped[int] = mapped_column(Integer, nullable=False)
+    survey_type: Mapped[int] = mapped_column(Integer, nullable=False)
+    reason: Mapped[str] = mapped_column(Text, nullable=False)
+    admin_user_id: Mapped[int] = mapped_column(ForeignKey("user_admin.id"), nullable=False)

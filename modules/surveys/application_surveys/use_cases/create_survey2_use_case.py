@@ -110,7 +110,7 @@ class CreateSurvey2UseCase:
             attended_by=input_dto.attended_by,
             user=input_dto.user,
             worker_up=input_dto.worker_up,
-            household_size=input_dto.Household_size,
+            household_size=input_dto.household_size,
             other=input_dto.other,
             state="pending",
             producter=None,

@@ -66,5 +66,5 @@ class CreateSurvey2InputDTO(BaseModel):
     attended_by: Optional[str] = Field(None, alias="attended_by")
     user: Optional[str] = Field(None, alias="user")
     worker_up: Optional[str] = Field(None, alias="worker_up")
-    Household_size: Optional[str] = Field(None, alias="Household_size")
+    household_size: Optional[str] = Field(None, alias="household_size")
     other: Optional[str] = Field(None, alias="other")

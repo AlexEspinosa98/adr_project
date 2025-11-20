@@ -10,6 +10,8 @@ from modules.surveys.infrastructure_surveys.repositories.postgresql.survey3_repo
     PostgreSQLSurvey3Repository,
 )
 from modules.admin.application_admin.use_cases.log_admin_action import LogAdminAction
+from modules.surveys.infrastructure_surveys.repositories.postgresql.survey_rejection_repository import PostgreSQLSurveyRejectionRepository
+from modules.surveys.domain_surveys.entities.survey_rejection_entity import SurveyRejection
 
 
 class UpdateSurveyState:
@@ -21,9 +23,10 @@ class UpdateSurveyState:
             3: PostgreSQLSurvey3Repository(db_session),
         }
         self.log_admin_action = LogAdminAction(db_session)
+        self.survey_rejection_repository = PostgreSQLSurveyRejectionRepository(db_session)
 
     def execute(
-        self, survey_type: int, survey_id: int, new_state: str, admin_user_id: int
+        self, survey_type: int, survey_id: int, new_state: str, admin_user_id: int, rejection_reason: str | None = None
     ):
         if survey_type not in self.survey_repositories:
             raise ValueError("Invalid survey type")
@@ -47,6 +50,16 @@ class UpdateSurveyState:
             )
 
         updated_survey = repository.save(survey)
+
+        if new_state.lower() == "rejected" and rejection_reason:
+            rejection = SurveyRejection(
+                id=None,
+                survey_id=survey_id,
+                survey_type=survey_type,
+                reason=rejection_reason,
+                admin_user_id=admin_user_id,
+            )
+            self.survey_rejection_repository.save(rejection)
 
         # Log the action
         self.log_admin_action.execute(

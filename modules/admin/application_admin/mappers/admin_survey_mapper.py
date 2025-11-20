@@ -33,6 +33,6 @@ class AdminSurveyMapper:
             observations=survey_entity.observations,
             attended_by=survey_entity.attended_by,
             user=survey_entity.user,
-            Household_size=survey_entity.Household_size,
+            household_size=survey_entity.household_size,
             other=survey_entity.other,
         )

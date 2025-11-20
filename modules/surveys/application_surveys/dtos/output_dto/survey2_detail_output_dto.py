@@ -70,7 +70,7 @@ class Survey2DetailOutputDTO(BaseModel):
     attended_by: Optional[str] = Field(None, alias="attended_by")
     user: Optional[str] = Field(None, alias="user")
     worker_up: Optional[str] = Field(None, alias="worker_up")
-    Household_size: Optional[str] = Field(None, alias="Household_size")
+    household_size: Optional[str] = Field(None, alias="household_size")
     other: Optional[str] = Field(None, alias="other")
     state: Optional[str]
 
@@ -81,6 +81,7 @@ class Survey2DetailOutputDTO(BaseModel):
     name_acompanamiento: Optional[str] = None
     type_acompanamiento: Optional[str] = None
     other_acompanamiento: Optional[str] = None
+    rejection_reason: Optional[str] = None
 
     @validator("objective_accompaniment", pre=True)
     def parse_json_fields(cls, value):

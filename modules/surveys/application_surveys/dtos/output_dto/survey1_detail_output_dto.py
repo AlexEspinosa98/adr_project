@@ -40,6 +40,7 @@ class Survey1DetailOutputDTO(BaseModel):
     type_acompanamiento: Optional[str]
     other_acompanamiento: Optional[str]
     household_size: Optional[str]
+    rejection_reason: Optional[str] = None
 
     @validator("classification_user", "medition_focalization", pre=True)
     def parse_json_fields(cls, value):

@@ -422,6 +422,7 @@ async def update_survey_state(
             survey_id=survey_id,
             new_state=state_update.new_state,
             admin_user_id=current_user.id,
+            rejection_reason=state_update.rejection_reason,
         )
         return ApiResponseDTO.success_response(
             data=f"Survey {survey_type} with ID {survey_id} state updated to {updated_survey.state.value}",

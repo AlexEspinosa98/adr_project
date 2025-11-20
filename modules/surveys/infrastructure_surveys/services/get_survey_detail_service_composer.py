@@ -9,6 +9,9 @@ from modules.surveys.application_surveys.use_cases.get_survey_detail_use_case im
 from modules.surveys.infrastructure_surveys.repositories.postgresql.survey_detail_repository import (
     PostgreSQLSurveyDetailRepository,
 )
+from modules.surveys.infrastructure_surveys.repositories.postgresql.survey_rejection_repository import (
+    PostgreSQLSurveyRejectionRepository,
+)
 from common.infrastructure.database.session import session_manager
 
 
@@ -16,5 +19,6 @@ def get_survey_detail_service(
     session: Session = Depends(session_manager.get_session),
 ) -> GetSurveyDetailService:
     survey_detail_repository = PostgreSQLSurveyDetailRepository(session)
-    get_survey_detail_use_case = GetSurveyDetailUseCase(survey_detail_repository)
+    survey_rejection_repository = PostgreSQLSurveyRejectionRepository(session)
+    get_survey_detail_use_case = GetSurveyDetailUseCase(survey_detail_repository, survey_rejection_repository)
     return GetSurveyDetailService(get_survey_detail_use_case)

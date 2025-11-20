@@ -12,3 +12,4 @@ class SurveyListItemDTO(BaseModel):
     producter_name: Optional[str]
     extensionist_name: Optional[str]
     created_at: Optional[datetime]
+    rejection_reason: Optional[str] = None
