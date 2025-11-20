@@ -7,6 +7,7 @@ class UserProducterOutputDTO(BaseModel):
     name: Optional[str] = Field(None, description="Producter name")
     type_id: Optional[str] = Field(None, description="Producter type id")
     identification: Optional[str] = Field(None, description="Producter identification")
+    number_phone: Optional[str] = Field(None, description="Producter number phone")
     is_woman_rural: Optional[bool] = Field(None, description="Is woman rural")
     is_young_rural: Optional[bool] = Field(None, description="Is young rural")
     ethnic_belonging: Optional[str] = Field(None, description="Ethnic belonging")

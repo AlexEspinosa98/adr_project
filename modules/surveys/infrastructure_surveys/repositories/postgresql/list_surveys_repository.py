@@ -31,21 +31,21 @@ class PostgreSQLListSurveysRepository(ListSurveysRepository):
         status: Optional[int] = None,
     ) -> Tuple[list[SurveyListItemDTO], int]:
         base_query = """
-        (SELECT s.id, 'Survey 1' as survey_type, pp.name as farm_name, s.visit_date, s.state, up.name as producter_name, ue.name as extensionist_name, ue.api_token, s.created_at, sr.reason as rejection_reason
+        (SELECT s.id, 1 as survey_type, pp.name as farm_name, s.visit_date, s.state, up.name as producter_name, ue.name as extensionist_name, ue.api_token, s.created_at, sr.reason as rejection_reason
         FROM survey_1 s
         LEFT JOIN product_property pp ON s.property_id = pp.id
         LEFT JOIN user_producter up ON s.user_producter_id = up.id
         LEFT JOIN user_extensionist ue ON s.extensionist_id = ue.id
         LEFT JOIN survey_rejection sr ON s.id = sr.survey_id AND sr.survey_type = 1)
         UNION ALL
-        (SELECT s.id, 'Survey 2' as survey_type, pp.name as farm_name, s.visit_date, s.state, up.name as producter_name, ue.name as extensionist_name, ue.api_token, s.created_at, sr.reason as rejection_reason
+        (SELECT s.id, 2 as survey_type, pp.name as farm_name, s.visit_date, s.state, up.name as producter_name, ue.name as extensionist_name, ue.api_token, s.created_at, sr.reason as rejection_reason
         FROM survey_2 s
         LEFT JOIN product_property pp ON s.property_id = pp.id
         LEFT JOIN user_producter up ON s.producter_id = up.id
         LEFT JOIN user_extensionist ue ON s.extensionist_id = ue.id
         LEFT JOIN survey_rejection sr ON s.id = sr.survey_id AND sr.survey_type = 2)
         UNION ALL
-        (SELECT s.id, 'Survey 3' as survey_type, pp.name as farm_name, s.visit_date, s.state, up.name as producter_name, ue.name as extensionist_name, ue.api_token, s.created_at, sr.reason as rejection_reason
+        (SELECT s.id, 3 as survey_type, pp.name as farm_name, s.visit_date, s.state, up.name as producter_name, ue.name as extensionist_name, ue.api_token, s.created_at, sr.reason as rejection_reason
         FROM survey_3 s
         LEFT JOIN product_property pp ON s.property_id = pp.id
         LEFT JOIN user_producter up ON s.user_producter_id = up.id
@@ -70,7 +70,7 @@ class PostgreSQLListSurveysRepository(ListSurveysRepository):
             filters.append("farm_name ILIKE :farm_name")
             params["farm_name"] = f"%{farm_name}%"
         if survey_type:
-            filters.append(f"survey_type = 'Survey {survey_type}'")
+            filters.append(f"survey_type = {survey_type}")
         if status is not None:            
             filters.append("state = :state")
             params["state"] = status

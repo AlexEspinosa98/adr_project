@@ -5,7 +5,7 @@ from typing import Optional
 
 class SurveyListItemDTO(BaseModel):
     id: int
-    survey_type: str
+    survey_type: int
     farm_name: Optional[str]
     visit_date: Optional[datetime]
     state: Optional[str]
