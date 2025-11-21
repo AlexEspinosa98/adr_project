@@ -1,5 +1,8 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 from typing import Optional
+from modules.surveys.application_surveys.utils.property_name_utils import (
+    denormalize_property_name,
+)
 
 
 class ProductPropertyOutputDTO(BaseModel):
@@ -25,6 +28,11 @@ class ProductPropertyOutputDTO(BaseModel):
         None, description="area total in secondary linea"
     )
     area_in_production: Optional[str] = Field(None, description="area in production")
+
+    @field_validator("name", mode="before")
+    @classmethod
+    def denormalize_name(cls, value: Optional[str]) -> Optional[str]:
+        return denormalize_property_name(value)
 
     class Config:
         from_attributes = True
