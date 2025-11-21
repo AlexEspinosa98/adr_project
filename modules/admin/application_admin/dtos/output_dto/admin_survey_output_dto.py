@@ -36,6 +36,3 @@ class AdminSurveyOutputDTO(common_dtos.BaseDTO):
     attended_by: Optional[str] = Field(
         None, description="Person who attended the survey"
     )
-    user: Optional[str] = Field(None, description="User associated with the survey")
-    Household_size: Optional[str] = Field(None, description="Household size")
-    other: Optional[str] = Field(None, description="Other information")

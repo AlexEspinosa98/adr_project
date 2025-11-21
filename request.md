@@ -42,10 +42,6 @@ This document provides detailed information about the API endpoints available in
   "observations_visited": "Observations from the visit",
   "visit_date": "2025-11-07T10:00:00",
   "attended_by": "Name of the person attended",
-  "user": "Associated user",
-  "worker_up": "UP Worker",
-  "Household_size": "4",
-  "other": "Other relevant information",
   "classification_user": {
     "development_human_capacity": {"observation": "Notes on human capacity",
     "score": 3},
@@ -204,11 +200,7 @@ This document provides detailed information about the API endpoints available in
     "type_acompanamiento": "FOLLOW_UP",
     "other_acompanamiento": null,
     "visit_date": "2025-11-08T11:00:00",
-    "attended_by": "Jane Doe",
-    "user": "Associated user",
-    "worker_up": "UP Worker",
-    "Household_size": "3",
-    "other": "Other info"
+    "attended_by": "Jane Doe"
 }
 ```
 
@@ -280,10 +272,6 @@ This document provides detailed information about the API endpoints available in
     "other_acompanamiento": null,
     "visit_date": "2025-11-09T12:00:00",
     "attended_by": "John Smith",
-    "user": "Associated user",
-    "worker_up": "UP Worker",
-    "household_size": "5",
-    "other": "Final notes",
     "state": "PENDING"
 }
 ```
@@ -493,10 +481,6 @@ Note: `classification_user` cannot be updated.
     "observations_visited": "Observations from the visit",
     "visit_date": "2025-11-07T10:00:00",
     "attended_by": "Name of the person attended",
-    "user": "Associated user",
-    "worker_up": "UP Worker",
-    "Household_size": "4",
-    "other": "Other relevant information",
     "photo_user": "./uploads/photo1.jpg",
     "photo_interaction": "./uploads/photo2.jpg",
     "photo_panorama": null,

@@ -47,10 +47,6 @@ class Survey2(BaseModel):
     copy_documentation_delivered: Optional[bool]
     visit_date: Optional[datetime]
     attended_by: Optional[str]
-    user: Optional[str]
-    worker_up: Optional[str]
-    household_size: Optional[str]
-    other: Optional[str]
     state: SurveyStatus
 
     # Data companionship

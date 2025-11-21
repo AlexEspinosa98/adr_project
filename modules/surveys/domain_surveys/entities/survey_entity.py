@@ -33,9 +33,6 @@ class Survey(BaseModel):
     attended_by: Optional[str] = Field(
         None, description="Person who attended the survey"
     )
-    user: Optional[str] = Field(None, description="User associated with the survey")
-    household_size: Optional[str] = Field(None, description="Household size")
-    other: Optional[str] = Field(None, description="Other information")
     photo_user: Optional[str] = Field(None)
     photo_interaction: Optional[str] = Field(None)
     photo_panorama: Optional[str] = Field(None)

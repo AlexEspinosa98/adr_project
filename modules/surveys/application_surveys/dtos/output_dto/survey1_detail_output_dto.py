@@ -23,9 +23,6 @@ class Survey1DetailOutputDTO(BaseModel):
     observations_visited: Optional[str]
     visit_date: Optional[datetime]
     attended_by: Optional[str]
-    user: Optional[str]
-    worker_up: Optional[str]
-    other: Optional[str]
     photo_user: Optional[str]
     photo_interaction: Optional[str]
     photo_panorama: Optional[str]
@@ -38,7 +35,6 @@ class Survey1DetailOutputDTO(BaseModel):
     name_acompanamiento: Optional[str]
     type_acompanamiento: Optional[str]
     other_acompanamiento: Optional[str]
-    household_size: Optional[str]
     rejection_reason: Optional[str] = None
 
     @validator("classification_user", "medition_focalization", pre=True)

@@ -48,10 +48,6 @@ class Survey1Mapper:
             other_acompanamiento=survey_entity.other_acompanamiento,
             visit_date=survey_entity.visit_date,
             attended_by=survey_entity.attended_by,
-            user=survey_entity.user,
-            worker_up=survey_entity.worker_up,
-            household_size=survey_entity.household_size,
-            other=survey_entity.other,
 
         )
 
@@ -97,8 +93,4 @@ class Survey1Mapper:
             other_acompanamiento=survey_model.other_acompanamiento,
             visit_date=survey_model.visit_date,
             attended_by=survey_model.attended_by,
-            user=survey_model.user,
-            worker_up=survey_model.worker_up,
-            household_size=survey_model.household_size,
-            other=survey_model.other,
         )

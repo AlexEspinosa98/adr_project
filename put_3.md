@@ -32,10 +32,7 @@ Update a Survey 3 (cierre de acompañamiento) that is in `rejected` state. After
   "recommendations_commitments": "Compromisos finales",
   "observations_visited": "Observaciones finales",
   "visit_date": "2025-12-01T09:00:00Z",
-  "attended_by": "Coordinador Acompañamiento",
-  "user": "Associated user",
-  "worker_up": "UP Worker",
-  "household_size": "5"
+  "attended_by": "Coordinador Acompañamiento"
 }
 ```
 
@@ -57,10 +54,7 @@ curl -X PUT "https://api.example.com/surveys/3/44" \
         "recommendations_commitments": "Compromisos finales",
         "observations_visited": "Observaciones finales",
         "visit_date": "2025-12-01T09:00:00Z",
-        "attended_by": "Coordinador Acompañamiento",
-        "user": "Associated user",
-        "worker_up": "UP Worker",
-        "household_size": "5"
+        "attended_by": "Coordinador Acompañamiento"
       }' \
   -F 'producter_data={
         "id": 2,

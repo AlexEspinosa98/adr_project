@@ -36,10 +36,6 @@ class AdminSurvey1DetailOutputDTO(BaseModel):
 
     # Otros datos administrativos
     attended_by: Optional[str]
-    user: Optional[str]
-    worker_up: Optional[str]
-    household_size: Optional[str]
-    other: Optional[str]
 
     # Fotos
     photo_user: Optional[str]

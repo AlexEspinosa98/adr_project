@@ -12,7 +12,6 @@ class AdminSurveyListOutputDTO(common_dtos.BaseDTO):
         None, description="Type of the survey (e.g., 'Survey 1', 'Survey 2')"
     )
     visit_date: Optional[datetime] = Field(None, description="Date of the visit")
-    other: Optional[str] = Field(None, description="Other information")
     state: Optional[str] = Field(None, description="Status of the survey")
     property_city: Optional[str] = Field(None, description="City of the property")
     property_name: Optional[str] = Field(None, description="Name of the property")

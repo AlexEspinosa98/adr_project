@@ -114,10 +114,6 @@ class CreateSurvey3UseCase:
             other_acompanamiento=input_dto.other_acompanamiento,
             visit_date=input_dto.visit_date,
             attended_by=input_dto.attended_by,
-            user=input_dto.user,
-            worker_up=input_dto.worker_up,
-            household_size=input_dto.household_size,
-            other=input_dto.other,
             user_producter=None,
             property=None,
         )

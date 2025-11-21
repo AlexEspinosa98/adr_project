@@ -57,10 +57,6 @@ class Survey2Mapper:
             copy_documentation_delivered=survey_entity.copy_documentation_delivered,
             visit_date=survey_entity.visit_date,
             attended_by=survey_entity.attended_by,
-            user=survey_entity.user,
-            worker_up=survey_entity.worker_up,
-            household_size=survey_entity.household_size,
-            other=survey_entity.other,
             state=survey_entity.state,
             date_acompanamiento=survey_entity.date_acompanamiento,
             hour_acompanamiento=survey_entity.hour_acompanamiento,
@@ -115,10 +111,6 @@ class Survey2Mapper:
             copy_documentation_delivered=survey_model.copy_documentation_delivered,
             visit_date=survey_model.visit_date,
             attended_by=survey_model.attended_by,
-            user=survey_model.user,
-            worker_up=survey_model.worker_up,
-            household_size=survey_model.household_size,
-            other=survey_model.other,
             state=str.lower(survey_model.state),
             producter=UserProducterMapper.to_entity(survey_model.producter)
             if survey_model.producter

@@ -32,7 +32,4 @@ class AdminSurveyMapper:
             recommendations_commitments=survey_entity.recommendations_commitments,
             observations=survey_entity.observations,
             attended_by=survey_entity.attended_by,
-            user=survey_entity.user,
-            household_size=survey_entity.household_size,
-            other=survey_entity.other,
         )

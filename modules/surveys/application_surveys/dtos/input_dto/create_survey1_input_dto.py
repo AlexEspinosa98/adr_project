@@ -39,7 +39,3 @@ class CreateSurvey1InputDTO(BaseModel):
     # Información complementaria (si aplica)
     visit_date: Optional[datetime] = None
     attended_by: Optional[str] = None
-    user: Optional[str] = None
-    worker_up: Optional[str] = None
-    household_size: Optional[str] = None
-    other: Optional[str] = None

@@ -64,10 +64,6 @@ class UpdateSurvey2InputDTO(BaseModel):
     # Información complementaria
     visit_date: Optional[datetime] = Field(None, alias="visit_date")
     attended_by: Optional[str] = Field(None, alias="attended_by")
-    user: Optional[str] = Field(None, alias="user")
-    worker_up: Optional[str] = Field(None, alias="worker_up")
-    household_size: Optional[str] = Field(None, alias="household_size")
-    other: Optional[str] = Field(None, alias="other")
 
     class Config:
         populate_by_name = True

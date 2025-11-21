@@ -144,10 +144,6 @@ class Survey1(BaseModel):
         DateTime(timezone=True), nullable=True
     )
     attended_by: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
-    user: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
-    worker_up: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
-    household_size: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
-    other: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)
 
     def set_classification_user(self, data: dict):
         validated = ClassificationUser(**data)
@@ -260,10 +256,6 @@ class Survey2(BaseModel):
         DateTime(timezone=True), nullable=True
     )
     attended_by: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
-    user: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
-    worker_up: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
-    household_size: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
-    other: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)
 
 
 # ==============================
@@ -327,10 +319,6 @@ class Survey3(BaseModel):
         DateTime(timezone=True), nullable=True
     )
     attended_by: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
-    user: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
-    worker_up: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
-    household_size: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
-    other: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)
 
     def set_classification_user(self, data: dict):
         validated = ClassificationUser(**data)

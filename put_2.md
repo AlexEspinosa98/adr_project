@@ -24,10 +24,7 @@ Update a Survey 2 entry that is currently `rejected`. After applying changes the
   "recommendations_commitments": "Nuevos compromisos",
   "observations_visited": "Observaciones recientes",
   "visit_date": "2025-11-10T11:00:00Z",
-  "attended_by": "Alex Espinosa",
-  "user": "Associated user",
-  "worker_up": "UP Worker",
-  "household_size": "3"
+  "attended_by": "Alex Espinosa"
 }
 ```
 
@@ -43,10 +40,7 @@ curl -X PUT "https://api.example.com/surveys/2/25" \
         "recommendations_commitments": "Nuevos compromisos",
         "observations_visited": "Observaciones recientes",
         "visit_date": "2025-11-10T11:00:00Z",
-        "attended_by": "Alex Espinosa",
-        "user": "Associated user",
-        "worker_up": "UP Worker",
-        "household_size": "3"
+        "attended_by": "Alex Espinosa"
       }' \
   -F 'producter_data={
         "id": 12,
