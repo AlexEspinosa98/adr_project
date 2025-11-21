@@ -1,10 +1,14 @@
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 from modules.auth.infraestructure_auth.api.routes import auth_routes
 from modules.surveys.infrastructure_surveys.api.routes import surveys_routes
 from modules.admin.infrastructure_admin.api.routes import admin_routes
 import uvicorn
 
 app = FastAPI(title="ADR Project API")
+
+# Mount static files directory
+app.mount("/static", StaticFiles(directory="uploads"), name="static")
 
 # Add middleware
 # app.add_middleware(RequestLoggingMiddleware)

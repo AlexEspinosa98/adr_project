@@ -22,6 +22,7 @@ from modules.surveys.application_surveys.dtos.output_dto.product_property_output
 )
 from modules.surveys.domain_surveys.repositories.survey_rejection_repository import SurveyRejectionRepository
 from common.domain.enums.survey_status import SurveyStatus
+import os
 
 
 # Todo retirar
@@ -95,6 +96,16 @@ def calcular_media_geometrica_usuario(data: dict):
     return resultados
 
 
+def _get_full_image_url(image_path: Optional[str]) -> Optional[str]:
+    if image_path:
+        # Assuming the base URL for static files is /static/
+        # And the UPLOAD_DIRECTORY is 'uploads'
+        # So, a path like './uploads/IMG_2057.JPG' becomes '/static/IMG_2057.JPG'
+        filename = os.path.basename(image_path)
+        return f"/static/{filename}"
+    return None
+
+
 class GetSurveyDetailUseCase:
     def __init__(self, survey_detail_repository: SurveyDetailRepository, survey_rejection_repository: SurveyRejectionRepository):
         self._survey_detail_repository = survey_detail_repository
@@ -146,10 +157,10 @@ class GetSurveyDetailUseCase:
                 user=survey_entity.user,
                 worker_up=survey_entity.worker_up,
                 other=survey_entity.other,
-                photo_user=survey_entity.photo_user,
-                photo_interaction=survey_entity.photo_interaction,
-                photo_panorama=survey_entity.photo_panorama,
-                phono_extra_1=survey_entity.phono_extra_1,
+                photo_user=_get_full_image_url(survey_entity.photo_user),
+                photo_interaction=_get_full_image_url(survey_entity.photo_interaction),
+                photo_panorama=_get_full_image_url(survey_entity.photo_panorama),
+                phono_extra_1=_get_full_image_url(survey_entity.phono_extra_1),
                 state=survey_entity.state,
                 classification_general=calcular_media_geometrica_usuario(
                     classification_user
@@ -201,10 +212,10 @@ class GetSurveyDetailUseCase:
                 process_functioning=survey_entity.process_functioning,
                 potential_replication=survey_entity.potential_replication,
                 observations_extensionist=survey_entity.observations_extensionist,
-                photo_user=survey_entity.photo_user,
-                photo_interaction=survey_entity.photo_interaction,
-                photo_panorama=survey_entity.photo_panorama,
-                phono_extra_1=survey_entity.phono_extra_1,
+                photo_user=_get_full_image_url(survey_entity.photo_user),
+                photo_interaction=_get_full_image_url(survey_entity.photo_interaction),
+                photo_panorama=_get_full_image_url(survey_entity.photo_panorama),
+                phono_extra_1=_get_full_image_url(survey_entity.phono_extra_1),
                 date_hour_end=survey_entity.date_hour_end,
                 socilization_next_event=survey_entity.socilization_next_event,
                 copy_documentation_delivered=survey_entity.copy_documentation_delivered,
@@ -246,10 +257,10 @@ class GetSurveyDetailUseCase:
                 worker_up=survey_entity.worker_up,
                 household_size=survey_entity.household_size,
                 other=survey_entity.other,
-                photo_user=survey_entity.photo_user,
-                photo_interaction=survey_entity.photo_interaction,
-                photo_panorama=survey_entity.photo_panorama,
-                phono_extra_1=survey_entity.phono_extra_1,
+                photo_user=_get_full_image_url(survey_entity.photo_user),
+                photo_interaction=_get_full_image_url(survey_entity.photo_interaction),
+                photo_panorama=_get_full_image_url(survey_entity.photo_panorama),
+                phono_extra_1=_get_full_image_url(survey_entity.phono_extra_1),
                 state=survey_entity.state,
                 rejection_reason=rejection_reason,
             )

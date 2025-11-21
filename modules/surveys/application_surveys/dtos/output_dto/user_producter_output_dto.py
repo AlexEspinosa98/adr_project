@@ -15,6 +15,9 @@ class UserProducterOutputDTO(BaseModel):
         None, description="Is victim of conflict"
     )
     is_narp: Optional[bool] = Field(None, description="Is NARP")
+    is_producer_organization_member: Optional[bool] = Field(None, description="Is producer organization member")
+    organization_name: Optional[str] = Field(None, description="Organization name")
+    representantive1_name: Optional[str] = Field(None, description="Representative name")
 
     class Config:
         from_attributes = True
