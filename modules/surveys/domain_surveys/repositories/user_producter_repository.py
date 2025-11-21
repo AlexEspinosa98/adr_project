@@ -9,5 +9,9 @@ class UserProducterRepository(ABC):
         pass
 
     @abstractmethod
+    def get_by_id(self, producter_id: int) -> Optional[UserProducter]:
+        pass
+
+    @abstractmethod
     def save(self, producter: UserProducter) -> UserProducter:
         pass

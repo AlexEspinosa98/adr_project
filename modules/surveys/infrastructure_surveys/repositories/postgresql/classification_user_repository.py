@@ -18,14 +18,33 @@ class PostgreSQLClassificationUserRepository(ClassificationUserRepository):
         self.session = session
 
     def save(self, classification_user: ClassificationUser) -> ClassificationUser:
-        classification_user_data = classification_user.dict()
-        if classification_user.id is None:
-            classification_user_data.pop("id", None)
+        classification_user_data = classification_user.model_dump()
+        classification_user_id = classification_user_data.get("id")
+
+        for field in ["created_at", "updated_at", "deleted_at", "is_active"]:
+            classification_user_data.pop(field, None)
+
+        if classification_user_id:
+            existing_model = self.session.get(
+                ClassificationUserModel, classification_user_id
+            )
+            if existing_model:
+                for key, value in classification_user_data.items():
+                    setattr(existing_model, key, value)
+                self.session.commit()
+                self.session.refresh(existing_model)
+                return ClassificationUser.model_validate(
+                    existing_model, from_attributes=True
+                )
+
+        classification_user_data.pop("id", None)
         classification_user_model = ClassificationUserModel(**classification_user_data)
         self.session.add(classification_user_model)
         self.session.commit()
         self.session.refresh(classification_user_model)
-        return ClassificationUser(**classification_user_model.__dict__)
+        return ClassificationUser.model_validate(
+            classification_user_model, from_attributes=True
+        )
 
     def find_by_survey_id(
         self, survey_id: int, survey_type: int

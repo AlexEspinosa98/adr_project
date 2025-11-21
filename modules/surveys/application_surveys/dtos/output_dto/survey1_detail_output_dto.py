@@ -31,7 +31,6 @@ class Survey1DetailOutputDTO(BaseModel):
     photo_panorama: Optional[str]
     phono_extra_1: Optional[str]
     state: Optional[SurveyStatus] = SurveyStatus.PENDING
-    classification_general: Optional[Dict]  # New field added
     copy_documentation_delivered: Optional[str]
     date_hour_end: Optional[datetime]
     date_acompanamiento: Optional[datetime]

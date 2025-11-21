@@ -260,45 +260,138 @@ async def create_survey3(
     )
 
 
-@router.put("/{survey_type}/{survey_id}", status_code=response_status.HTTP_200_OK)
-async def update_survey(
-    survey_type: int,
+@router.put("/1/{survey_id}", status_code=response_status.HTTP_200_OK)
+async def update_survey1(
     survey_id: int,
     api_key: str = Form(...),
     survey_data: str = Form(...),
+    producter_data: str = Form(...),
+    property_data: str = Form(...),
     files: Optional[List[UploadFile]] = File(None),
     update_survey_service: UpdateSurveyService = Depends(get_update_survey_service),
-):
-    _LOGGER.info(f"Updating survey type {survey_type}, ID {survey_id}")
+) -> ApiResponseDTO[dict]:
+    _LOGGER.info(f"Updating survey type 1, ID {survey_id}")
 
-    image_paths = []
-    if files:
-        image_paths = save_uploaded_files(files)
+    image_paths = save_uploaded_files(files) if files else []
 
     try:
         survey_data_dict = json.loads(survey_data)
-        
-        dto_class = None
-        if survey_type == 1:
-            dto_class = UpdateSurvey1InputDTO
-        elif survey_type == 2:
-            dto_class = UpdateSurvey2InputDTO
-        elif survey_type == 3:
-            dto_class = UpdateSurvey3InputDTO
-        else:
-            raise HTTPException(status_code=400, detail="Invalid survey type")
+        producter_data_dict = json.loads(producter_data)
+        property_data_dict = json.loads(property_data)
 
-        update_dto = dto_class(**survey_data_dict)
+        update_dto = UpdateSurvey1InputDTO(**survey_data_dict)
+        producter_input_dto = SurveyUserProducterInputDTO(**producter_data_dict)
+        property_input_dto = PropertyInfoInputDTO(**property_data_dict)
 
         result = update_survey_service.update_survey(
-            survey_type=survey_type,
+            survey_type=1,
             survey_id=survey_id,
             update_dto=update_dto,
             image_paths=image_paths if image_paths else None,
+            user_producter_data=producter_input_dto.model_dump(exclude_none=True),
+            property_data=property_input_dto.model_dump(exclude_none=True),
+            classification_user_data=None,
         )
+
         return ApiResponseDTO.success_response(
             data={"id": result.id, "state": result.state.value},
-            message=f"Survey {survey_type} with ID {survey_id} updated successfully and set to pending.",
+            message=f"Survey 1 with ID {survey_id} updated successfully and set to pending.",
+        )
+    except PermissionError as e:
+        _LOGGER.error(f"Permission error updating survey: {e}")
+        raise HTTPException(status_code=403, detail=str(e))
+    except ValueError as e:
+        _LOGGER.error(f"Validation error updating survey: {e}")
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        _LOGGER.error(f"Error updating survey: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail="Error updating survey.")
+
+
+@router.put("/2/{survey_id}", status_code=response_status.HTTP_200_OK)
+async def update_survey2(
+    survey_id: int,
+    api_key: str = Form(...),
+    survey_data: str = Form(...),
+    producter_data: str = Form(...),
+    property_data: str = Form(...),
+    files: Optional[List[UploadFile]] = File(None),
+    update_survey_service: UpdateSurveyService = Depends(get_update_survey_service),
+) -> ApiResponseDTO[dict]:
+    _LOGGER.info(f"Updating survey type 2, ID {survey_id}")
+
+    image_paths = save_uploaded_files(files) if files else []
+
+    try:
+        survey_data_dict = json.loads(survey_data)
+        producter_data_dict = json.loads(producter_data)
+        property_data_dict = json.loads(property_data)
+
+        update_dto = UpdateSurvey2InputDTO(**survey_data_dict)
+        producter_input_dto = SurveyUserProducterInputDTO(**producter_data_dict)
+        property_input_dto = PropertyInfoInputDTO(**property_data_dict)
+
+        result = update_survey_service.update_survey(
+            survey_type=2,
+            survey_id=survey_id,
+            update_dto=update_dto,
+            image_paths=image_paths if image_paths else None,
+            user_producter_data=producter_input_dto.model_dump(exclude_none=True),
+            property_data=property_input_dto.model_dump(exclude_none=True),
+            classification_user_data=None,
+        )
+
+        return ApiResponseDTO.success_response(
+            data={"id": result.id, "state": result.state.value},
+            message=f"Survey 2 with ID {survey_id} updated successfully and set to pending.",
+        )
+    except PermissionError as e:
+        _LOGGER.error(f"Permission error updating survey: {e}")
+        raise HTTPException(status_code=403, detail=str(e))
+    except ValueError as e:
+        _LOGGER.error(f"Validation error updating survey: {e}")
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        _LOGGER.error(f"Error updating survey: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail="Error updating survey.")
+
+
+@router.put("/3/{survey_id}", status_code=response_status.HTTP_200_OK)
+async def update_survey3(
+    survey_id: int,
+    api_key: str = Form(...),
+    survey_data: str = Form(...),
+    producter_data: str = Form(...),
+    property_data: str = Form(...),
+    files: Optional[List[UploadFile]] = File(None),
+    update_survey_service: UpdateSurveyService = Depends(get_update_survey_service),
+) -> ApiResponseDTO[dict]:
+    _LOGGER.info(f"Updating survey type 3, ID {survey_id}")
+
+    image_paths = save_uploaded_files(files) if files else []
+
+    try:
+        survey_data_dict = json.loads(survey_data)
+        producter_data_dict = json.loads(producter_data)
+        property_data_dict = json.loads(property_data)
+
+        update_dto = UpdateSurvey3InputDTO(**survey_data_dict)
+        producter_input_dto = SurveyUserProducterInputDTO(**producter_data_dict)
+        property_input_dto = PropertyInfoInputDTO(**property_data_dict)
+
+        result = update_survey_service.update_survey(
+            survey_type=3,
+            survey_id=survey_id,
+            update_dto=update_dto,
+            image_paths=image_paths if image_paths else None,
+            user_producter_data=producter_input_dto.model_dump(exclude_none=True),
+            property_data=property_input_dto.model_dump(exclude_none=True),
+            classification_user_data=None,
+        )
+
+        return ApiResponseDTO.success_response(
+            data={"id": result.id, "state": result.state.value},
+            message=f"Survey 3 with ID {survey_id} updated successfully and set to pending.",
         )
     except PermissionError as e:
         _LOGGER.error(f"Permission error updating survey: {e}")

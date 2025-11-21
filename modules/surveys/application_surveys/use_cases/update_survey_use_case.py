@@ -1,5 +1,5 @@
 from logging import Logger
-from typing import Union, Optional, List
+from typing import Any, Dict, List, Optional, Union
 from common.infrastructure.logging.config import get_logger
 from common.domain.enums.survey_status import SurveyStatus
 from modules.surveys.domain_surveys.repositories.survey1_repository import (
@@ -20,6 +20,18 @@ from modules.surveys.application_surveys.dtos.input_dto.update_survey2_input_dto
 from modules.surveys.application_surveys.dtos.input_dto.update_survey3_input_dto import (
     UpdateSurvey3InputDTO,
 )
+from modules.surveys.domain_surveys.repositories.user_producter_repository import (
+    UserProducterRepository,
+)
+from modules.surveys.domain_surveys.repositories.product_property_repository import (
+    ProductPropertyRepository,
+)
+from modules.surveys.domain_surveys.repositories.classification_user_repository import (
+    ClassificationUserRepository,
+)
+from modules.surveys.domain_surveys.entities.classification_user_entity import (
+    ClassificationUser,
+)
 
 _LOGGER: Logger = get_logger(__name__)
 
@@ -30,12 +42,18 @@ class UpdateSurveyUseCase:
         survey1_repository: Survey1Repository,
         survey2_repository: Survey2Repository,
         survey3_repository: Survey3Repository,
+        user_producter_repository: UserProducterRepository,
+        product_property_repository: ProductPropertyRepository,
+        classification_user_repository: ClassificationUserRepository,
     ):
         self._repositories = {
             1: survey1_repository,
             2: survey2_repository,
             3: survey3_repository,
         }
+        self._user_producter_repository = user_producter_repository
+        self._product_property_repository = product_property_repository
+        self._classification_user_repository = classification_user_repository
 
     def execute(
         self,
@@ -45,6 +63,9 @@ class UpdateSurveyUseCase:
             UpdateSurvey1InputDTO, UpdateSurvey2InputDTO, UpdateSurvey3InputDTO
         ],
         image_paths: Optional[List[str]] = None,
+        user_producter_data: Optional[Dict[str, Any]] = None,
+        property_data: Optional[Dict[str, Any]] = None,
+        classification_user_data: Optional[Dict[str, Any]] = None,
     ):
         _LOGGER.info(f"Executing update for survey type {survey_type}, ID {survey_id}")
 
@@ -76,6 +97,14 @@ class UpdateSurveyUseCase:
                 survey.photo_panorama = image_paths[2]
             if len(image_paths) > 3:
                 survey.phono_extra_1 = image_paths[3]
+
+        if survey_type == 1:
+            self._update_survey1_relations(
+                survey,
+                user_producter_data,
+                property_data,
+                classification_user_data,
+            )
         
         # After updating, set the state back to PENDING
         survey.state = SurveyStatus.PENDING
@@ -84,3 +113,65 @@ class UpdateSurveyUseCase:
         _LOGGER.info(f"Survey {survey_type} with ID {survey_id} updated successfully.")
 
         return updated_survey
+
+    def _update_survey1_relations(
+        self,
+        survey,
+        user_producter_data: Optional[Dict[str, Any]],
+        property_data: Optional[Dict[str, Any]],
+        classification_user_data: Optional[Dict[str, Any]],
+    ) -> None:
+        if user_producter_data and survey.user_producter_id:
+            self._update_user_producter(survey.user_producter_id, user_producter_data)
+        if property_data and survey.property_id:
+            self._update_product_property(survey.property_id, property_data)
+        if classification_user_data:
+            self._update_classification_user(
+                survey.id, 1, classification_user_data
+            )
+
+    def _update_user_producter(
+        self, producter_id: int, update_data: Dict[str, Any]
+    ) -> None:
+        producter = self._user_producter_repository.get_by_id(producter_id)
+        if not producter:
+            return
+
+        for field, value in update_data.items():
+            if hasattr(producter, field):
+                setattr(producter, field, value)
+
+        self._user_producter_repository.save(producter)
+
+    def _update_product_property(
+        self, property_id: int, update_data: Dict[str, Any]
+    ) -> None:
+        property_info = self._product_property_repository.get_by_id(property_id)
+        if not property_info:
+            return
+
+        for field, value in update_data.items():
+            if hasattr(property_info, field):
+                setattr(property_info, field, value)
+
+        self._product_property_repository.save(property_info)
+
+    def _update_classification_user(
+        self, survey_id: int, survey_type: int, update_data: Dict[str, Any]
+    ) -> None:
+        classification_user = self._classification_user_repository.find_by_survey_id(
+            survey_id, survey_type
+        )
+
+        if classification_user is None:
+            classification_user = ClassificationUser(**update_data)
+            if survey_type == 1:
+                classification_user.survey_idd1 = survey_id
+            elif survey_type == 3:
+                classification_user.survey_idd3 = survey_id
+        else:
+            for field, value in update_data.items():
+                if hasattr(classification_user, field):
+                    setattr(classification_user, field, value)
+
+        self._classification_user_repository.save(classification_user)

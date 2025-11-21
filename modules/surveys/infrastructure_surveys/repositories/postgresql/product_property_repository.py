@@ -25,8 +25,22 @@ class PostgreSQLProductPropertyRepository(ProductPropertyRepository):
         model = self.session.execute(stmt).scalar_one_or_none()
         return ProductPropertyMapper.to_entity(model) if model else None
 
+    def get_by_id(self, property_id: int) -> Optional[ProductProperty]:
+        model = self.session.get(ProductPropertyModel, property_id)
+        return ProductPropertyMapper.to_entity(model) if model else None
+
     def save(self, property: ProductProperty) -> ProductProperty:
         property_model = ProductPropertyMapper.to_db_model(property)
+        if property_model.id:
+            existing_property = self.session.get(ProductPropertyModel, property_model.id)
+            if existing_property:
+                for key, value in property_model.__dict__.items():
+                    if key != "_sa_instance_state":
+                        setattr(existing_property, key, value)
+                self.session.commit()
+                self.session.refresh(existing_property)
+                return ProductPropertyMapper.to_entity(existing_property)
+
         self.session.add(property_model)
         self.session.commit()
         self.session.refresh(property_model)

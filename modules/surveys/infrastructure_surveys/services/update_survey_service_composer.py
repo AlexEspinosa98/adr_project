@@ -16,6 +16,15 @@ from modules.surveys.infrastructure_surveys.repositories.postgresql.survey2_repo
 from modules.surveys.infrastructure_surveys.repositories.postgresql.survey3_repository import (
     PostgreSQLSurvey3Repository,
 )
+from modules.surveys.infrastructure_surveys.repositories.postgresql.user_producter_repository import (
+    PostgreSQLUserProducterRepository,
+)
+from modules.surveys.infrastructure_surveys.repositories.postgresql.product_property_repository import (
+    PostgreSQLProductPropertyRepository,
+)
+from modules.surveys.infrastructure_surveys.repositories.postgresql.classification_user_repository import (
+    PostgreSQLClassificationUserRepository,
+)
 
 
 def get_update_survey_service(
@@ -24,11 +33,17 @@ def get_update_survey_service(
     survey1_repo = PostgreSQLSurvey1Repository(session)
     survey2_repo = PostgreSQLSurvey2Repository(session)
     survey3_repo = PostgreSQLSurvey3Repository(session)
+    user_producter_repo = PostgreSQLUserProducterRepository(session)
+    product_property_repo = PostgreSQLProductPropertyRepository(session)
+    classification_user_repo = PostgreSQLClassificationUserRepository(session)
 
     update_survey_use_case = UpdateSurveyUseCase(
         survey1_repository=survey1_repo,
         survey2_repository=survey2_repo,
         survey3_repository=survey3_repo,
+        user_producter_repository=user_producter_repo,
+        product_property_repository=product_property_repo,
+        classification_user_repository=classification_user_repo,
     )
 
     return UpdateSurveyService(update_survey_use_case=update_survey_use_case)

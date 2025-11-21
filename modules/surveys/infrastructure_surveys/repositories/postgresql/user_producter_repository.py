@@ -25,8 +25,22 @@ class PostgreSQLUserProducterRepository(UserProducterRepository):
         model = self.session.execute(stmt).scalar_one_or_none()
         return UserProducterMapper.to_entity(model) if model else None
 
+    def get_by_id(self, producter_id: int) -> Optional[UserProducter]:
+        model = self.session.get(UserProducterModel, producter_id)
+        return UserProducterMapper.to_entity(model) if model else None
+
     def save(self, producter: UserProducter) -> UserProducter:
         producter_model = UserProducterMapper.to_db_model(producter)
+        if producter_model.id:
+            existing_producter = self.session.get(UserProducterModel, producter_model.id)
+            if existing_producter:
+                for key, value in producter_model.__dict__.items():
+                    if key != "_sa_instance_state":
+                        setattr(existing_producter, key, value)
+                self.session.commit()
+                self.session.refresh(existing_producter)
+                return UserProducterMapper.to_entity(existing_producter)
+
         self.session.add(producter_model)
         self.session.commit()
         self.session.refresh(producter_model)

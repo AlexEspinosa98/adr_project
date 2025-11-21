@@ -1,5 +1,5 @@
 from logging import Logger
-from typing import Union, Optional, List
+from typing import Any, Dict, Optional, List, Union
 from common.infrastructure.logging.config import get_logger
 from modules.surveys.application_surveys.use_cases.update_survey_use_case import (
     UpdateSurveyUseCase,
@@ -29,10 +29,19 @@ class UpdateSurveyService:
             UpdateSurvey1InputDTO, UpdateSurvey2InputDTO, UpdateSurvey3InputDTO
         ],
         image_paths: Optional[List[str]] = None,
+        user_producter_data: Optional[Dict[str, Any]] = None,
+        property_data: Optional[Dict[str, Any]] = None,
+        classification_user_data: Optional[Dict[str, Any]] = None,
     ):
         _LOGGER.info(
             f"Service call to update survey type {survey_type}, ID {survey_id}"
         )
         return self._update_survey_use_case.execute(
-            survey_type, survey_id, update_dto, image_paths
+            survey_type,
+            survey_id,
+            update_dto,
+            image_paths,
+            user_producter_data,
+            property_data,
+            classification_user_data,
         )

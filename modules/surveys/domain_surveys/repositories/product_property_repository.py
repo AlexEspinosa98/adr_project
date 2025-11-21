@@ -11,5 +11,9 @@ class ProductPropertyRepository(ABC):
         pass
 
     @abstractmethod
+    def get_by_id(self, property_id: int) -> Optional[ProductProperty]:
+        pass
+
+    @abstractmethod
     def save(self, property: ProductProperty) -> ProductProperty:
         pass

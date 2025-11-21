@@ -25,77 +25,6 @@ from common.domain.enums.survey_status import SurveyStatus
 import os
 
 
-# Todo retirar
-import math
-
-
-def geometric_mean(values):
-    """Calcula la media geométrica de una lista de valores positivos."""
-    values = [v for v in values if v is not None and v > 0]
-    if not values:
-        return None
-    product = math.prod(values)
-    return round(product ** (1 / len(values)), 3)
-
-
-def calcular_media_geometrica_usuario(data: dict):
-    """Calcula la media geométrica por aspecto para la calificación de usuarios."""
-
-    aspectos = {
-        "Human_and_Technical_Capacities": [
-            "main_productive_activity",
-            "secondary_productive_activities",
-            "tools_and_equipment",
-            "good_agricultural_practices",
-            "commercialization_structure",
-            "markets",
-            "added_value",
-            "records",
-            "labor_type",
-            "credit_and_banking",
-        ],
-        "Social_Capacities_Associativity": [
-            "organization_membership",
-            "collective_activities",
-            "entrepreneurship_associativity",
-            "commercial_alliances",
-            "technical_support",
-            "quality_certifications",
-            "intellectual_property",
-        ],
-        "Information_ICT": [
-            "access_information_sources",
-            "access_to_ict",
-            "use_of_ict_decision",
-            "ict_skills",
-            "knowledge_appropriation",
-        ],
-        "Sustainable_Resource_Management": [
-            "environmental_practices",
-            "sustainable_practices",
-            "climate_change_adaptation",
-            "environmental_regulations",
-        ],
-        "Participation_Empowerment": [
-            "participation_mechanisms",
-            "participation_tools",
-            "political_social_control",
-            "community_self_management",
-        ],
-    }
-
-    resultados = {}
-    for aspecto, campos in aspectos.items():
-        valores = [data.get(campo) for campo in campos]
-        resultados[aspecto] = geometric_mean(valores)
-
-    # Media geométrica global considerando todos los aspectos
-    medias_validas = [v for v in resultados.values() if v is not None]
-    resultados["Global_Score"] = geometric_mean(medias_validas)
-
-    return resultados
-
-
 def _get_full_image_url(image_path: Optional[str]) -> Optional[str]:
     if image_path:
         # Assuming the base URL for static files is /static/
@@ -131,11 +60,6 @@ class GetSurveyDetailUseCase:
 
         # Map the entity to the specific SurveyDetailOutputDTO
         if isinstance(survey_entity, Survey1):
-            classification_user = (
-                self._survey_detail_repository.get_classification_user_by_survey_id(
-                    survey_id, survey_type
-                )
-            )
             return Survey1DetailOutputDTO(
                 id=survey_entity.id,
                 user_producter=UserProducterOutputDTO.model_validate(
@@ -162,11 +86,6 @@ class GetSurveyDetailUseCase:
                 photo_panorama=_get_full_image_url(survey_entity.photo_panorama),
                 phono_extra_1=_get_full_image_url(survey_entity.phono_extra_1),
                 state=survey_entity.state,
-                classification_general=calcular_media_geometrica_usuario(
-                    classification_user
-                )
-                if classification_user
-                else None,
                 copy_documentation_delivered=survey_entity.copy_documentation_delivered,
                 date_hour_end=survey_entity.date_hour_end,
                 date_acompanamiento=survey_entity.date_acompanamiento,
