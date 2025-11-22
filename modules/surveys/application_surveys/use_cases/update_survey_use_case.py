@@ -44,7 +44,6 @@ class UpdateSurveyUseCase:
         survey3_repository: Survey3Repository,
         user_producter_repository: UserProducterRepository,
         product_property_repository: ProductPropertyRepository,
-        classification_user_repository: ClassificationUserRepository,
     ):
         self._repositories = {
             1: survey1_repository,
@@ -53,7 +52,6 @@ class UpdateSurveyUseCase:
         }
         self._user_producter_repository = user_producter_repository
         self._product_property_repository = product_property_repository
-        self._classification_user_repository = classification_user_repository
 
     def execute(
         self,

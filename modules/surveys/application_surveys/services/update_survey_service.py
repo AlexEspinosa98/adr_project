@@ -31,7 +31,6 @@ class UpdateSurveyService:
         image_paths: Optional[List[str]] = None,
         user_producter_data: Optional[Dict[str, Any]] = None,
         property_data: Optional[Dict[str, Any]] = None,
-        classification_user_data: Optional[Dict[str, Any]] = None,
     ):
         _LOGGER.info(
             f"Service call to update survey type {survey_type}, ID {survey_id}"
@@ -42,6 +41,5 @@ class UpdateSurveyService:
             update_dto,
             image_paths,
             user_producter_data,
-            property_data,
-            classification_user_data,
-        )
+            property_data        
+            )

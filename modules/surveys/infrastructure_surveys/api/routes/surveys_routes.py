@@ -290,8 +290,7 @@ async def update_survey1(
             image_paths=image_paths if image_paths else None,
             user_producter_data=producter_input_dto.model_dump(exclude_none=True),
             property_data=property_input_dto.model_dump(exclude_none=True),
-            classification_user_data=None,
-        )
+                    )
 
         return ApiResponseDTO.success_response(
             data={"id": result.id, "state": result.state.value},
@@ -338,7 +337,6 @@ async def update_survey2(
             image_paths=image_paths if image_paths else None,
             user_producter_data=producter_input_dto.model_dump(exclude_none=True),
             property_data=property_input_dto.model_dump(exclude_none=True),
-            classification_user_data=None,
         )
 
         return ApiResponseDTO.success_response(
@@ -386,7 +384,6 @@ async def update_survey3(
             image_paths=image_paths if image_paths else None,
             user_producter_data=producter_input_dto.model_dump(exclude_none=True),
             property_data=property_input_dto.model_dump(exclude_none=True),
-            classification_user_data=None,
         )
 
         return ApiResponseDTO.success_response(
