@@ -62,9 +62,6 @@ class AdminSurvey2DetailOutputDTO(BaseModel):
     socilization_next_event: Optional[str] = Field(
         None, alias="socilization_next_event"
     )
-    copy_documentation_delivered: Optional[bool] = Field(
-        None, alias="copy_documentation_delivered"
-    )
     visit_date: Optional[datetime] = Field(None, alias="visit_date")
     attended_by: Optional[str] = Field(None, alias="attended_by")
     state: Optional[str]

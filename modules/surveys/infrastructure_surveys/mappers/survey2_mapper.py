@@ -54,7 +54,6 @@ class Survey2Mapper:
             phono_extra_1=survey_entity.phono_extra_1,
             date_hour_end=survey_entity.date_hour_end,
             socilization_next_event=survey_entity.socilization_next_event,
-            copy_documentation_delivered=survey_entity.copy_documentation_delivered,
             visit_date=survey_entity.visit_date,
             attended_by=survey_entity.attended_by,
             state=survey_entity.state,
@@ -62,8 +61,6 @@ class Survey2Mapper:
             hour_acompanamiento=survey_entity.hour_acompanamiento,
             origen_register=survey_entity.origen_register,
             name_acompanamiento=survey_entity.name_acompanamiento,
-            type_acompanamiento=survey_entity.type_acompanamiento,
-            other_acompanamiento=survey_entity.other_acompanamiento,
         )
 
     @staticmethod
@@ -108,7 +105,6 @@ class Survey2Mapper:
             phono_extra_1=survey_model.phono_extra_1,
             date_hour_end=survey_model.date_hour_end,
             socilization_next_event=survey_model.socilization_next_event,
-            copy_documentation_delivered=survey_model.copy_documentation_delivered,
             visit_date=survey_model.visit_date,
             attended_by=survey_model.attended_by,
             state=str.lower(survey_model.state),
@@ -122,6 +118,4 @@ class Survey2Mapper:
             hour_acompanamiento=survey_model.hour_acompanamiento,
             origen_register=survey_model.origen_register,
             name_acompanamiento=survey_model.name_acompanamiento,
-            type_acompanamiento=survey_model.type_acompanamiento,
-            other_acompanamiento=survey_model.other_acompanamiento,
         )

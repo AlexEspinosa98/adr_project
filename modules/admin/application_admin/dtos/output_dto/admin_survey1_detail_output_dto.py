@@ -46,12 +46,9 @@ class AdminSurvey1DetailOutputDTO(BaseModel):
     # Acompañamiento adicional
     origen_register: Optional[str]
     name_acompanamiento: Optional[str]
-    type_acompanamiento: Optional[str]
-    other_acompanamiento: Optional[str]
 
     # Estado y documentación
     state: Optional[SurveyStatus]
-    copy_documentation_delivered: Optional[str]
 
     class Config:
         from_attributes = True

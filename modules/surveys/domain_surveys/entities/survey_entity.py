@@ -65,7 +65,6 @@ class Survey(BaseModel):
     observations_extensionist: Optional[str] = Field(None)
     date_hour_end: Optional[datetime] = Field(None)
     socilization_next_event: Optional[str] = Field(None)
-    copy_documentation_delivered: Optional[bool] = Field(None)
 
     class Config:
         from_attributes = True

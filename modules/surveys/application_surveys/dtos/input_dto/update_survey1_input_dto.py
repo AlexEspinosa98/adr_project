@@ -16,15 +16,12 @@ class UpdateSurvey1InputDTO(BaseModel):
 
     # Cierre y documentación
     date_hour_end: Optional[datetime] = None
-    copy_documentation_delivered: Optional[str] = None
 
     # Datos de acompañamiento
     date_acompanamiento: Optional[str] = None
     hour_acompanamiento: Optional[str] = None
     origen_register: Optional[str] = None
     name_acompanamiento: Optional[str] = None
-    type_acompanamiento: Optional[str] = None
-    other_acompanamiento: Optional[str] = None
 
     # Información complementaria (si aplica)
     visit_date: Optional[datetime] = None

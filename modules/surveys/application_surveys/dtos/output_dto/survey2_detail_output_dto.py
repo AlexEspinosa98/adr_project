@@ -63,9 +63,6 @@ class Survey2DetailOutputDTO(BaseModel):
     socilization_next_event: Optional[str] = Field(
         None, alias="socilization_next_event"
     )
-    copy_documentation_delivered: Optional[bool] = Field(
-        None, alias="copy_documentation_delivered"
-    )
     visit_date: Optional[datetime] = Field(None, alias="visit_date")
     attended_by: Optional[str] = Field(None, alias="attended_by")
     state: Optional[str]
@@ -75,8 +72,6 @@ class Survey2DetailOutputDTO(BaseModel):
     hour_acompanamiento: Optional[str] = None
     origen_register: Optional[str] = None
     name_acompanamiento: Optional[str] = None
-    type_acompanamiento: Optional[str] = None
-    other_acompanamiento: Optional[str] = None
     rejection_reason: Optional[str] = None
 
     @validator("objective_accompaniment", pre=True)

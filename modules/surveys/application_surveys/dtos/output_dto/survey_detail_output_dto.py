@@ -68,9 +68,6 @@ class SurveyDetailOutputDTO(BaseModel):
     socilization_next_event: Optional[str] = Field(
         None, alias="socilization_next_event"
     )
-    copy_documentation_delivered: Optional[bool] = Field(
-        None, alias="copy_documentation_delivered"
-    )
 
     class Config:
         from_attributes = True

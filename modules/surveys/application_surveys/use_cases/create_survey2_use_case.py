@@ -105,7 +105,6 @@ class CreateSurvey2UseCase:
             phono_extra_1=image_paths[3] if len(image_paths) > 3 else None,
             date_hour_end=input_dto.date_hour_end,
             socilization_next_event=input_dto.socilization_next_event,
-            copy_documentation_delivered=input_dto.copy_documentation_delivered,
             visit_date=input_dto.visit_date,
             attended_by=input_dto.attended_by,
             state="pending",
@@ -115,8 +114,6 @@ class CreateSurvey2UseCase:
             hour_acompanamiento=input_dto.hour_acompanamiento,
             origen_register=input_dto.origen_register,
             name_acompanamiento=input_dto.name_acompanamiento,
-            type_acompanamiento=input_dto.type_acompanamiento,
-            other_acompanamiento=input_dto.other_acompanamiento,
         )
 
         saved_survey = self._survey_repository.save(survey_entity)

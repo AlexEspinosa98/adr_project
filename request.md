@@ -56,9 +56,7 @@ This document provides detailed information about the API endpoints available in
   },
   "date_acompanamiento": "2025-11-07T10:00:00",
   "origen_register": "MOBILE",
-  "name_acompanamiento": "pepito",
-  "type_acompanamiento": "INITIAL",
-  "other_acompanamiento": "nose"
+  "name_acompanamiento": "pepito"
 }
 ```
 
@@ -192,13 +190,10 @@ This document provides detailed information about the API endpoints available in
     "observations_extensionist": "The innovation is simple and effective.",
     "date_hour_end": "2025-11-08T12:00:00",
     "socilization_next_event": "Next event will be on...",
-    "copy_documentation_delivered": true,
     "date_acompanamiento": "2025-11-08",
     "hour_acompanamiento": "11:00",
     "origen_register": "MOBILE",
     "name_acompanamiento": "Seguimiento 1",
-    "type_acompanamiento": "FOLLOW_UP",
-    "other_acompanamiento": null,
     "visit_date": "2025-11-08T11:00:00",
     "attended_by": "Jane Doe"
 }
@@ -261,15 +256,12 @@ This document provides detailed information about the API endpoints available in
     "recommendations_commitments": "Final recommendations and commitments.",
     "observations_visited": "Final observations from the visit.",
     "date_hour_end": "2025-11-09T13:00:00",
-    "copy_documentation_delivered": "true",
     "socialization_events_group": "Socialization of results with the producer group.",
     "not_agend_new_visit": "No new visit is scheduled as this is the final one.",
     "date_acompanamiento": "2025-11-09",
     "hour_acompanamiento": "12:00",
     "origen_register": "WEB",
     "name_acompanamiento": "Diagnóstico Final",
-    "type_acompanamiento": "FINAL",
-    "other_acompanamiento": null,
     "visit_date": "2025-11-09T12:00:00",
     "attended_by": "John Smith",
     "state": "PENDING"

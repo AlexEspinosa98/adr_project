@@ -129,15 +129,12 @@ class Survey1(BaseModel):
 
     # closed and despedida
     date_hour_end: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
-    copy_documentation_delivered: Mapped[Optional[str]] = mapped_column(String(50))
 
     # Date acompañamiento
     date_acompanamiento: Mapped[Optional[str]] = mapped_column(String(50))
     hour_acompanamiento: Mapped[Optional[str]] = mapped_column(String(50))
     origen_register: Mapped[Optional[str]] = mapped_column(String(100))
     name_acompanamiento: Mapped[Optional[str]] = mapped_column(String(100))
-    type_acompanamiento: Mapped[Optional[str]] = mapped_column(String(100))
-    other_acompanamiento: Mapped[Optional[str]] = mapped_column(String(100))
 
     # Otros campos
     visit_date: Mapped[Optional[datetime]] = mapped_column(
@@ -237,15 +234,12 @@ class Survey2(BaseModel):
     # cierre
     date_hour_end: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
     socilization_next_event: Mapped[Optional[str]] = mapped_column(String(500))
-    copy_documentation_delivered: Mapped[Optional[bool]] = mapped_column(Boolean)
 
     # 7. data companionship
     date_acompanamiento: Mapped[Optional[str]] = mapped_column(String(50))
     hour_acompanamiento: Mapped[Optional[str]] = mapped_column(String(50))
     origen_register: Mapped[Optional[str]] = mapped_column(String(100))
     name_acompanamiento: Mapped[Optional[str]] = mapped_column(String(100))
-    type_acompanamiento: Mapped[Optional[str]] = mapped_column(String(100))
-    other_acompanamiento: Mapped[Optional[str]] = mapped_column(String(100))
 
     state: Mapped[Optional[str]] = mapped_column(
         String(50), nullable=False, default="PENDING"
@@ -296,8 +290,6 @@ class Survey3(BaseModel):
     hour_acompanamiento: Mapped[Optional[str]] = mapped_column(String(50))
     origen_register: Mapped[Optional[str]] = mapped_column(String(100))
     name_acompanamiento: Mapped[Optional[str]] = mapped_column(String(100))
-    type_acompanamiento: Mapped[Optional[str]] = mapped_column(String(100))
-    other_acompanamiento: Mapped[Optional[str]] = mapped_column(String(100))
 
     # Fotos
     photo_user: Mapped[Optional[str]] = mapped_column(String(255))
@@ -310,7 +302,6 @@ class Survey3(BaseModel):
 
     # closed and despedida
     date_hour_end: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
-    copy_documentation_delivered: Mapped[Optional[str]] = mapped_column(String(50))
     socialization_events_group: Mapped[Optional[str]] = mapped_column(String(500))
     not_agend_new_visit: Mapped[Optional[str]] = mapped_column(String(500))
 

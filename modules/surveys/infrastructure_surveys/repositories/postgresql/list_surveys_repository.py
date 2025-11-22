@@ -285,9 +285,6 @@ class PostgreSQLListSurveysRepository(ListSurveysRepository):
                     ),
                     date_hour_end=survey_data.get("date_hour_end"),
                     socilization_next_event=survey_data.get("socilization_next_event"),
-                    copy_documentation_delivered=survey_data.get(
-                        "copy_documentation_delivered"
-                    ),
                 )
             )
         return surveys

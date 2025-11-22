@@ -28,13 +28,10 @@ class Survey1DetailOutputDTO(BaseModel):
     photo_panorama: Optional[str]
     phono_extra_1: Optional[str]
     state: Optional[SurveyStatus] = SurveyStatus.PENDING
-    copy_documentation_delivered: Optional[str]
     date_hour_end: Optional[datetime]
     date_acompanamiento: Optional[datetime]
     origen_register: Optional[str]
     name_acompanamiento: Optional[str]
-    type_acompanamiento: Optional[str]
-    other_acompanamiento: Optional[str]
     rejection_reason: Optional[str] = None
 
     @validator("classification_user", "medition_focalization", pre=True)

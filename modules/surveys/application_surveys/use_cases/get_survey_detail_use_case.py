@@ -83,14 +83,11 @@ class GetSurveyDetailUseCase:
                 photo_panorama=_get_full_image_url(survey_entity.photo_panorama),
                 phono_extra_1=_get_full_image_url(survey_entity.phono_extra_1),
                 state=survey_entity.state,
-                copy_documentation_delivered=survey_entity.copy_documentation_delivered,
                 date_hour_end=survey_entity.date_hour_end,
                 date_acompanamiento=survey_entity.date_acompanamiento,
                 hour_acompanamiento=survey_entity.hour_acompanamiento,
                 origen_register=survey_entity.origen_register,
                 name_acompanamiento=survey_entity.name_acompanamiento,
-                type_acompanamiento=survey_entity.type_acompanamiento,
-                other_acompanamiento=survey_entity.other_acompanamiento,
                 rejection_reason=rejection_reason,
             )
         elif isinstance(survey_entity, Survey2):
@@ -133,7 +130,6 @@ class GetSurveyDetailUseCase:
                 phono_extra_1=_get_full_image_url(survey_entity.phono_extra_1),
                 date_hour_end=survey_entity.date_hour_end,
                 socilization_next_event=survey_entity.socilization_next_event,
-                copy_documentation_delivered=survey_entity.copy_documentation_delivered,
                 visit_date=survey_entity.visit_date,
                 attended_by=survey_entity.attended_by,
                 state=survey_entity.state,
@@ -141,8 +137,6 @@ class GetSurveyDetailUseCase:
                 hour_acompanamiento=survey_entity.hour_acompanamiento,
                 origen_register=survey_entity.origen_register,
                 name_acompanamiento=survey_entity.name_acompanamiento,
-                type_acompanamiento=survey_entity.type_acompanamiento,
-                other_acompanamiento=survey_entity.other_acompanamiento,
                 rejection_reason=rejection_reason,
             )
         elif isinstance(survey_entity, Survey3):

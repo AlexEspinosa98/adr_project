@@ -44,7 +44,6 @@ class Survey2(BaseModel):
     phono_extra_1: Optional[str]
     date_hour_end: Optional[datetime]
     socilization_next_event: Optional[str]
-    copy_documentation_delivered: Optional[bool]
     visit_date: Optional[datetime]
     attended_by: Optional[str]
     state: SurveyStatus
@@ -54,8 +53,6 @@ class Survey2(BaseModel):
     hour_acompanamiento: Optional[str] = None
     origen_register: Optional[str] = None
     name_acompanamiento: Optional[str] = None
-    type_acompanamiento: Optional[str] = None
-    other_acompanamiento: Optional[str] = None
 
     class Config:
         from_attributes = True

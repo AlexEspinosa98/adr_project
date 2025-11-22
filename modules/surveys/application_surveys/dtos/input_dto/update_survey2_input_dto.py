@@ -49,17 +49,12 @@ class UpdateSurvey2InputDTO(BaseModel):
     socilization_next_event: Optional[str] = Field(
         None, alias="socilization_next_event"
     )
-    copy_documentation_delivered: Optional[bool] = Field(
-        None, alias="copy_documentation_delivered"
-    )
 
     # Datos de acompañamiento
     date_acompanamiento: Optional[str] = None
     hour_acompanamiento: Optional[str] = None
     origen_register: Optional[str] = None
     name_acompanamiento: Optional[str] = None
-    type_acompanamiento: Optional[str] = None
-    other_acompanamiento: Optional[str] = None
 
     # Información complementaria
     visit_date: Optional[datetime] = Field(None, alias="visit_date")

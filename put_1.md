@@ -26,13 +26,10 @@ Edit an existing Survey 1. The survey must currently be `rejected`; after a succ
   "observations_visited": "Observations from the visit",
   "visit_date": "2025-11-07T10:00:00Z",
   "attended_by": "Name of the person attended",
-  "copy_documentation_delivered": null,
   "date_hour_end": null,
   "date_acompanamiento": "2025-11-07T00:00:00",
   "origen_register": "MOBILE",
-  "name_acompanamiento": "pepito",
-  "type_acompanamiento": "INITIAL",
-  "other_acompanamiento": "nose"
+  "name_acompanamiento": "pepito"
 }
 ```
 
@@ -87,13 +84,10 @@ curl -X PUT "https://api.example.com/surveys/1/17" \
         "observations_visited": "Observations from the visit",
         "visit_date": "2025-11-07T10:00:00Z",
         "attended_by": "Name of the person attended",
-        "copy_documentation_delivered": null,
         "date_hour_end": null,
         "date_acompanamiento": "2025-11-07T00:00:00",
         "origen_register": "MOBILE",
-        "name_acompanamiento": "pepito",
-        "type_acompanamiento": "INITIAL",
-        "other_acompanamiento": "nose"
+        "name_acompanamiento": "pepito"
       }' \
   -F 'producter_data={
         "id": 2,

@@ -62,9 +62,6 @@ class Survey1(BaseModel):
     date_hour_end: Optional[datetime] = Field(
         None, description="End date and time of the accompaniment"
     )
-    copy_documentation_delivered: Optional[str] = Field(
-        None, description="Indicates if documentation was delivered"
-    )
 
     # Fecha, hora y tipo de acompañamiento
     date_acompanamiento: Optional[str] = Field(
@@ -76,12 +73,6 @@ class Survey1(BaseModel):
     origen_register: Optional[str] = Field(None, description="Origin of the record")
     name_acompanamiento: Optional[str] = Field(
         None, description="Name of the accompaniment type or event"
-    )
-    type_acompanamiento: Optional[str] = Field(
-        None, description="Type of accompaniment"
-    )
-    other_acompanamiento: Optional[str] = Field(
-        None, description="Additional accompaniment type"
     )
 
     # Información complementaria
