@@ -65,7 +65,6 @@ class UpdateSurveyUseCase:
         image_paths: Optional[List[str]] = None,
         user_producter_data: Optional[Dict[str, Any]] = None,
         property_data: Optional[Dict[str, Any]] = None,
-        classification_user_data: Optional[Dict[str, Any]] = None,
     ):
         _LOGGER.info(f"Executing update for survey type {survey_type}, ID {survey_id}")
 
@@ -98,12 +97,11 @@ class UpdateSurveyUseCase:
             if len(image_paths) > 3:
                 survey.phono_extra_1 = image_paths[3]
 
-        if survey_type == 1:
-            self._update_survey1_relations(
+        if survey_type in [1, 3]:
+            self._update_survey_relations(
                 survey,
                 user_producter_data,
                 property_data,
-                classification_user_data,
             )
         
         # After updating, set the state back to PENDING
@@ -114,21 +112,16 @@ class UpdateSurveyUseCase:
 
         return updated_survey
 
-    def _update_survey1_relations(
+    def _update_survey_relations(
         self,
         survey,
         user_producter_data: Optional[Dict[str, Any]],
         property_data: Optional[Dict[str, Any]],
-        classification_user_data: Optional[Dict[str, Any]],
     ) -> None:
         if user_producter_data and survey.user_producter_id:
             self._update_user_producter(survey.user_producter_id, user_producter_data)
         if property_data and survey.property_id:
             self._update_product_property(survey.property_id, property_data)
-        if classification_user_data:
-            self._update_classification_user(
-                survey.id, 1, classification_user_data
-            )
 
     def _update_user_producter(
         self, producter_id: int, update_data: Dict[str, Any]

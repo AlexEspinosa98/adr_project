@@ -4,7 +4,7 @@ from datetime import datetime
 
 
 class UpdateSurvey3InputDTO(BaseModel):
-    # classification_user is excluded as it cannot be edited.
+    classification_user: Optional[Dict] = None
     medition_focalization: Optional[Dict] = None
 
     # Información de acompañamiento
