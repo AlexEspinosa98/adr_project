@@ -302,10 +302,10 @@ This document provides detailed information about the API endpoints available in
 - **Form Data:**
   - `api_key` (string, required): The API key of the extensionist.
   - `survey_data` (string, required): A JSON string representing the `UpdateSurveyXInputDTO` with the fields to be updated.
+  - `classification_user` (string, optional): JSON for the `classification_user` column stored in Survey 1 and Survey 3. For Survey 2 this field is accepted for parity but ignored by the current schema.
   - `files` (file, optional): Up to 4 new image files. If provided, they will replace the existing ones.
 
 #### Example `survey_data` for Survey 1 (`/surveys/1/{survey_id}`):
-Note: `classification_user` cannot be updated.
 ```json
 {
   "objetive_accompaniment": "Corrected objective of the visit",
@@ -322,11 +322,21 @@ Note: `classification_user` cannot be updated.
 ```
 
 #### Example `survey_data` for Survey 3 (`/surveys/3/{survey_id}`):
-Note: `classification_user` cannot be updated.
 ```json
 {
     "final_diagnosis": "Revised final diagnosis based on feedback.",
     "other": "Correction on final notes."
+}
+```
+
+#### Example `classification_user` form value
+```json
+{
+  "development_human_capacity": {"observation": "Improved record keeping", "score": 4},
+  "development_social_capacity": {"observation": "Participates in cooperatives", "score": 3},
+  "access_adaptative_adoption_information": {"observation": "Uses extension bulletins", "score": 5},
+  "sustainable_management_natural_resources": {"observation": "Implements contour lines", "score": 4},
+  "participation_public_political": {"observation": "Represents producer board", "score": 3}
 }
 ```
 

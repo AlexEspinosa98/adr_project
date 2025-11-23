@@ -11,6 +11,7 @@ Update a Survey 2 entry that is currently `rejected`. After applying changes the
 |------------|------|----------|-------------|
 | `api_key` | `string` | Yes | API key of the extensionist. |
 | `survey_data` | `string` (JSON) | Yes | Fields following `UpdateSurvey2InputDTO`. |
+| `classification_user` | `string` (JSON) | No | Optional JSON for parity with other surveys. Survey 2 currently does not persist this field. |
 | `producter_data` | `string` (JSON) | Yes | Same payload used when creating Survey 2. |
 | `property_data` | `string` (JSON) | Yes | Same payload used when creating Survey 2. |
 | `files` | `List[UploadFile]` | No | Optional replacement photos (user, interaction, panorama, extra). |

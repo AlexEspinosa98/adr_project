@@ -23,6 +23,7 @@ from modules.surveys.application_surveys.dtos.output_dto.product_property_output
 from modules.surveys.domain_surveys.repositories.survey_rejection_repository import SurveyRejectionRepository
 from common.domain.enums.survey_status import SurveyStatus
 import os
+from common.config.common.settings import settings
 
 
 def _get_full_image_url(image_path: Optional[str]) -> Optional[str]:
@@ -31,7 +32,7 @@ def _get_full_image_url(image_path: Optional[str]) -> Optional[str]:
         # And the UPLOAD_DIRECTORY is 'uploads'
         # So, a path like './uploads/IMG_2057.JPG' becomes '/static/IMG_2057.JPG'
         filename = os.path.basename(image_path)
-        return f"/static/{filename}"
+        return f"{settings.backend_url}/static/{filename}"
     return None
 
 

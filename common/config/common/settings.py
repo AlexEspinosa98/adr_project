@@ -89,6 +89,12 @@ class Settings(BaseSettings):
         description="Token for admin user registration",
     )
 
+    # Backend URL
+    backend_url: str = Field(
+        default="http://localhost:8000",
+        description="Backend URL for generating absolute URLs",
+    )
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",

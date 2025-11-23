@@ -11,15 +11,23 @@ Edit an existing Survey 1. The survey must currently be `rejected`; after a succ
 |------------|------|----------|-------------|
 | `api_key` | `string` | Yes | API key of the extensionist editing the survey. |
 | `survey_data` | `string` (JSON) | Yes | Fields that map to `UpdateSurvey1InputDTO`. |
+| `classification_user` | `string` (JSON) | No | Updated value for the `survey_1.classification_user` JSON column. |
 | `producter_data` | `string` (JSON) | Yes | Same shape used on POST `/surveys/1`. |
 | `property_data` | `string` (JSON) | Yes | Same shape used on POST `/surveys/1`. |
 | `files` | `List[UploadFile]` | No | Up to 4 replacement images in the order: user, interaction, panorama, extra. |
 
-> `classification_user_data` is **not** sent in this endpoint.
+> Send only the `classification_user` object that lives inside `survey_1`; the separate `classification_user_data` entity remains unchanged.
 
 ### Example `survey_data`
 ```json
 {
+  "classification_user": {
+    "development_human_capacity": {"observation": "Updated note", "score": 4},
+    "development_social_capacity": {"observation": "Group work improved", "score": 3},
+    "access_adaptative_adoption_information": {"observation": "Now uses technical bulletins", "score": 5},
+    "sustainable_management_natural_resources": {"observation": "Keeps soil records", "score": 4},
+    "participation_public_political": {"observation": "Leads community meetings", "score": 3}
+  },
   "objetive_accompaniment": "Objective of the visit",
   "initial_diagnosis": "Initial diagnosis of the property",
   "recommendations_commitments": "Recommendations and commitments",
@@ -77,6 +85,13 @@ Edit an existing Survey 1. The survey must currently be `rejected`; after a succ
 curl -X PUT "https://api.example.com/surveys/1/17" \
   -H "Content-Type: multipart/form-data" \
   -F 'api_key=EXT-123' \
+  -F 'classification_user={
+        "development_human_capacity": {"observation": "Updated note", "score": 4},
+        "development_social_capacity": {"observation": "Group work improved", "score": 3},
+        "access_adaptative_adoption_information": {"observation": "Now uses technical bulletins", "score": 5},
+        "sustainable_management_natural_resources": {"observation": "Keeps soil records", "score": 4},
+        "participation_public_political": {"observation": "Leads community meetings", "score": 3}
+      }' \
   -F 'survey_data={
         "objetive_accompaniment": "Objective of the visit",
         "initial_diagnosis": "Initial diagnosis of the property",

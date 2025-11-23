@@ -11,15 +11,21 @@ Update a Survey 3 (cierre de acompañamiento) that is in `rejected` state. After
 |------------|------|----------|-------------|
 | `api_key` | `string` | Yes | API key of the extensionist. |
 | `survey_data` | `string` (JSON) | Yes | Fields that map to `UpdateSurvey3InputDTO`. |
+| `classification_user` | `string` (JSON) | No | Updated JSON for the `survey_3.classification_user` column. |
 | `producter_data` | `string` (JSON) | Yes | Same payload used on POST `/surveys/3`. |
 | `property_data` | `string` (JSON) | Yes | Same payload used on POST `/surveys/3`. |
 | `files` | `List[UploadFile]` | No | Replacement images (user, interaction, panorama, extra). |
 
-> Survey 3 PUT does **not** receive `classification_user_data`.
-
 ### Example `survey_data`
 ```json
 {
+  "classification_user": {
+    "development_human_capacity": {"observation": "Final adjustments", "score": 5},
+    "development_social_capacity": {"observation": "Maintains leadership", "score": 4},
+    "access_adaptative_adoption_information": {"observation": "Consults technical bulletins", "score": 5},
+    "sustainable_management_natural_resources": {"observation": "Implements soil conservation", "score": 4},
+    "participation_public_political": {"observation": "Represents local board", "score": 3}
+  },
   "medition_focalization": {
     "control_resources": {
       "score": 4,
@@ -41,6 +47,13 @@ Update a Survey 3 (cierre de acompañamiento) that is in `rejected` state. After
 curl -X PUT "https://api.example.com/surveys/3/44" \
   -H "Content-Type: multipart/form-data" \
   -F 'api_key=EXT-123' \
+  -F 'classification_user={
+        "development_human_capacity": {"observation": "Final adjustments", "score": 5},
+        "development_social_capacity": {"observation": "Maintains leadership", "score": 4},
+        "access_adaptative_adoption_information": {"observation": "Consults technical bulletins", "score": 5},
+        "sustainable_management_natural_resources": {"observation": "Implements soil conservation", "score": 4},
+        "participation_public_political": {"observation": "Represents local board", "score": 3}
+      }' \
   -F 'survey_data={
         "medition_focalization": {
           "control_resources": {
