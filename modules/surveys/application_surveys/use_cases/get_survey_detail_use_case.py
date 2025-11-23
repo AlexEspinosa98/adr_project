@@ -32,7 +32,7 @@ def _get_full_image_url(image_path: Optional[str]) -> Optional[str]:
         # And the UPLOAD_DIRECTORY is 'uploads'
         # So, a path like './uploads/IMG_2057.JPG' becomes '/static/IMG_2057.JPG'
         filename = os.path.basename(image_path)
-        return f"{settings.backend_url}/static/{filename}"
+        return f"{settings.backend_url}/upload/{filename}"
     return None
 
 
