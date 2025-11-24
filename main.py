@@ -8,7 +8,7 @@ import uvicorn
 app = FastAPI(title="ADR Project API")
 
 # Mount static files directory
-app.mount("/static", StaticFiles(directory="uploads"), name="static")
+app.mount("/upload", StaticFiles(directory="uploads"), name="static")
 
 # Add middleware
 # app.add_middleware(RequestLoggingMiddleware)
