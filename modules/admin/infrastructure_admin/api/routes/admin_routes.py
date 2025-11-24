@@ -11,6 +11,7 @@ from fastapi import (
     UploadFile,
     Form,
 )
+from fastapi.responses import FileResponse
 
 from common.infrastructure.api import decorators as common_decorators
 from common.infrastructure.api.dtos.response_dto import ApiResponseDTO
@@ -510,3 +511,25 @@ async def admin_update_survey(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Error updating survey.",
         )
+
+
+@router.get(
+    "/images/{image_name}",
+    summary="Get Image",
+    description="Retrieves an image from the uploads directory without authentication.",
+    tags=["Admin Images"],
+)
+async def get_image(image_name: str):
+    """
+    Retrieves an image from the uploads directory.
+
+    Args:
+        image_name (str): The name of the image file.
+
+    Returns:
+        FileResponse: The image file.
+    """
+    image_path = os.path.join(UPLOAD_DIRECTORY, image_name)
+    if not os.path.isfile(image_path):
+        raise HTTPException(status_code=404, detail="Image not found")
+    return FileResponse(image_path)

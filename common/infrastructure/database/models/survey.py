@@ -20,7 +20,7 @@ class UserProducter(BaseModel):
     # group focal
     is_woman_rural: Mapped[Optional[bool]] = mapped_column(Boolean, nullable=True)
     is_young_rural: Mapped[Optional[bool]] = mapped_column(Boolean, nullable=True)
-    ethnic_belonging: Mapped[Optional[str]] = mapped_column(String(150), nullable=True)
+    ethnic_belonging: Mapped[Optional[bool]] = mapped_column(Boolean, nullable=True)
     is_victim_conflict: Mapped[Optional[bool]] = mapped_column(Boolean, nullable=True)
     is_narp: Mapped[Optional[bool]] = mapped_column(Boolean, nullable=True)
 

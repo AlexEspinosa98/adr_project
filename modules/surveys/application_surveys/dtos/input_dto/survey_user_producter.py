@@ -9,7 +9,7 @@ class SurveyUserProducterInputDTO(BaseModel):
     number_phone: Optional[str] = None
     is_woman_rural: Optional[bool] = None
     is_young_rural: Optional[bool] = None
-    ethnic_belonging: Optional[str] = None
+    ethnic_belonging: Optional[bool] = None
     is_victim_conflict: Optional[bool] = None
     is_narp: Optional[bool] = None
     is_producer_organization_member: Optional[bool] = None
