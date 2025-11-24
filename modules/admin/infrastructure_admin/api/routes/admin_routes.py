@@ -1,16 +1,15 @@
 from typing import List, Optional, Union
 import json
 import os
-import shutil
 from fastapi import (
     APIRouter,
     Depends,
     status,
     HTTPException,
     File,
-    UploadFile,
     Form,
 )
+from fastapi import UploadFile
 from fastapi.responses import FileResponse
 
 from common.infrastructure.api import decorators as common_decorators
@@ -105,6 +104,10 @@ from modules.surveys.application_surveys.dtos.input_dto.update_survey3_input_dto
 from modules.admin.application_admin.use_cases.admin_update_survey_use_case import (
     AdminUpdateSurveyUseCase,
 )
+from modules.surveys.infrastructure_surveys.api.utils.photo_upload_helper import (
+    save_optional_photo_files,
+    UPLOAD_DIRECTORY,
+)
 
 # logger setup
 from common.infrastructure.logging.config import get_logger
@@ -112,9 +115,6 @@ from common.infrastructure.logging.config import get_logger
 _LOGGER = get_logger(__name__)
 
 router = APIRouter(prefix="/admin", tags=["Admin"])
-
-UPLOAD_DIRECTORY = "./uploads"
-
 
 @router.post(
     "/login",
@@ -453,7 +453,10 @@ async def admin_update_survey(
     survey_type: int,
     survey_id: int,
     survey_data: str = Form(...),
-    files: Optional[List[UploadFile]] = File(None),
+    photo_user: Optional[UploadFile] = File(None),
+    photo_interaction: Optional[UploadFile] = File(None),
+    photo_panorama: Optional[UploadFile] = File(None),
+    phono_extra_1: Optional[UploadFile] = File(None),
     current_user: AdminUserDTO = Depends(get_current_admin_user),
     admin_update_use_case: AdminUpdateSurveyUseCase = Depends(
         get_admin_update_survey_use_case
@@ -463,15 +466,12 @@ async def admin_update_survey(
         f"Admin {current_user.id} attempting to update survey type {survey_type}, ID {survey_id}"
     )
 
-    image_paths = []
-    if files:
-        if not os.path.exists(UPLOAD_DIRECTORY):
-            os.makedirs(UPLOAD_DIRECTORY)
-        for file in files:
-            file_path = os.path.join(UPLOAD_DIRECTORY, file.filename)
-            with open(file_path, "wb") as buffer:
-                shutil.copyfileobj(file.file, buffer)
-            image_paths.append(file_path)
+    photo_paths = save_optional_photo_files(
+        photo_user=photo_user,
+        photo_interaction=photo_interaction,
+        photo_panorama=photo_panorama,
+        phono_extra_1=phono_extra_1,
+    )
 
     try:
         survey_data_dict = json.loads(survey_data)
@@ -493,7 +493,7 @@ async def admin_update_survey(
             survey_type=survey_type,
             survey_id=survey_id,
             update_dto=update_dto,
-            image_paths=image_paths if image_paths else None,
+            photo_paths=photo_paths,
         )
         return ApiResponseDTO.success_response(
             data={"id": result.id, "state": result.state.value},

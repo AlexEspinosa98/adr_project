@@ -14,6 +14,9 @@ from modules.surveys.application_surveys.dtos.input_dto.property_info_input_dto 
 from modules.surveys.application_surveys.dtos.input_dto.classification_user_input_dto import (
     ClassificationUserInputDTO,
 )
+from modules.surveys.application_surveys.dtos.photo_paths_dto import (
+    SurveyPhotoPathsDTO,
+)
 from modules.surveys.application_surveys.mappers.survey1_mapper import Survey1Mapper
 from modules.surveys.application_surveys.use_cases.create_survey1_use_case import (
     CreateSurvey1UseCase,
@@ -59,7 +62,7 @@ class Survey1Service:
         property_info_input_dto: PropertyInfoInputDTO,
         classification_user_input_dto: ClassificationUserInputDTO,
         api_key: str,
-        image_paths: list[str],
+        photo_paths: SurveyPhotoPathsDTO,
     ) -> CreateSurvey1OutputDTO:
         self.logger.info("Creating survey 1 with data: %s", data)
 
@@ -76,7 +79,7 @@ class Survey1Service:
             property_info_input_dto,
             classification_user_input_dto,
             api_key,
-            image_paths,
+            photo_paths,
         )
 
         return Survey1Mapper.to_survey1_dto(survey_entity)

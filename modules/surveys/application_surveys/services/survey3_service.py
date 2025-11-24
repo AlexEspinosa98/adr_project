@@ -18,6 +18,9 @@ from modules.surveys.application_surveys.mappers.survey3_mapper import Survey3Ma
 from modules.surveys.application_surveys.use_cases.create_survey3_use_case import (
     CreateSurvey3UseCase,
 )
+from modules.surveys.application_surveys.dtos.photo_paths_dto import (
+    SurveyPhotoPathsDTO,
+)
 from modules.surveys.domain_surveys.repositories.survey3_repository import (
     Survey3Repository,
 )
@@ -59,7 +62,7 @@ class Survey3Service:
         property_info_input_dto: PropertyInfoInputDTO,
         classification_user_input_dto: ClassificationUserInputDTO,
         api_key: str,
-        image_paths: list[str],
+        photo_paths: SurveyPhotoPathsDTO,
     ) -> CreateSurvey3OutputDTO:
         self.logger.info("Creating survey 3 with data: %s", data)
 
@@ -76,7 +79,7 @@ class Survey3Service:
             property_info_input_dto,
             classification_user_input_dto,
             api_key,
-            image_paths,
+            photo_paths,
         )
 
         return Survey3Mapper.to_survey3_dto(survey_entity)

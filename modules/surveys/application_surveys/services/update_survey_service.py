@@ -1,5 +1,5 @@
 from logging import Logger
-from typing import Any, Dict, Optional, List, Union
+from typing import Any, Dict, Optional, Union
 from common.infrastructure.logging.config import get_logger
 from modules.surveys.application_surveys.use_cases.update_survey_use_case import (
     UpdateSurveyUseCase,
@@ -12,6 +12,9 @@ from modules.surveys.application_surveys.dtos.input_dto.update_survey2_input_dto
 )
 from modules.surveys.application_surveys.dtos.input_dto.update_survey3_input_dto import (
     UpdateSurvey3InputDTO,
+)
+from modules.surveys.application_surveys.dtos.photo_paths_dto import (
+    SurveyPhotoPathsDTO,
 )
 
 _LOGGER: Logger = get_logger(__name__)
@@ -28,7 +31,7 @@ class UpdateSurveyService:
         update_dto: Union[
             UpdateSurvey1InputDTO, UpdateSurvey2InputDTO, UpdateSurvey3InputDTO
         ],
-        image_paths: Optional[List[str]] = None,
+        photo_paths: Optional[SurveyPhotoPathsDTO] = None,
         user_producter_data: Optional[Dict[str, Any]] = None,
         property_data: Optional[Dict[str, Any]] = None,
     ):
@@ -39,7 +42,7 @@ class UpdateSurveyService:
             survey_type,
             survey_id,
             update_dto,
-            image_paths,
+            photo_paths,
             user_producter_data,
             property_data        
             )

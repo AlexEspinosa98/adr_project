@@ -32,6 +32,9 @@ from modules.surveys.application_surveys.dtos.input_dto.property_info_input_dto 
 from modules.surveys.application_surveys.dtos.input_dto.classification_user_input_dto import (
     ClassificationUserInputDTO,
 )
+from modules.surveys.application_surveys.dtos.photo_paths_dto import (
+    SurveyPhotoPathsDTO,
+)
 from common.infrastructure.logging.config import get_logger
 
 _LOGGER: Logger = get_logger(__name__)
@@ -59,7 +62,7 @@ class CreateSurvey1UseCase:
         property_info_input_dto: PropertyInfoInputDTO,
         classification_user_input_dto: ClassificationUserInputDTO,
         api_key: str,
-        image_paths: list[str],
+        photo_paths: SurveyPhotoPathsDTO,
     ) -> Survey1:
         _LOGGER.info("Creating new survey 1")
 
@@ -100,10 +103,10 @@ class CreateSurvey1UseCase:
             hour_acompanamiento=input_dto.hour_acompanamiento,
             origen_register=input_dto.origen_register,
             name_acompanamiento=input_dto.name_acompanamiento,
-            photo_user=image_paths[0] if len(image_paths) > 0 else None,
-            photo_interaction=image_paths[1] if len(image_paths) > 1 else None,
-            photo_panorama=image_paths[2] if len(image_paths) > 2 else None,
-            phono_extra_1=image_paths[3] if len(image_paths) > 3 else None,
+            photo_user=photo_paths.photo_user,
+            photo_interaction=photo_paths.photo_interaction,
+            photo_panorama=photo_paths.photo_panorama,
+            phono_extra_1=photo_paths.phono_extra_1,
             state=input_dto.state,
             date_hour_end=input_dto.date_hour_end,
             visit_date=input_dto.visit_date,

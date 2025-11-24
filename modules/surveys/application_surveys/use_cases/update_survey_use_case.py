@@ -1,5 +1,5 @@
 from logging import Logger
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, Optional, Union
 from common.infrastructure.logging.config import get_logger
 from common.domain.enums.survey_status import SurveyStatus
 from modules.surveys.domain_surveys.repositories.survey1_repository import (
@@ -32,6 +32,9 @@ from modules.surveys.domain_surveys.repositories.classification_user_repository 
 from modules.surveys.domain_surveys.entities.classification_user_entity import (
     ClassificationUser,
 )
+from modules.surveys.application_surveys.dtos.photo_paths_dto import (
+    SurveyPhotoPathsDTO,
+)
 
 _LOGGER: Logger = get_logger(__name__)
 
@@ -60,7 +63,7 @@ class UpdateSurveyUseCase:
         update_dto: Union[
             UpdateSurvey1InputDTO, UpdateSurvey2InputDTO, UpdateSurvey3InputDTO
         ],
-        image_paths: Optional[List[str]] = None,
+        photo_paths: Optional[SurveyPhotoPathsDTO] = None,
         user_producter_data: Optional[Dict[str, Any]] = None,
         property_data: Optional[Dict[str, Any]] = None,
     ):
@@ -85,15 +88,15 @@ class UpdateSurveyUseCase:
             if hasattr(survey, field):
                 setattr(survey, field, value)
 
-        if image_paths:
-            if len(image_paths) > 0:
-                survey.photo_user = image_paths[0]
-            if len(image_paths) > 1:
-                survey.photo_interaction = image_paths[1]
-            if len(image_paths) > 2:
-                survey.photo_panorama = image_paths[2]
-            if len(image_paths) > 3:
-                survey.phono_extra_1 = image_paths[3]
+        if photo_paths:
+            if photo_paths.photo_user:
+                survey.photo_user = photo_paths.photo_user
+            if photo_paths.photo_interaction:
+                survey.photo_interaction = photo_paths.photo_interaction
+            if photo_paths.photo_panorama:
+                survey.photo_panorama = photo_paths.photo_panorama
+            if photo_paths.phono_extra_1:
+                survey.phono_extra_1 = photo_paths.phono_extra_1
 
         if survey_type in [1, 3]:
             self._update_survey_relations(

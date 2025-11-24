@@ -1,5 +1,5 @@
 from logging import Logger
-from typing import Union, Optional, List
+from typing import Union, Optional
 from common.infrastructure.logging.config import get_logger
 from modules.surveys.application_surveys.services.update_survey_service import (
     UpdateSurveyService,
@@ -13,6 +13,9 @@ from modules.surveys.application_surveys.dtos.input_dto.update_survey2_input_dto
 )
 from modules.surveys.application_surveys.dtos.input_dto.update_survey3_input_dto import (
     UpdateSurvey3InputDTO,
+)
+from modules.surveys.application_surveys.dtos.photo_paths_dto import (
+    SurveyPhotoPathsDTO,
 )
 
 _LOGGER: Logger = get_logger(__name__)
@@ -35,7 +38,7 @@ class AdminUpdateSurveyUseCase:
         update_dto: Union[
             UpdateSurvey1InputDTO, UpdateSurvey2InputDTO, UpdateSurvey3InputDTO
         ],
-        image_paths: Optional[List[str]] = None,
+        photo_paths: Optional[SurveyPhotoPathsDTO] = None,
     ):
         _LOGGER.info(
             f"Admin user {admin_user_id} initiating update for survey type {survey_type}, ID {survey_id}"
@@ -46,7 +49,7 @@ class AdminUpdateSurveyUseCase:
             survey_type=survey_type,
             survey_id=survey_id,
             update_dto=update_dto,
-            image_paths=image_paths,
+            photo_paths=photo_paths,
         )
 
         # Log the admin action

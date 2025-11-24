@@ -9,12 +9,9 @@ from fastapi import (
     Form,
     Query,
 )
-from typing import List, Optional, Union
+from typing import Optional, Union
 from datetime import datetime
 import json
-import shutil
-import os
-import uuid
 
 from modules.surveys.application_surveys.dtos.input_dto.create_survey1_input_dto import (
     CreateSurvey1InputDTO,
@@ -110,29 +107,15 @@ from modules.surveys.application_surveys.services.update_survey_service import (
 from modules.surveys.infrastructure_surveys.services.update_survey_service_composer import (
     get_update_survey_service,
 )
+from modules.surveys.infrastructure_surveys.api.utils.photo_upload_helper import (
+    save_required_photo_files,
+    save_optional_photo_files,
+)
 
 
 _LOGGER: Logger = get_logger(__name__)
 
 router = APIRouter(prefix="/surveys", tags=["surveys"])
-
-UPLOAD_DIRECTORY = "./uploads"
-
-
-def save_uploaded_files(files: List[UploadFile]) -> List[str]:
-    if not os.path.exists(UPLOAD_DIRECTORY):
-        os.makedirs(UPLOAD_DIRECTORY)
-
-    image_paths = []
-    for file in files:
-        _, extension = os.path.splitext(file.filename)
-        unique_filename = f"{uuid.uuid4()}{extension}"
-        file_path = os.path.join(UPLOAD_DIRECTORY, unique_filename)
-        with open(file_path, "wb") as buffer:
-            shutil.copyfileobj(file.file, buffer)
-        image_paths.append(file_path)
-    return image_paths
-
 
 @router.post("/1", status_code=response_status.HTTP_201_CREATED)
 async def create_survey1(
@@ -141,12 +124,20 @@ async def create_survey1(
     producter_data: str = Form(...),
     property_data: str = Form(...),
     classification_user_data: str = Form(...),
-    files: List[UploadFile] = File(...),
+    photo_user: UploadFile = File(...),
+    photo_interaction: UploadFile = File(...),
+    photo_panorama: UploadFile = File(...),
+    phono_extra_1: Optional[UploadFile] = File(None),
     survey_service: Survey1Service = Depends(get_survey1_service),
 ) -> ApiResponseDTO[CreateSurvey1OutputDTO]:
     _LOGGER.info("Creating new survey 1")
 
-    image_paths = save_uploaded_files(files)
+    photo_paths = save_required_photo_files(
+        photo_user=photo_user,
+        photo_interaction=photo_interaction,
+        photo_panorama=photo_panorama,
+        phono_extra_1=phono_extra_1,
+    )
 
     try:
         survey_data_dict = json.loads(survey_data)
@@ -167,7 +158,7 @@ async def create_survey1(
             property_info_input_dto,
             classification_user_input_dto,
             api_key,
-            image_paths,
+            photo_paths,
         )
     except Exception as e:
         _LOGGER.error(f"Error creating survey 1: {e}", exc_info=True)
@@ -184,12 +175,20 @@ async def create_survey2(
     survey_data: str = Form(...),
     producter_data: str = Form(...),
     property_data: str = Form(...),
-    files: List[UploadFile] = File(...),
+    photo_user: UploadFile = File(...),
+    photo_interaction: UploadFile = File(...),
+    photo_panorama: UploadFile = File(...),
+    phono_extra_1: Optional[UploadFile] = File(None),
     survey_service: Survey2Service = Depends(get_survey2_service),
 ) -> ApiResponseDTO[CreateSurvey2OutputDTO]:
     _LOGGER.info("Creating new survey 2")
 
-    image_paths = save_uploaded_files(files)
+    photo_paths = save_required_photo_files(
+        photo_user=photo_user,
+        photo_interaction=photo_interaction,
+        photo_panorama=photo_panorama,
+        phono_extra_1=phono_extra_1,
+    )
 
     try:
         survey_data_dict = json.loads(survey_data)
@@ -205,7 +204,7 @@ async def create_survey2(
             producter_input_dto,
             property_info_input_dto,
             api_key,
-            image_paths,
+            photo_paths,
         )
     except Exception as e:
         _LOGGER.error(f"Error creating survey 2: {e}", exc_info=True)
@@ -223,12 +222,20 @@ async def create_survey3(
     producter_data: str = Form(...),
     property_data: str = Form(...),
     classification_user_data: str = Form(...),
-    files: List[UploadFile] = File(...),
+    photo_user: UploadFile = File(...),
+    photo_interaction: UploadFile = File(...),
+    photo_panorama: UploadFile = File(...),
+    phono_extra_1: Optional[UploadFile] = File(None),
     survey_service: Survey3Service = Depends(get_survey3_service),
 ) -> ApiResponseDTO[CreateSurvey3OutputDTO]:
     _LOGGER.info("Creating new survey 3")
 
-    image_paths = save_uploaded_files(files)
+    photo_paths = save_required_photo_files(
+        photo_user=photo_user,
+        photo_interaction=photo_interaction,
+        photo_panorama=photo_panorama,
+        phono_extra_1=phono_extra_1,
+    )
 
     try:
         survey_data_dict = json.loads(survey_data)
@@ -249,7 +256,7 @@ async def create_survey3(
             property_info_input_dto,
             classification_user_input_dto,
             api_key,
-            image_paths,
+            photo_paths,
         )
     except Exception as e:
         _LOGGER.error(f"Error creating survey 3: {e}", exc_info=True)
@@ -267,12 +274,20 @@ async def update_survey1(
     survey_data: str = Form(...),
     producter_data: str = Form(...),
     property_data: str = Form(...),
-    files: Optional[List[UploadFile]] = File(None),
+    photo_user: Optional[UploadFile] = File(None),
+    photo_interaction: Optional[UploadFile] = File(None),
+    photo_panorama: Optional[UploadFile] = File(None),
+    phono_extra_1: Optional[UploadFile] = File(None),
     update_survey_service: UpdateSurveyService = Depends(get_update_survey_service),
 ) -> ApiResponseDTO[dict]:
     _LOGGER.info(f"Updating survey type 1, ID {survey_id}")
 
-    image_paths = save_uploaded_files(files) if files else []
+    photo_paths = save_optional_photo_files(
+        photo_user=photo_user,
+        photo_interaction=photo_interaction,
+        photo_panorama=photo_panorama,
+        phono_extra_1=phono_extra_1,
+    )
 
     try:
         survey_data_dict = json.loads(survey_data)
@@ -287,7 +302,7 @@ async def update_survey1(
             survey_type=1,
             survey_id=survey_id,
             update_dto=update_dto,
-            image_paths=image_paths if image_paths else None,
+            photo_paths=photo_paths,
             user_producter_data=producter_input_dto.model_dump(exclude_none=True),
             property_data=property_input_dto.model_dump(exclude_none=True),
                     )
@@ -314,12 +329,20 @@ async def update_survey2(
     survey_data: str = Form(...),
     producter_data: str = Form(...),
     property_data: str = Form(...),
-    files: Optional[List[UploadFile]] = File(None),
+    photo_user: Optional[UploadFile] = File(None),
+    photo_interaction: Optional[UploadFile] = File(None),
+    photo_panorama: Optional[UploadFile] = File(None),
+    phono_extra_1: Optional[UploadFile] = File(None),
     update_survey_service: UpdateSurveyService = Depends(get_update_survey_service),
 ) -> ApiResponseDTO[dict]:
     _LOGGER.info(f"Updating survey type 2, ID {survey_id}")
 
-    image_paths = save_uploaded_files(files) if files else []
+    photo_paths = save_optional_photo_files(
+        photo_user=photo_user,
+        photo_interaction=photo_interaction,
+        photo_panorama=photo_panorama,
+        phono_extra_1=phono_extra_1,
+    )
 
     try:
         survey_data_dict = json.loads(survey_data)
@@ -334,7 +357,7 @@ async def update_survey2(
             survey_type=2,
             survey_id=survey_id,
             update_dto=update_dto,
-            image_paths=image_paths if image_paths else None,
+            photo_paths=photo_paths,
             user_producter_data=producter_input_dto.model_dump(exclude_none=True),
             property_data=property_input_dto.model_dump(exclude_none=True),
         )
@@ -361,12 +384,20 @@ async def update_survey3(
     survey_data: str = Form(...),
     producter_data: str = Form(...),
     property_data: str = Form(...),
-    files: Optional[List[UploadFile]] = File(None),
+    photo_user: Optional[UploadFile] = File(None),
+    photo_interaction: Optional[UploadFile] = File(None),
+    photo_panorama: Optional[UploadFile] = File(None),
+    phono_extra_1: Optional[UploadFile] = File(None),
     update_survey_service: UpdateSurveyService = Depends(get_update_survey_service),
 ) -> ApiResponseDTO[dict]:
     _LOGGER.info(f"Updating survey type 3, ID {survey_id}")
 
-    image_paths = save_uploaded_files(files) if files else []
+    photo_paths = save_optional_photo_files(
+        photo_user=photo_user,
+        photo_interaction=photo_interaction,
+        photo_panorama=photo_panorama,
+        phono_extra_1=phono_extra_1,
+    )
 
     try:
         survey_data_dict = json.loads(survey_data)
@@ -381,7 +412,7 @@ async def update_survey3(
             survey_type=3,
             survey_id=survey_id,
             update_dto=update_dto,
-            image_paths=image_paths if image_paths else None,
+            photo_paths=photo_paths,
             user_producter_data=producter_input_dto.model_dump(exclude_none=True),
             property_data=property_input_dto.model_dump(exclude_none=True),
         )

@@ -24,6 +24,9 @@ from modules.surveys.application_surveys.dtos.input_dto.property_info_input_dto 
     PropertyInfoInputDTO,
 )
 from common.infrastructure.logging.config import get_logger
+from modules.surveys.application_surveys.dtos.photo_paths_dto import (
+    SurveyPhotoPathsDTO,
+)
 
 _LOGGER: Logger = get_logger(__name__)
 
@@ -47,7 +50,7 @@ class CreateSurvey2UseCase:
         producter_input_dto: SurveyUserProducterInputDTO,
         property_info_input_dto: PropertyInfoInputDTO,
         api_key: str,
-        image_paths: list[str],
+        photo_paths: SurveyPhotoPathsDTO,
     ) -> Survey2:
         _LOGGER.info("Creating new survey 2")
 
@@ -99,10 +102,10 @@ class CreateSurvey2UseCase:
             process_functioning=input_dto.process_functioning,
             potential_replication=input_dto.potential_replication,
             observations_extensionist=input_dto.observations_extensionist,
-            photo_user=image_paths[0] if len(image_paths) > 0 else None,
-            photo_interaction=image_paths[1] if len(image_paths) > 1 else None,
-            photo_panorama=image_paths[2] if len(image_paths) > 2 else None,
-            phono_extra_1=image_paths[3] if len(image_paths) > 3 else None,
+            photo_user=photo_paths.photo_user,
+            photo_interaction=photo_paths.photo_interaction,
+            photo_panorama=photo_paths.photo_panorama,
+            phono_extra_1=photo_paths.phono_extra_1,
             date_hour_end=input_dto.date_hour_end,
             socilization_next_event=input_dto.socilization_next_event,
             visit_date=input_dto.visit_date,

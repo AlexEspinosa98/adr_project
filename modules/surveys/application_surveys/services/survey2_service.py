@@ -15,6 +15,9 @@ from modules.surveys.application_surveys.mappers.survey2_mapper import Survey2Ma
 from modules.surveys.application_surveys.use_cases.create_survey2_use_case import (
     CreateSurvey2UseCase,
 )
+from modules.surveys.application_surveys.dtos.photo_paths_dto import (
+    SurveyPhotoPathsDTO,
+)
 from modules.surveys.domain_surveys.repositories.survey2_repository import (
     Survey2Repository,
 )
@@ -50,7 +53,7 @@ class Survey2Service:
         producter_input_dto: SurveyUserProducterInputDTO,
         property_info_input_dto: PropertyInfoInputDTO,
         api_key: str,
-        image_paths: list[str],
+        photo_paths: SurveyPhotoPathsDTO,
     ) -> CreateSurvey2OutputDTO:
         self.logger.info("Creating survey 2 with data: %s", data)
 
@@ -61,7 +64,7 @@ class Survey2Service:
             self.product_property_repository,
         )
         survey_entity = use_case.execute(
-            data, producter_input_dto, property_info_input_dto, api_key, image_paths
+            data, producter_input_dto, property_info_input_dto, api_key, photo_paths
         )
 
         return Survey2Mapper.to_survey2_dto(survey_entity)
