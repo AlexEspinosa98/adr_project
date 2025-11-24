@@ -22,6 +22,13 @@ class AuthRepository(ABC):
         pass
 
     @abstractmethod
+    def get_user_by_phone_and_identification(
+        self, phone: str, identification: str
+    ) -> Optional[UserExtensionist]:
+        """Find a user by phone and identification."""
+        pass
+
+    @abstractmethod
     def get_user_by_token(self, token: str) -> Optional[UserExtensionist]:
         """Find a user by token."""
         pass

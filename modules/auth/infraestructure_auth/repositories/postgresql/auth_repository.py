@@ -41,6 +41,16 @@ class PostgreSQLAuthRepository(AuthRepository):
         model = self.session.execute(stmt).scalar_one_or_none()
         return self._to_domain_entity(model) if model else None
 
+    def get_user_by_phone_and_identification(
+        self, phone: str, identification: str
+    ) -> Optional[UserExtensionist]:
+        stmt = select(UserExtensionistModel).where(
+            UserExtensionistModel.phone == phone,
+            UserExtensionistModel.identification == identification,
+        )
+        model = self.session.execute(stmt).scalar_one_or_none()
+        return self._to_domain_entity(model) if model else None
+
     def save_extensionist(self, extensionist: UserExtensionist) -> UserExtensionist:
         extensionist_model = self._to_database_model(extensionist)
         merged_model = self.session.merge(extensionist_model)

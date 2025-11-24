@@ -38,6 +38,12 @@ from modules.auth.infraestructure_auth.api.dependencies.auth import (
     get_current_user_from_token,
     get_current_user_from_query_token,
 )
+from modules.auth.application_auth.dtos.input_dto.login_user_extensionist_input_dto import (
+    LoginUserExtensionistInputDTO,
+)
+from modules.auth.application_auth.dtos.output_dto.login_user_extensionist_output_dto import (
+    LoginUserExtensionistOutputDTO,
+)
 
 _LOGGER: Logger = get_logger(__name__)
 
@@ -49,6 +55,23 @@ TYPE_ID_MAPPING = {
     "ti": 2,
     "ce": 3,
 }
+
+
+@router.post("/login", status_code=response_status.HTTP_200_OK)
+def login_extensionist(
+    input_dto: LoginUserExtensionistInputDTO,
+    auth_service: AuthService = Depends(get_auth_service),
+) -> ApiResponseDTO[LoginUserExtensionistOutputDTO]:
+    _LOGGER.info(f"Login attempt for extensionist with identification {input_dto.identification}")
+
+    try:
+        result = auth_service.login_extensionist(input_dto)
+    except ValueError as e:
+        raise HTTPException(status_code=401, detail=str(e))
+
+    return ApiResponseDTO.success_response(
+        data=result, message="Extensionist logged in successfully"
+    )
 
 
 @router.post("/register_extensionist", status_code=response_status.HTTP_201_CREATED)

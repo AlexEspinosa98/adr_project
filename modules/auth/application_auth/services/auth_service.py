@@ -19,6 +19,15 @@ from modules.auth.application_auth.use_cases.register_user_extensionist import (
 from modules.auth.application_auth.use_cases.upload_signing_image import (
     UploadSigningImageUseCase,
 )
+from modules.auth.application_auth.dtos.input_dto.login_user_extensionist_input_dto import (
+    LoginUserExtensionistInputDTO,
+)
+from modules.auth.application_auth.dtos.output_dto.login_user_extensionist_output_dto import (
+    LoginUserExtensionistOutputDTO,
+)
+from modules.auth.application_auth.use_cases.login_user_extensionist import (
+    LoginUserExtensionistUseCase,
+)
 from modules.auth.domain_auth.repositories.auth_repository import AuthRepository
 from common.infrastructure.logging.config import get_logger
 
@@ -39,6 +48,16 @@ class AuthService:
         user_entity = use_case.execute(data)
 
         return AuthMapper.to_user_extensionist_dto(user_entity)
+
+    def login_extensionist(
+        self, data: LoginUserExtensionistInputDTO
+    ) -> LoginUserExtensionistOutputDTO:
+        self.logger.info("Logging in extensionist with identification: %s", data.identification)
+
+        use_case = LoginUserExtensionistUseCase(self.auth_repository)
+        user_entity = use_case.execute(data)
+
+        return AuthMapper.to_login_user_extensionist_dto(user_entity)
 
     def upload_signing_image(
         self, user_id: int, image_data: bytes, image_content_type: str
