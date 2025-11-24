@@ -24,7 +24,8 @@ def upgrade() -> None:
     op.alter_column('user_producter', 'ethnic_belonging',
                existing_type=sa.VARCHAR(length=150),
                type_=sa.Boolean(),
-               existing_nullable=True)
+               existing_nullable=True,
+               postgresql_using='ethnic_belonging::boolean')
     # ### end Alembic commands ###
 
 
