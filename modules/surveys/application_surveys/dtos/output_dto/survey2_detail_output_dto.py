@@ -73,6 +73,7 @@ class Survey2DetailOutputDTO(BaseModel):
     origen_register: Optional[str] = None
     name_acompanamiento: Optional[str] = None
     rejection_reason: Optional[str] = None
+    file_pdf: Optional[str] = None
 
     @validator("objective_accompaniment", pre=True)
     def parse_json_fields(cls, value):

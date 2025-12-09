@@ -30,6 +30,7 @@ class Survey3DetailOutputDTO(BaseModel):
     phono_extra_1: Optional[str]
     state: Optional[SurveyStatus] = SurveyStatus.PENDING
     rejection_reason: Optional[str] = None
+    file_pdf: Optional[str] = None
 
     @validator(
         "classification_user",

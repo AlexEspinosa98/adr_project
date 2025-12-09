@@ -28,6 +28,7 @@ class Survey3(BaseModel):
     photo_interaction: Optional[str]
     photo_panorama: Optional[str]
     phono_extra_1: Optional[str]
+    file_pdf: Optional[str] = None
     state: SurveyStatus = SurveyStatus.PENDING
 
     # Cierre y despedida

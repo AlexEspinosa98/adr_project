@@ -31,3 +31,8 @@ class SurveyDetailRepository(ABC):
         self, survey_id: int, survey_type: int
     ) -> Optional[dict]:
         pass
+
+    @abstractmethod
+    def update_pdf_path(self, survey_id: int, survey_type: int, pdf_path: str) -> None:
+        """Persist the generated PDF path for a survey."""
+        pass

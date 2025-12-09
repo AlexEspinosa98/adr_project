@@ -6,6 +6,9 @@ from modules.surveys.application_surveys.services.get_survey_detail_service impo
 from modules.surveys.application_surveys.use_cases.get_survey_detail_use_case import (
     GetSurveyDetailUseCase,
 )
+from modules.surveys.application_surveys.services.survey_pdf_generator import (
+    SurveyPdfGenerator,
+)
 from modules.surveys.infrastructure_surveys.repositories.postgresql.survey_detail_repository import (
     PostgreSQLSurveyDetailRepository,
 )
@@ -20,5 +23,10 @@ def get_survey_detail_service(
 ) -> GetSurveyDetailService:
     survey_detail_repository = PostgreSQLSurveyDetailRepository(session)
     survey_rejection_repository = PostgreSQLSurveyRejectionRepository(session)
-    get_survey_detail_use_case = GetSurveyDetailUseCase(survey_detail_repository, survey_rejection_repository)
+    pdf_generator = SurveyPdfGenerator()
+    get_survey_detail_use_case = GetSurveyDetailUseCase(
+        survey_detail_repository,
+        survey_rejection_repository,
+        pdf_generator,
+    )
     return GetSurveyDetailService(get_survey_detail_use_case)

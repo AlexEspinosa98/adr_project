@@ -56,3 +56,21 @@ class PostgreSQLSurveyDetailRepository(SurveyDetailRepository):
             return model.__dict__ if model else None
         else:
             return None
+
+    def update_pdf_path(self, survey_id: int, survey_type: int, pdf_path: str) -> None:
+        model_mapping = {
+            1: Survey1Model,
+            2: Survey2Model,
+            3: Survey3Model,
+        }
+        model_cls = model_mapping.get(survey_type)
+        if not model_cls:
+            raise ValueError(f"Unsupported survey type {survey_type} for PDF update.")
+
+        model = self.session.get(model_cls, survey_id)
+        if not model:
+            raise ValueError(f"Survey type {survey_type} with ID {survey_id} not found.")
+
+        model.file_pdf = pdf_path
+        self.session.add(model)
+        self.session.commit()

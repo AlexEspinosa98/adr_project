@@ -27,6 +27,7 @@ class AdminSurvey3DetailOutputDTO(BaseModel):
     photo_panorama: Optional[str]
     phono_extra_1: Optional[str]
     state: Optional[SurveyStatus] = SurveyStatus.PENDING
+    file_pdf: Optional[str] = None
 
     class Config:
         from_attributes = True

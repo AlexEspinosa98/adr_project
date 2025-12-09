@@ -52,6 +52,7 @@ class Survey1(BaseModel):
     )
     photo_panorama: Optional[str] = Field(None, description="Path to panorama photo")
     phono_extra_1: Optional[str] = Field(None, description="Path to additional photo")
+    file_pdf: Optional[str] = Field(None, description="Path to generated PDF file")
 
     # Estado de la encuesta
     state: SurveyStatus = Field(

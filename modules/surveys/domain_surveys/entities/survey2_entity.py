@@ -42,6 +42,7 @@ class Survey2(BaseModel):
     photo_interaction: Optional[str]
     photo_panorama: Optional[str]
     phono_extra_1: Optional[str]
+    file_pdf: Optional[str] = None
     date_hour_end: Optional[datetime]
     socilization_next_event: Optional[str]
     visit_date: Optional[datetime]

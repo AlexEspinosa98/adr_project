@@ -123,6 +123,7 @@ class Survey1(BaseModel):
     photo_interaction: Mapped[Optional[str]] = mapped_column(String(255))
     photo_panorama: Mapped[Optional[str]] = mapped_column(String(255))
     phono_extra_1: Mapped[Optional[str]] = mapped_column(String(255))
+    file_pdf: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     state: Mapped[Optional[str]] = mapped_column(
         String(50), nullable=False, default="PENDING"
     )
@@ -212,6 +213,7 @@ class Survey2(BaseModel):
     photo_interaction: Mapped[Optional[str]] = mapped_column(String(255))
     photo_panorama: Mapped[Optional[str]] = mapped_column(String(255))
     phono_extra_1: Mapped[Optional[str]] = mapped_column(String(255))
+    file_pdf: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
 
     # 4. Co-innovación
     register_coinnovation: Mapped[Optional[str]] = mapped_column(String(500))
@@ -296,6 +298,7 @@ class Survey3(BaseModel):
     photo_interaction: Mapped[Optional[str]] = mapped_column(String(255))
     photo_panorama: Mapped[Optional[str]] = mapped_column(String(255))
     phono_extra_1: Mapped[Optional[str]] = mapped_column(String(255))
+    file_pdf: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     state: Mapped[Optional[str]] = mapped_column(
         String(50), nullable=False, default="PENDING"
     )

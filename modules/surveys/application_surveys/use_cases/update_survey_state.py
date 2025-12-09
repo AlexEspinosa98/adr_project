@@ -1,3 +1,4 @@
+from logging import Logger
 from sqlalchemy.orm import Session
 from common.domain.enums.survey_status import SurveyStatus
 from modules.surveys.infrastructure_surveys.repositories.postgresql.survey1_repository import (
@@ -12,6 +13,16 @@ from modules.surveys.infrastructure_surveys.repositories.postgresql.survey3_repo
 from modules.admin.application_admin.use_cases.log_admin_action import LogAdminAction
 from modules.surveys.infrastructure_surveys.repositories.postgresql.survey_rejection_repository import PostgreSQLSurveyRejectionRepository
 from modules.surveys.domain_surveys.entities.survey_rejection_entity import SurveyRejection
+from modules.surveys.infrastructure_surveys.repositories.postgresql.survey_detail_repository import (
+    PostgreSQLSurveyDetailRepository,
+)
+from modules.surveys.application_surveys.services.survey_pdf_generator import (
+    SurveyPdfGenerator,
+)
+from modules.surveys.application_surveys.use_cases.get_survey_detail_use_case import (
+    GetSurveyDetailUseCase,
+)
+from common.infrastructure.logging.config import get_logger
 
 
 class UpdateSurveyState:
@@ -24,6 +35,14 @@ class UpdateSurveyState:
         }
         self.log_admin_action = LogAdminAction(db_session)
         self.survey_rejection_repository = PostgreSQLSurveyRejectionRepository(db_session)
+        self.survey_detail_repository = PostgreSQLSurveyDetailRepository(db_session)
+        self.pdf_generator = SurveyPdfGenerator()
+        self._survey_detail_use_case = GetSurveyDetailUseCase(
+            self.survey_detail_repository,
+            self.survey_rejection_repository,
+            self.pdf_generator,
+        )
+        self.logger: Logger = get_logger(__name__)
 
     def execute(
         self, survey_type: int, survey_id: int, new_state: str, admin_user_id: int, rejection_reason: str | None = None
@@ -68,4 +87,25 @@ class UpdateSurveyState:
             description=f"Survey {survey_type} with ID {survey_id} state changed from {old_state_value} to {new_state}",
         )
 
+        state_value = (
+            updated_survey.state.value
+            if isinstance(updated_survey.state, SurveyStatus)
+            else str(updated_survey.state).lower()
+        )
+
+        if state_value == SurveyStatus.ACCEPTED.value:
+            self._generate_pdf_for_survey(survey_type=survey_type, survey_id=survey_id)
+
         return updated_survey
+
+    def _generate_pdf_for_survey(self, survey_type: int, survey_id: int) -> None:
+        try:
+            self._survey_detail_use_case.execute(survey_id, survey_type)
+        except Exception as exc:  # pragma: no cover - defensive logging
+            self.logger.error(
+                "Unable to generate PDF for survey %s (type %s): %s",
+                survey_id,
+                survey_type,
+                exc,
+                exc_info=True,
+            )
