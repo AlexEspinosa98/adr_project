@@ -14,11 +14,15 @@ from modules.surveys.domain_surveys.entities.product_property_entity import (
     ProductProperty,
 )
 from modules.surveys.domain_surveys.entities.user_producter_entity import UserProducter
+from modules.surveys.application_surveys.services.survey_pdf_generator import (
+    SurveyPdfGenerator,
+)
 
 
 class PostgreSQLListSurveysRepository(ListSurveysRepository):
     def __init__(self, session: Session):
         self.session = session
+        self._pdf_generator = SurveyPdfGenerator()
 
     def list_surveys(
         self,
@@ -31,21 +35,21 @@ class PostgreSQLListSurveysRepository(ListSurveysRepository):
         status: Optional[int] = None,
     ) -> Tuple[list[SurveyListItemDTO], int]:
         base_query = """
-        (SELECT s.id, 1 as survey_type, pp.name as farm_name, s.visit_date, s.state, up.name as producter_name, ue.name as extensionist_name, ue.api_token, s.created_at, sr.reason as rejection_reason
+        (SELECT s.id, 1 as survey_type, pp.name as farm_name, s.visit_date, s.state, up.name as producter_name, ue.name as extensionist_name, ue.api_token, s.created_at, sr.reason as rejection_reason, s.file_pdf
         FROM survey_1 s
         LEFT JOIN product_property pp ON s.property_id = pp.id
         LEFT JOIN user_producter up ON s.user_producter_id = up.id
         LEFT JOIN user_extensionist ue ON s.extensionist_id = ue.id
         LEFT JOIN survey_rejection sr ON s.id = sr.survey_id AND sr.survey_type = 1)
         UNION ALL
-        (SELECT s.id, 2 as survey_type, pp.name as farm_name, s.visit_date, s.state, up.name as producter_name, ue.name as extensionist_name, ue.api_token, s.created_at, sr.reason as rejection_reason
+        (SELECT s.id, 2 as survey_type, pp.name as farm_name, s.visit_date, s.state, up.name as producter_name, ue.name as extensionist_name, ue.api_token, s.created_at, sr.reason as rejection_reason, s.file_pdf
         FROM survey_2 s
         LEFT JOIN product_property pp ON s.property_id = pp.id
         LEFT JOIN user_producter up ON s.producter_id = up.id
         LEFT JOIN user_extensionist ue ON s.extensionist_id = ue.id
         LEFT JOIN survey_rejection sr ON s.id = sr.survey_id AND sr.survey_type = 2)
         UNION ALL
-        (SELECT s.id, 3 as survey_type, pp.name as farm_name, s.visit_date, s.state, up.name as producter_name, ue.name as extensionist_name, ue.api_token, s.created_at, sr.reason as rejection_reason
+        (SELECT s.id, 3 as survey_type, pp.name as farm_name, s.visit_date, s.state, up.name as producter_name, ue.name as extensionist_name, ue.api_token, s.created_at, sr.reason as rejection_reason, s.file_pdf
         FROM survey_3 s
         LEFT JOIN product_property pp ON s.property_id = pp.id
         LEFT JOIN user_producter up ON s.user_producter_id = up.id
@@ -89,10 +93,14 @@ class PostgreSQLListSurveysRepository(ListSurveysRepository):
 
         result = self.session.execute(text(base_query), params).fetchall()
 
-        return [
-            SurveyListItemDTO.model_validate(row, from_attributes=True)
-            for row in result
-        ], total_items
+        items: list[SurveyListItemDTO] = []
+        for row in result:
+            row_data = dict(row._mapping)
+            pdf_path = row_data.pop("file_pdf", None)
+            row_data["pdf_url"] = self._build_pdf_url(pdf_path)
+            items.append(SurveyListItemDTO.model_validate(row_data))
+
+        return items, total_items
 
     def find_admin_surveys_with_filters(
         self, city: Optional[str] = None, extensionist: Optional[str] = None
@@ -121,7 +129,8 @@ class PostgreSQLListSurveysRepository(ListSurveysRepository):
             pp.name as property_name,
             up.name as user_producter_name,
             ue.name as extensionist_name,
-            ue.identification as extensionist_identification
+            ue.identification as extensionist_identification,
+            s.file_pdf
         FROM survey_1 s
         LEFT JOIN product_property pp ON s.property_id = pp.id
         LEFT JOIN user_producter up ON s.user_producter_id = up.id
@@ -150,7 +159,8 @@ class PostgreSQLListSurveysRepository(ListSurveysRepository):
             pp.name as property_name,
             up.name as user_producter_name,
             ue.name as extensionist_name,
-            ue.identification as extensionist_identification
+            ue.identification as extensionist_identification,
+            s.file_pdf
         FROM survey_2 s
         LEFT JOIN product_property pp ON s.property_id = pp.id
         LEFT JOIN user_producter up ON s.producter_id = up.id
@@ -179,7 +189,8 @@ class PostgreSQLListSurveysRepository(ListSurveysRepository):
             pp.name as property_name,
             up.name as user_producter_name,
             ue.name as extensionist_name,
-            ue.identification as extensionist_identification
+            ue.identification as extensionist_identification,
+            s.file_pdf
         FROM survey_3 s
         LEFT JOIN product_property pp ON s.property_id = pp.id
         LEFT JOIN user_producter up ON s.user_producter_id = up.id
@@ -288,3 +299,11 @@ class PostgreSQLListSurveysRepository(ListSurveysRepository):
                 )
             )
         return surveys
+
+    def _build_pdf_url(self, relative_path: Optional[str]) -> str:
+        if not relative_path:
+            return ""
+        try:
+            return SurveyPdfGenerator.build_public_url(relative_path)
+        except Exception:
+            return ""

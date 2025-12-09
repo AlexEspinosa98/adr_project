@@ -13,3 +13,4 @@ class SurveyListItemDTO(BaseModel):
     extensionist_name: Optional[str]
     created_at: Optional[datetime]
     rejection_reason: Optional[str] = None
+    pdf_url: Optional[str] = None
