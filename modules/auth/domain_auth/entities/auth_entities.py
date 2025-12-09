@@ -6,6 +6,7 @@ from pydantic import Field
 class UserExtensionist(common_entities.BaseEntity):
     name: Optional[str] = Field(None, description="Extensionist name")
     email: Optional[str] = Field(None, description="Extensionist email")
+    password: Optional[str] = Field(None, description="Extensionist password (hashed)")
     phone: Optional[str] = Field(None, description="Extensionist phone")
     type_id: Optional[int] = Field(None, description="Extensionist type id")
     identification: Optional[str] = Field(

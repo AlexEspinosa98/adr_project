@@ -20,12 +20,14 @@ class UserExtensionistInputDTO(common_dtos.BaseDTO):
     city: str
     zone: str
     phone: str
+    password: str
 
     class Config:
         json_schema_extra: dict[str, dict[str, Any]] = {
             "example": {
                 "name": "John Doe",
                 "email": "john.doe@example.com",
+                "password": "SecretPassword123",
                 "type_id": "cc",
                 "identification": "123456789",
                 "city": "Sample City",

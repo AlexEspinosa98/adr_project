@@ -62,7 +62,7 @@ def login_extensionist(
     input_dto: LoginUserExtensionistInputDTO,
     auth_service: AuthService = Depends(get_auth_service),
 ) -> ApiResponseDTO[LoginUserExtensionistOutputDTO]:
-    _LOGGER.info(f"Login attempt for extensionist with identification {input_dto.identification}")
+    _LOGGER.info(f"Login attempt for extensionist with email {input_dto.email}")
 
     try:
         result = auth_service.login_extensionist(input_dto)
@@ -90,6 +90,7 @@ def register_extensionist(
     app_input_dto = RegisterUserExtensionistInputDTO(
         name=input_dto.name,
         email=input_dto.email,
+        password=input_dto.password,
         phone=input_dto.phone,
         type_id=type_id_int,
         identification=input_dto.identification,

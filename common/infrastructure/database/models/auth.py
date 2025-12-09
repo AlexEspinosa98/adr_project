@@ -11,6 +11,7 @@ class UserExtensionist(BaseModel):
     # metadata
     name: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     email: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    password: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     phone: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
     type_id: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
     identification: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)

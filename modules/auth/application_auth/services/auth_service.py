@@ -52,7 +52,7 @@ class AuthService:
     def login_extensionist(
         self, data: LoginUserExtensionistInputDTO
     ) -> LoginUserExtensionistOutputDTO:
-        self.logger.info("Logging in extensionist with identification: %s", data.identification)
+        self.logger.info("Logging in extensionist with email: %s", data.email)
 
         use_case = LoginUserExtensionistUseCase(self.auth_repository)
         user_entity = use_case.execute(data)

@@ -14,14 +14,15 @@ class LoginUserExtensionistUseCase:
         self._auth_repository = auth_repository
 
     def execute(self, input_dto: LoginUserExtensionistInputDTO) -> UserExtensionist:
-        _LOGGER.info(f"Attempting login for user with identification: {input_dto.identification}")
+        _LOGGER.info(f"Attempting login for user with email: {input_dto.email}")
 
-        user = self._auth_repository.get_user_by_phone_and_identification(
-            phone=input_dto.phone, identification=input_dto.identification
-        )
+        user = self._auth_repository.get_user_by_email(email=input_dto.email)
 
         if not user:
-            raise ValueError("Invalid phone number or identification.")
+            raise ValueError("Invalid email or password.")
 
-        _LOGGER.info(f"User with identification {input_dto.identification} logged in successfully.")
+        if user.password != input_dto.password:
+            raise ValueError("Invalid email or password.")
+
+        _LOGGER.info(f"User with email {input_dto.email} logged in successfully.")
         return user

@@ -9,3 +9,4 @@ class RegisterUserExtensionistInputDTO(BaseDTO):
     identification: str
     city: str
     zone: str
+    password: str

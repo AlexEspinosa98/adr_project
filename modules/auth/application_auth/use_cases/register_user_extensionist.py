@@ -28,6 +28,7 @@ class RegisterUserExtensionistUseCase:
         user_entity = UserExtensionist(
             name=input_dto.name,
             email=input_dto.email,
+            password=input_dto.password,
             phone=input_dto.phone,
             type_id=input_dto.type_id,
             identification=input_dto.identification,
