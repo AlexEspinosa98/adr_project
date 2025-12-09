@@ -18,3 +18,6 @@ class AdminSurveyListOutputDTO(common_dtos.BaseDTO):
     user_producter_name: Optional[str] = Field(
         None, description="Name of the user producer"
     )
+    pdf_url: Optional[str] = Field(
+        None, description="Public URL for the survey PDF (if available)"
+    )

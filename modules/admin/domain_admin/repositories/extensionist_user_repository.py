@@ -15,5 +15,6 @@ class ExtensionistUserRepository(BaseRepository[ExtensionistUser], ABC):
         identification: Optional[str] = None,
         email: Optional[str] = None,
         phone: Optional[str] = None,
+        city: Optional[str] = None,
     ) -> List[ExtensionistUser]:
         """Find all extensionist users with optional filters."""

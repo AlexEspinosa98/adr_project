@@ -1,6 +1,7 @@
 from typing import List, Optional, Union
 import json
 import os
+from pathlib import Path
 from fastapi import (
     APIRouter,
     Depends,
@@ -67,6 +68,12 @@ from modules.admin.application_admin.use_cases.get_product_properties_by_extensi
 from modules.admin.application_admin.use_cases.get_surveys_by_property_id_use_case import (
     GetSurveysByPropertyIdUseCase,
 )
+from modules.surveys.application_surveys.services.get_survey_detail_service import (
+    GetSurveyDetailService,
+)
+from modules.surveys.infrastructure_surveys.services.get_survey_detail_service_composer import (
+    get_survey_detail_service,
+)
 from modules.admin.infrastructure_admin.services.admin_authentication_service_composer import (
     get_login_admin_use_case,
     get_register_admin_use_case,
@@ -107,6 +114,9 @@ from modules.admin.application_admin.use_cases.admin_update_survey_use_case impo
 from modules.surveys.infrastructure_surveys.api.utils.photo_upload_helper import (
     save_optional_photo_files,
     UPLOAD_DIRECTORY,
+)
+from modules.surveys.infrastructure_surveys.repositories.postgresql.survey_detail_repository import (
+    PostgreSQLSurveyDetailRepository,
 )
 
 # logger setup
@@ -239,6 +249,7 @@ async def get_extensionist_name_id_phone_list(
     name: Optional[str] = None,
     identification: Optional[str] = None,
     phone: Optional[str] = None,
+    city: Optional[str] = None,
     get_extensionist_name_id_phone_list_use_case: GetExtensionistNameIdPhoneListUseCase = Depends(
         get_get_extensionist_name_id_phone_list_use_case
     ),
@@ -250,6 +261,7 @@ async def get_extensionist_name_id_phone_list(
         name=name,
         identification=identification,
         phone=phone,
+        city=city,
     )
     return ApiResponseDTO.success_response(
         data=extensionists,
@@ -309,6 +321,56 @@ async def get_surveys_by_property_id(
     return ApiResponseDTO.success_response(
         data=surveys,
         message=f"Surveys for property ID {property_id} fetched successfully",
+    )
+
+
+@router.get(
+    "/surveys/{survey_type}/{survey_id}/pdf",
+    response_class=FileResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Download Survey PDF",
+    description="Generates (if needed) and downloads the PDF associated with the specified survey.",
+    tags=["Admin Surveys"],
+)
+@common_decorators.handle_exceptions
+@common_decorators.handle_authentication_exceptions
+async def download_survey_pdf(
+    survey_type: int,
+    survey_id: int,
+    survey_detail_service: GetSurveyDetailService = Depends(
+        get_survey_detail_service
+    ),
+    db_session: Session = Depends(session_manager.get_session),
+):
+    survey_detail = survey_detail_service.get_survey_detail(survey_id, survey_type)
+    if not survey_detail:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Survey not found"
+        )
+
+    repository = PostgreSQLSurveyDetailRepository(db_session)
+    survey_entity = repository.get_survey_by_id_and_type(survey_id, survey_type)
+
+    pdf_relative_path = getattr(survey_entity, "file_pdf", None)
+    if not pdf_relative_path:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="PDF not available for this survey.",
+        )
+
+    project_root = Path(__file__).resolve().parents[4]
+    absolute_path = project_root / pdf_relative_path
+
+    if not absolute_path.exists():
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="PDF file not found on server.",
+        )
+
+    return FileResponse(
+        path=str(absolute_path),
+        filename=absolute_path.name,
+        media_type="application/pdf",
     )
 
 

@@ -65,7 +65,6 @@ class AdminSurvey2DetailOutputDTO(BaseModel):
     visit_date: Optional[datetime] = Field(None, alias="visit_date")
     attended_by: Optional[str] = Field(None, alias="attended_by")
     state: Optional[str]
-    file_pdf: Optional[str] = None
 
     class Config:
         from_attributes = True

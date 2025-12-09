@@ -28,6 +28,7 @@ class GetExtensionistNameIdPhoneListUseCase:
         name: Optional[str] = None,
         identification: Optional[str] = None,
         phone: Optional[str] = None,
+        city: Optional[str] = None,
     ) -> List[ExtensionistNameIdPhoneOutputDTO]:
         _LOGGER.info("Fetching extensionist names, identification, and phones list")
 
@@ -35,6 +36,7 @@ class GetExtensionistNameIdPhoneListUseCase:
             name=name,
             identification=identification,
             phone=phone,
+            city=city,
         )
 
         return [

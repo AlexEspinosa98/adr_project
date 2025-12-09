@@ -32,6 +32,7 @@ class ExtensionistUserRepository(
         identification: Optional[str] = None,
         email: Optional[str] = None,
         phone: Optional[str] = None,
+        city: Optional[str] = None,
     ) -> List[ExtensionistUser]:
         stmt: Select[Tuple[UserExtensionistModel]] = select(UserExtensionistModel)
 
@@ -45,6 +46,8 @@ class ExtensionistUserRepository(
             stmt = stmt.where(UserExtensionistModel.email.ilike(f"%{email}%"))
         if phone:
             stmt = stmt.where(UserExtensionistModel.phone.ilike(f"%{phone}%"))
+        if city:
+            stmt = stmt.where(UserExtensionistModel.city.ilike(f"%{city}%"))
 
         result: Result[Tuple[UserExtensionistModel]] = self._session.execute(stmt)
         user_models = result.scalars().all()

@@ -194,8 +194,7 @@ class GetSurveyDetailUseCase:
         try:
             existing_path = getattr(survey_entity, "file_pdf", None)
             if existing_path and self._pdf_generator.file_exists(existing_path):
-                pdf_url = self._pdf_generator.build_public_url(existing_path)
-                return dto.model_copy(update={"file_pdf": pdf_url})
+                return dto
 
             if (
                 survey_type == 1
@@ -207,8 +206,7 @@ class GetSurveyDetailUseCase:
                     survey_type=survey_type,
                     pdf_path=_SAMPLE_SURVEY_1_PDF,
                 )
-                sample_url = self._pdf_generator.build_public_url(_SAMPLE_SURVEY_1_PDF)
-                return dto.model_copy(update={"file_pdf": sample_url})
+                return dto
 
             if not survey_entity.id:
                 return dto
@@ -224,8 +222,7 @@ class GetSurveyDetailUseCase:
                 survey_type=survey_type,
                 pdf_path=pdf_relative_path,
             )
-            pdf_url = self._pdf_generator.build_public_url(pdf_relative_path)
-            return dto.model_copy(update={"file_pdf": pdf_url})
+            return dto
         except Exception as exc:  # pragma: no cover - defensive logging
             _LOGGER.error(
                 "Error generating PDF for survey %s (type %s): %s",

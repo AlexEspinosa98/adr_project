@@ -49,7 +49,6 @@ class AdminSurvey1DetailOutputDTO(BaseModel):
 
     # Estado y documentación
     state: Optional[SurveyStatus]
-    file_pdf: Optional[str] = None
 
     class Config:
         from_attributes = True

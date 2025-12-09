@@ -13,3 +13,6 @@ class PropertySurveyOutputDTO(common_dtos.BaseDTO):
     )
     date: Optional[datetime] = Field(None, description="Date of the survey")
     state: Optional[str] = Field(None, description="Status of the survey")
+    pdf_url: Optional[str] = Field(
+        None, description="Public URL for the survey PDF (if available)"
+    )

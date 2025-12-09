@@ -17,6 +17,9 @@ from modules.admin.application_admin.dtos.output_dto.product_property_output_dto
 from modules.admin.application_admin.dtos.output_dto.property_survey_output_dto import (
     PropertySurveyOutputDTO,
 )
+from modules.surveys.application_surveys.services.survey_pdf_generator import (
+    SurveyPdfGenerator,
+)
 
 
 _LOGGER: Logger = get_logger(__name__)
@@ -58,7 +61,8 @@ class PostgreSQLAdminSurveyRepository(
             pp.name as property_name,
             up.name as user_producter_name,
             ue.name as extensionist_name,
-            ue.identification as extensionist_identification
+            ue.identification as extensionist_identification,
+            s.file_pdf
         FROM survey_1 s
         LEFT JOIN product_property pp ON s.property_id = pp.id
         LEFT JOIN user_producter up ON s.user_producter_id = up.id
@@ -87,7 +91,8 @@ class PostgreSQLAdminSurveyRepository(
             pp.name as property_name,
             up.name as user_producter_name,
             ue.name as extensionist_name,
-            ue.identification as extensionist_identification
+            ue.identification as extensionist_identification,
+            s.file_pdf
         FROM survey_2 s
         LEFT JOIN product_property pp ON s.property_id = pp.id
         LEFT JOIN user_producter up ON s.producter_id = up.id
@@ -116,7 +121,8 @@ class PostgreSQLAdminSurveyRepository(
             pp.name as property_name,
             up.name as user_producter_name,
             ue.name as extensionist_name,
-            ue.identification as extensionist_identification
+            ue.identification as extensionist_identification,
+            s.file_pdf
         FROM survey_3 s
         LEFT JOIN product_property pp ON s.property_id = pp.id
         LEFT JOIN user_producter up ON s.user_producter_id = up.id
@@ -160,6 +166,8 @@ class PostgreSQLAdminSurveyRepository(
                 survey_data["medition_focalization"] = json.loads(
                     survey_data["medition_focalization"]
                 )
+            pdf_path = survey_data.pop("file_pdf", None)
+            survey_data["pdf_url"] = self._build_pdf_url(pdf_path)
             processed_results.append(
                 AdminSurveyListOutputDTO.model_validate(survey_data)
             )
@@ -277,15 +285,37 @@ class PostgreSQLAdminSurveyRepository(
         _LOGGER.info(f"Finding surveys for property ID: [{property_id}]")
 
         query = """
-        SELECT id, 'Survey 1' as survey_type, visit_date as date, state FROM survey_1 WHERE property_id = :property_id
+        SELECT id, 'Survey 1' as survey_type, visit_date as date, state, file_pdf FROM survey_1 WHERE property_id = :property_id
         UNION ALL
-        SELECT id, 'Survey 2' as survey_type, visit_date as date, state FROM survey_2 WHERE property_id = :property_id
+        SELECT id, 'Survey 2' as survey_type, visit_date as date, state, file_pdf FROM survey_2 WHERE property_id = :property_id
         UNION ALL
-        SELECT id, 'Survey 3' as survey_type, visit_date as date, state FROM survey_3 WHERE property_id = :property_id
+        SELECT id, 'Survey 3' as survey_type, visit_date as date, state, file_pdf FROM survey_3 WHERE property_id = :property_id
         """
 
         result = self.session.execute(
             text(query), {"property_id": property_id}
         ).fetchall()
 
-        return [PropertySurveyOutputDTO.model_validate(row._asdict()) for row in result]
+        surveys: List[PropertySurveyOutputDTO] = []
+        for row in result:
+            row_data = row._asdict()
+            pdf_path = row_data.get("file_pdf")
+            surveys.append(
+                PropertySurveyOutputDTO(
+                    id=row_data["id"],
+                    survey_type=row_data["survey_type"],
+                    date=row_data["date"],
+                    state=row_data["state"],
+                    pdf_url=self._build_pdf_url(pdf_path),
+                )
+            )
+
+        return surveys
+
+    def _build_pdf_url(self, relative_path: Optional[str]) -> str:
+        if not relative_path:
+            return ""
+        try:
+            return SurveyPdfGenerator.build_public_url(relative_path)
+        except Exception:
+            return ""
